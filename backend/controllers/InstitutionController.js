@@ -54,7 +54,7 @@ class InstitutionController {
         const { id } = req.params;
         try{
             await InstitutionService.deleteInstitution(id);
-            res.json({ message: 'Usuário deletado com sucesso!'});
+            res.json({ message: 'Instituição deletada com sucesso!'});
         } catch (error) {
             res.status(400).json({ error: error.message });
         }

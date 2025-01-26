@@ -3,6 +3,8 @@ const express = require('express');
 //const cors = require('cors');
 const UserRoutes = require('./routes/UserRoutes');
 const InstitutionRoutes = require('./routes/InstitutionRoutes');
+const RotationRoutes = require('./routes/RotationRoutes');
+const EquipmentRoutes = require('./routes/EquipmentRoutes');
 
 const app = express();
 
@@ -21,5 +23,7 @@ app.use((err, req, res, next) => {
 
 app.use('/users', UserRoutes);
 app.use('/institutions', InstitutionRoutes);
+app.use('/rotations', RotationRoutes);
+app.use('/equipment', EquipmentRoutes);
 
 module.exports = app;
