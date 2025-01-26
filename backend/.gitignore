@@ -1,3 +1,6 @@
 \node_modules
 /node_modules
 solicita\backend\node_modules
+/backend\.env
+\backend\.env
+solicita\backend\.gitignore

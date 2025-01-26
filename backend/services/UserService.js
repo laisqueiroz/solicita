@@ -9,6 +9,15 @@ class UserService {
         return UserRepository.findById(id);
     }
 
+    static async getUserByCPF(cpf) {
+        try {
+            return UserRepository.findOne(cpf);
+        } catch (eror) {
+            return ('erro na consulta ao repository')
+        }
+        
+    }
+
     static async createUser(data) {
         return UserRepository.create(data);
     }

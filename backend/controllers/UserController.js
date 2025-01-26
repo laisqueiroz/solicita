@@ -1,6 +1,37 @@
 const UserService = require('../services/UserService');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY;
 
 class UserController {
+    static async loginUser(req, res) {
+        if (!secretKey) {
+            throw new Error('A SECRET_KEY não foi definida. Verifique o arquivo .env');
+        }
+        try {
+            const { cpf, password } = req.body;
+            if (!cpf || !password) {
+                return res.status(400).json({ error: 'CPF e senha são obrigatórios.' });
+            }
+            const user = await UserService.getUserByCPF(cpf);
+            if (!user) {
+                return res.status(401).json({ error: 'Usuário não existe ou as credenciais fornecidas estão incorretas.' });
+            }
+
+            const isPasswodValid = await bcrypt.compare(password, user.password);
+            if (!isPasswodValid) {
+                console.log('a validação da senha está vazia.')
+                return res.status(401).json({ error: 'Senha incorreta.' })
+            }
+
+            const token = jwt.sign({ id: user.id, role: user.role }, secretKey, {expiresIn: '2h',});
+            res.status(200).json({token});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Erro ao realizar o login.' });
+        }
+    }
+
     static async getAllUsers(req, res) {
         try{
             const users = await UserService.getAllUsers();
@@ -24,11 +55,14 @@ class UserController {
     static async createUser(req, res) {
         try {
             const { name , email , password , cpf , role } = req.body;
+            const hashedPassword = await bcrypt.hash(password, 10);
+
             if (!name || !email || !password || !cpf || !role) {
                 res.status(400).json({ message: 'Todos os campos são obrigatórios!' })
             };
-            const user = await UserService.createUser({name, email, password, cpf, role});
-            res.status(201).json(user);
+
+            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, role});
+            res.status(201).json(newUser);
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
