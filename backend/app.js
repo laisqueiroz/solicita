@@ -5,6 +5,7 @@ const UserRoutes = require('./routes/UserRoutes');
 const InstitutionRoutes = require('./routes/InstitutionRoutes');
 const RotationRoutes = require('./routes/RotationRoutes');
 const EquipmentRoutes = require('./routes/EquipmentRoutes');
+const SolicitationRoutes = require('./routes/SolicitationRoutes');
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use('/users', UserRoutes);
 app.use('/institutions', InstitutionRoutes);
 app.use('/rotations', RotationRoutes);
 app.use('/equipment', EquipmentRoutes);
+app.user('/solicitations', SolicitationRoutes);
 
 module.exports = app;

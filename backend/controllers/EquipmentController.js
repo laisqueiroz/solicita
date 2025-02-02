@@ -1,4 +1,5 @@
 const EquipmentService = require('../services/EquipmentService');
+const RotationService = require('../services/RotationService');
 
 class EquipmentController {
     static async getAllEquipment(req, res) {
@@ -22,12 +23,17 @@ class EquipmentController {
 
     static async createEquipment(req, res) {
         try {
-            const { name } = req.bory;
-            if (!name) {
+            const { name, shift, vacant } = req.body;
+
+            if (!name || !shift || !vacant) {
                 res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
             }
             const equipment = await EquipmentService.createEquipment({ name });
-            res.status(201).json(equipment);
+            console.log('criou  equipamento');
+
+            const equipmentId = equipment.id;
+            const createRotation = await RotationService.createRotation({shift , vacant , equipmentId});
+            res.status(201).json();
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
