@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Institution.init({
     name: DataTypes.STRING,
-    cnpj: DataTypes.STRING
+    cnpj: {
+      type: DataTypes.STRING,
+      unique: true
+    },
   }, {
     sequelize,
     modelName: 'Institution',
