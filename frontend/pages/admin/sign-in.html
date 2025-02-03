@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicita - Página Inicial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0e2e4a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        nav a {
+            margin-left: 40px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .cta {
+            padding: 6px 10px;
+            background-color: #f7981d;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .cta:hover {
+            background-color: #e67a00;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            height: calc(100vh - 80px);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(5, 20%);
+            grid-template-rows: 25% 25% 25% 25%;
+        }
+
+        .content {
+            grid-column-start: 4;
+            grid-column-end: 6;
+            grid-row-start: 2;
+            grid-row-end: 4;
+        }
+
+        .content h1 {
+            font-size: 30px;
+            color: #f7981d;
+            line-height: 1.2;
+        }
+
+        .content p {
+            font-size: 14px;
+            margin-top: 20px;
+            line-height: 1.6;
+            padding-right: 100px;
+        }
+
+        
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .ilustracao img {
+            width: 100vw;  
+            height: auto;
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img id="imagem" src="logo amarela.png" width="100">
+        </div>
+        <nav>
+            <a href="#" style="color: #f7981d;">Adicionar Instituição de ensino</a>
+            <a href="#">Página Inicial</a>
+            <a href="#">Contatos</a>
+            <a href="#" style="color: #f7981d;">Solicitar Acesso</a>
+            <button class="cta">Entrar</button>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <div class="galery"></div>
+        <div class="content">
+            <h1>Facilitando<br> a prática, <br> ampliando o <br> aprendizado</h1>
+            <p>Um sistema inovador projetado para simplificar o processo de solicitação de práticas de ensino. Destinado a coordenadores e instituições de ensino, o sistema facilita a gestão dos pedidos, permitindo o acompanhamento de status e aprovações, promovendo uma experiência mais eficiente e organizada.</p>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="ilustracao">
+            <img src="linear arte.png" alt="Ilustração">
+        </div>
+    </footer>
+</body>
+</html>
