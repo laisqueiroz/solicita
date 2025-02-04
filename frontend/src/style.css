@@ -1,0 +1,163 @@
+body {
+  background-color: #003366;
+  font-family: 'Inter', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+button {
+  border-radius: 5px;
+  padding: 0.6em 1.3em;
+  font-size: 1.2em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border-color: transparent;
+  margin: 1.3em;
+  display: flex;
+  flex-direction: row;
+}
+
+.btn-primary {
+  color: #ffffff;
+  background-color: #003366;
+  border-color: transparent;
+}
+
+.btn-primary:hover {
+  color: #003366;
+  background-color: #ffffff;
+  border-color: transparent;
+}
+
+.btn-secondary {
+  color: #ffffff;
+  background-color: #F39A24;
+  border-color: transparent;
+}
+
+.btn-secondary:hover {
+  color: #fff;
+  background-color: #C0710A;
+  border-color: transparent;
+}
+
+.btn-add {
+  color: #ffffff;
+  background-color: #00C217;
+  border-color: transparent;
+}
+
+.btn-add:hover {
+  color: #fff;
+  background-color: #006D0D;
+  border-color: transparent;
+}
+
+.btn-remove {
+  color: #ffffff;
+  background-color: #C20000;
+  border-color: transparent;
+}
+
+.btn-remove:hover {
+  color: #fff;
+  background-color: #700;
+  border-color: transparent;
+}
+
+.btn-no-filling {
+  color: #ffffff;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-no-filling:hover {
+  color: #F39A24;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-no-filling-sec {
+  color: #F39A24;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-no-filling-sec:hover {
+  color: #fff;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-no-filling-add {
+  color: #00C217;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-no-filling-add:hover {
+  color: #006D0D;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-no-filling-remove {
+  color: #C20000;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-no-filling-remove:hover {
+  color: #700;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.card {
+  padding: 2em;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f39c12;
+  text-transform: uppercase;
+}
+
+.header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  display: grid;
+  grid-template-columns: repeat(8, 12.5%);
+  grid-template-rows: 60px;
+  column-gap: 3em;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header .logo {
+  grid-column: 1;
+}
+
+.header .navigation {
+  grid-column-start: 5;
+  grid-column-end: 8;
+  display: flex;
+  color: #fff;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
