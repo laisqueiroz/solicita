@@ -1,14 +1,14 @@
 <template>
   <div class="header">
-      <div class="logo">
-          <img id="imagem" src="../assets/logo amarela.png" width="100">
-      </div>
-      <nav class="navigation">
-          <button id="HomePage" class="btn-no-filling" href="#">Página Inicial</button>
-          <button id="Contacts" class="btn-no-filling" href="#">Contatos</button>
-          <button id="AcessSolicitation" class="btn-no-filling-sec" href="#">Solicitar Acesso</button>
-          <button id="SingIn" class="btn-secondary">Entrar</button>
-      </nav>
+    <div class="logo">
+      <img src="../assets/solicita.svg" alt="Logo do Sistema" class="h-10" />
+    </div>
+    <nav class="navigation">
+      <button>Página Inicial</button>
+      <button>Contato</button>
+      <button>Solicitar Acesso</button>
+      <button>Acessar Portal</button>
+    </nav>
   </div>
 </template>
 
@@ -19,6 +19,5 @@ export default {
 </script>
 
 <style scoped>
-
 
 </style>
