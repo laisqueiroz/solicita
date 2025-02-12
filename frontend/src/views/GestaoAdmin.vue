@@ -7,6 +7,7 @@
                 title="Gerenciar Solicitações"
                 description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
             />
+            <CardComponents />
             <CardComponents 
                 title="Gerenciar Instituições Credenciadas"
                 description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"

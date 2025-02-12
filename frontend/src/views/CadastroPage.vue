@@ -1,0 +1,165 @@
+<template>
+    <title>Solicitação de Cadastro</title>
+    <HeaderHome />
+    <main style="display: flex; align-items: center; padding-right: 164px; padding-left: 164px; padding-top: 64px;">
+        <div class="ilustracao" style="margin-right: 120px;">
+            <img id="imagem" src="../assets/image 12 (Traced).png" width="500">
+        </div>
+        <div class="form-container">
+            <div class="form-titulos">
+                <h2>Realizar Solicitação de Acesso</h2>
+                <p>Preencha todas as informações abaixo para realizar sua solicitação de acesso <br>ao sistema. Em caso
+                    de dúvidas <span style="color: #f7981d;"><b>consultar FAQ</b></span> ou entrar em <span
+                        style="color: #f7981d;"><b>contato.</b></span></p>
+                <br>
+                <h5 style="color: #0e2e4a; margin-bottom: 20px;">Dados pessoais</h5>
+            </div>
+            <form>
+                <div style="display: flex;">
+                    <div class="form-group" style="margin-right: 18px; flex: 1;">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo"
+                            style="max-height: 36px;">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Data de nascimento</label>
+                        <input type="date" name="date" style="min-width: 189px; max-height: 36px;">
+                    </div>
+                </div>
+
+                <div style="display: flex;">
+                    <div class="form-group" style="flex: 1; margin-right: 18px;">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Digite seu email"
+                            style="max-height: 36px;">
+                    </div>
+                    <div class="form-group">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF"
+                            style="min-width: 189px; max-height: 36px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Função cargo">Função/cargo</label>
+                    <input type="text" id="Função cargo" name="Função cargo"
+                        placeholder="Digite a função/cargo que você exerce na Instituição.">
+                </div>
+
+                <div class="form-group">
+                    <h5 style="color: #0e2e4a;">Dados da Instituição de Ensino Credenciada*</h5>
+                    <p style=" font-size: 12px;">*Instituições de Ensino que não estejam com o credenciamento ativo
+                        terão as solicitações de acesso negadas.</p>
+                </div>
+
+                <div style="display: flex;">
+                    <div class="form-group" style="margin-right: 18px;">
+                        <label for="CNPJ">CNPJ</label>
+                        <input type="text" id="CNPJ" name="CNPJ" placeholder="Digite o CNPJ da Instituição"
+                            style="max-height: 36px;">
+                    </div>
+
+                    <div class="form-group" style="flex: 1;">
+                        <label for="instituicao">Nome da Instituição</label>
+                        <select id="instituicao" name="instituicao" style="min-width: 189px; max-height: 36px;">
+                            <option value="" disabled selected>Selecione a Instituição</option>
+                            <option value="UFC">UFC</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <h5 style="color: #0e2e4a; margin-bottom: 20px;">Dados de Acesso</h5>
+
+                <div style="display: flex;">
+                    <div class="form-group" style="margin-right: 18px;">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" style="max-height: 36px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Confirmar senha</label>
+                        <input type="password" id="senha" name="senha" placeholder="confirme a senha" style="max-height: 36px;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Enviar Solicitação</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</template>
+
+<script>
+import HeaderHome from '../components/HeaderHome.vue';
+
+</script>
+
+<style>
+.ilustracao {
+    top: 200px;
+    left: 150px;
+}
+
+.form-container {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 10px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 32px;
+}
+
+.form-titulos h2 {
+    text-align: center;
+}
+
+.form-titulos p {
+    font-size: 12px;
+    text-align: center;
+
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group input:focus {
+    border: 2px solid #0e2e4a;
+    outline: none;
+}
+
+.form-group button {
+    padding: 6px 10px;
+    background-color: #0e2e4a;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+
+    display: block; 
+    margin: 0 auto;
+    
+}
+
+.form-group button:hover {
+    background-color: #0c273e;
+}
+</style>
