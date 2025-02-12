@@ -5,6 +5,7 @@ import GestaoAdmin from "../views/GestaoAdmin.vue";
 import GestaoIE from "../views/GestaoIE.vue";
 import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
+import CadastroPage from "../views/CadastroPage.vue";
 
 const routes = [
   { 
@@ -14,6 +15,10 @@ const routes = [
   { 
     path: "/Login", 
     component: LoginPage 
+  },
+  { 
+    path: "/cadastro", 
+    component: CadastroPage 
   },
 
   {

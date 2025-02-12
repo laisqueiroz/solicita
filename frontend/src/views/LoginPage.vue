@@ -1,5 +1,5 @@
 <template> 
-    <HeaderHome/>
+    <HeaderHome />
     <div class="container">
         <div class="illustration">
             <img src="../assets/image 9 (Traced).png" alt="Ilustração">
@@ -26,6 +26,9 @@ import HeaderHome from "../components/HeaderHome.vue"
 </script>
 
 <style scoped>
+h1 {
+    color: #000;
+}
         .container {
             display: flex;
             align-items: center;
