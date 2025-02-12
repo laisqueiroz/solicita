@@ -1,23 +1,19 @@
 <template>
-    <title>Gestão - Administrador</title>
-    <HeaderAdmin />
+    <title>Solicitações</title>
+    <HeaderAdmin/>
     <div class="container">
         <div class="cards">
-            <CardComponents @Click="goToSolicitations"
-                title="Gerenciar Solicitações"
+            <CardComponents @Click="goToViewSolicitations"
+                title="Solicitações de Práticas"
                 description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
             />
             <CardComponents 
-                title="Gerenciar Instituições Credenciadas"
-                description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
-            />
-            <CardComponents 
-                title="Gerenciar Equipamentos"
+                title="Solicitações de Acesso"
                 description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
             />
         </div>
         <div class="illustration">
-            <img src="../assets/linear-art-gestao.png" alt="Ilustração de gestão">
+        <img src="../assets/linear-art-gestao.png" alt="Ilustração de gestão">
         </div>
     </div>
 </template>
@@ -29,8 +25,8 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const goToSolicitations = () => {
-    router.push("/solicitations-admin")
+const goToViewSolicitations = () => {
+    router.push("/solicitations-admin-view-solicitations")
 };
 </script>
 

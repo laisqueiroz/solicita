@@ -8,6 +8,11 @@ body {
   background-color: #003366;
   font-family: 'Inter', Verdana, Geneva, Tahoma, sans-serif;
 }
+h1 {
+  font-family: 'Inter', Verdana, Geneva, Tahoma, sans-serif;
+  color: #fff;
+  font-weight:600;
+}
 button {
   border-radius: 5px;
   padding: 0.6em 1.3em;
@@ -116,6 +121,13 @@ button {
   color: #700;
   background-color: transparent;
   border-color: transparent;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .card {
