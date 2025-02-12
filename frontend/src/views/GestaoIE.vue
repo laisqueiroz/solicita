@@ -13,7 +13,7 @@
             /> 
         </div>
         <div class="illustration">
-            <img src="" alt="ilustração IE">
+            <img src="../assets/Layer_x0020_1 (Traced).png" alt="ilustração IE">
         </div>
     </div>
 </template>
@@ -24,5 +24,22 @@ import HeaderIE from '../components/HeaderIE.vue';
 </script>
 
 <style>
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+    .illustration {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
+    .illustration img {
+        max-width: 70%;
+        height: auto;
+    }
 </style>
