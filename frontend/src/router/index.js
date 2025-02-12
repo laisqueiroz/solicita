@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
+import LoginPage from "../views/LoginPage.vue";
 import GestaoAdmin from "../views/GestaoAdmin.vue";
 import GestaoIE from "../views/GestaoIE.vue";
 import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
@@ -9,6 +10,10 @@ const routes = [
   { 
     path: "/", 
     component: HomePage 
+  },
+  { 
+    path: "/Login", 
+    component: LoginPage 
   },
 
   {
