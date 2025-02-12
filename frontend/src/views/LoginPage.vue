@@ -2,7 +2,7 @@
     <HeaderHome/>
     <div class="container">
         <div class="illustration">
-            <img src="image 9 (Traced).png" alt="Ilustração">
+            <img src="../assets/image 9 (Traced).png" alt="Ilustração">
         </div>
         <div class="login-box">
             <h1>Acesse o Sistema</h1>
@@ -15,91 +15,17 @@
                 Esqueceu a senha? <a href="#">Solicitar recuperação</a>
             </div>
             <br>
-            <button>Entrar</button>
-    <h1>
-     Acesse o Sistema 
-    </h1>
-    <p>
-    Utilize suas credenciais cadastradas para
-    <br> acessar o sistema.
-    </p>
-    <label for="email">E-mail / CPF*</label>
-    <input type="email" id="email" placeholder="Digite sue email ou CPF cadastrado"/>
-    <label for="password">Senha*</label>
-    <input type="password" id="password" placeholder="Digite sua senha cadastrada"/>
-    <button>Entrar</button>
-    <p>
-        Esqueceu a senha? Solicitar recuperação
-        <a href="https://www.hashtagtreinamentos.com/">Clique aqui!</a>
-    </p>
-
-    <main>
-        <div class="ilustração">
-            <img id="imagem" src="image 9 (Traced).png" width="400">
+            <button class="btn-primary">Entrar</button>
         </div>
-    </main>
     </div>
 </template>
 
 <script>
-import HeaderHome from "../components/HeaderHome"
+import HeaderHome from "../components/HeaderHome.vue"
 
 </script>
 
 <style scoped>
-* {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Inter, sans-serif;
-            background-color: #0e2e4a;
-            color: #ffffff;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 20px 40px;
-            position: absolute;
-            top: 0;
-        }
-
-        nav a {
-            margin-left: 40px;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 13px;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .cta {
-            padding: 6px 10px;
-            background-color: #f7981d;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .cta:hover {
-            background-color: #e67a00;
-        }
-
         .container {
             display: flex;
             align-items: center;
