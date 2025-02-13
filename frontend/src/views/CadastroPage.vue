@@ -188,6 +188,8 @@ import HeaderHome from '../components/HeaderHome.vue';
         display: block;
         margin: 0 auto;
         margin-top: 15px;
+        font-family: 'Inter', sans-serif; 
+        font-weight: bold;
     }
     .form-group button:hover {
         background-color: #0c273e;
