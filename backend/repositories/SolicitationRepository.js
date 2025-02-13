@@ -5,6 +5,10 @@ class SolicitationRepository {
         return Solicitation.findAll();
     }
 
+    static async findOne(code) {
+        return Solicitation.findOne({where: {code}});
+    }
+
     static async findById(id) {
         return Solicitation.findByPk(id);
     }

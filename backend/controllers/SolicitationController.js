@@ -1,17 +1,9 @@
 const SolicitationService = require('../services/SolicitationService');
+const GenerateCode = require('../services/GenerateCodeService');
 
 class SolicitationController {
-    static generatedCodes = new Set();
 
-    static async generateUniqueCode() {
-        let code;
-        do {
-        code = Math.floor(100000 + Math.random() * 900000).toString(); 
-        } while (this.generatedCodes.has(code)); 
-
-        this.generatedCodes.add(code); 
-        return code;
-    }
+    
 
     static async getAllSolicitations(req, res){
         try {
@@ -34,13 +26,14 @@ class SolicitationController {
 
     static async createSolicitation(req, res) {
         try{
-            const { course , subject, period, modality, shift, relation, weekdays, preceptorName, councilRegistration, equipmentId } = req.body;
-            if ( !course || !subject || !period || !modality || !shift || !relation || !weekdays || !preceptorName || !councilRegistration || !equipmentId) {
+            const { course , subject, period, modality, shift, relation, weekdays, preceptorName, councilRegistration, equipmentId , institutionId , status} = req.body;
+            if ( !course || !subject || !period || !modality || !shift || !relation || !weekdays || !preceptorName || !councilRegistration || !equipmentId || !institutionId || !status ) {
                 res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
             }
-            const codeGenerator = this.generateUniqueCode();
-            if (!codeGenerator) return res.status(400).json({ message: 'Erro ao gerar o código.' })
-            const solicitation = await SolcitationService.createSolicitation({ codeGenerator, course , subject, period, modality, shift, relation, weekdays, preceptorName, councilRegistration, equipmentId });
+            const code = await GenerateCode.generateUniqueCode();
+            console.log(`codigo: ${code}`);
+            if (!code) return res.status(400).json({ message: 'Erro ao gerar o código.' })
+            const solicitation = await SolicitationService.createSolicitation({ code, course , subject, period, modality, shift, relation, weekdays, preceptorName, councilRegistration, equipmentId, institutionId, status });
             res.status(201).json(solicitation);
         } catch (error) {
             res.status(400).json({ error: error.message });
