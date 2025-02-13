@@ -31,8 +31,6 @@ h1 {
 }
         .container {
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 200px;
             max-width: 1100px;
             width: 100%;
@@ -41,6 +39,8 @@ h1 {
         .illustration img {
             max-width: 450px;
             height: auto;
+            position: relative;
+            left: 140px; 
         }
 
         .login-box {
@@ -53,6 +53,8 @@ h1 {
             width: 350px;
             height: 390px;
             text-align: center;
+            position: relative;
+            left: 140px; 
         }
 
         .login-box h1 {
