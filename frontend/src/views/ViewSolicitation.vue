@@ -18,7 +18,6 @@ const columns = ref([
   { label: "Unidade", field: "equipmentId" },
   { label: "Instituição", field: "institutionId" },
   { label: "Status", field: "status" },
-  { label: "Detalhes", field: "detalhes" }
 ]);
 
 const data = ref([]);
@@ -33,15 +32,13 @@ onMounted(async () => {
       "equipmentId": "UBS Centro",
       "institutionId": "Universidade Federal do Ceará",
       "status": "Aprovado",
-      "detalhes": "Ver mais"
     },
     {
       "code": "REQ-2024002",
       "modality": "Visita Técnica",
       "equipmentId": "Hospital Municipal",
       "institutionId": "Universidade Estadual do Ceará",
-      "status": "Pendente",
-      "detalhes": "Ver mais"
+      "status": "Em análise",
     },
     {
       "code": "REQ-2024003",
@@ -49,7 +46,6 @@ onMounted(async () => {
       "equipmentId": "Laboratório de Análises Clínicas",
       "institutionId": "Centro Universitário Estácio",
       "status": "Recusado",
-      "detalhes": "Ver mais"
     },
     {
       "code": "REQ-2024004",
@@ -57,7 +53,6 @@ onMounted(async () => {
       "equipmentId": "Posto de Saúde São José",
       "institutionId": "Universidade de Fortaleza",
       "status": "Aprovado",
-      "detalhes": "Ver mais"
     },
     {
       "code": "REQ-2024005",
@@ -65,7 +60,6 @@ onMounted(async () => {
       "equipmentId": "Hospital Infantil",
       "institutionId": "Faculdade Maurício de Nassau",
       "status": "Em análise",
-      "detalhes": "Ver mais"
     }
   ]
 });
