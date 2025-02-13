@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-//const cors = require('cors');
+const cors = require('cors');
 const UserRoutes = require('./routes/UserRoutes');
 const InstitutionRoutes = require('./routes/InstitutionRoutes');
 const RotationRoutes = require('./routes/RotationRoutes');
@@ -9,11 +9,11 @@ const SolicitationRoutes = require('./routes/SolicitationRoutes');
 
 const app = express();
 
-//app.use(cors({
-//  origin: 'http://localhost:5173',
-//  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//  allowedHeaders: ['Content-Type', 'Authorization'],
-//}));
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.json());
 
@@ -26,6 +26,6 @@ app.use('/users', UserRoutes);
 app.use('/institutions', InstitutionRoutes);
 app.use('/rotations', RotationRoutes);
 app.use('/equipment', EquipmentRoutes);
-app.user('/solicitations', SolicitationRoutes);
+app.use('/solicitations', SolicitationRoutes);
 
 module.exports = app;

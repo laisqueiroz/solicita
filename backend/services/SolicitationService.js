@@ -5,6 +5,11 @@ class SolicitationService {
         return SolicitationRepository.findAll();
     }
 
+    static async getOne(data){
+        console.log(data)
+        return SolicitationRepository.findOne(data);
+    }
+
     static async getSolicitationById(id) {
         return SolicitationRepository.findById(id);
     }
