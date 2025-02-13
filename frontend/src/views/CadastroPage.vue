@@ -1,85 +1,78 @@
 <template>
     <title>Solicitação de Cadastro</title>
-    <HeaderHome />
-    <main style="display: flex; align-items: center; padding-right: 164px; padding-left: 164px; padding-top: 64px;">
-        <div class="ilustracao" style="margin-right: 120px;">
+    <HeaderHome/>
+    <main class="main-container">
+        <div class="ilustracao">
             <img id="imagem" src="../assets/image 12 (Traced).png" width="500">
         </div>
         <div class="form-container">
             <div class="form-titulos">
                 <h2>Realizar Solicitação de Acesso</h2>
                 <p>Preencha todas as informações abaixo para realizar sua solicitação de acesso <br>ao sistema. Em caso
-                    de dúvidas <span style="color: #f7981d;"><b>consultar FAQ</b></span> ou entrar em <span
-                        style="color: #f7981d;"><b>contato.</b></span></p>
+                    de dúvidas <a href="#" class="faq-link"><b>consultar FAQ</b></a> ou entrar em <a href="#" class="faq-link"><b>contato.</b></a></p>
                 <br>
-                <h5 style="color: #0e2e4a; margin-bottom: 20px;">Dados pessoais</h5>
+                <h5 class="dados-pessoais">Dados pessoais</h5>
             </div>
             <form>
-                <div style="display: flex;">
-                    <div class="form-group" style="margin-right: 18px; flex: 1;">
+                <div class="form-row">
+                    <div class="form-group">
                         <label for="nome">Nome Completo</label>
-                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo"
-                            style="max-height: 36px;">
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo">
                     </div>
                     <div class="form-group">
                         <label for="date">Data de nascimento</label>
-                        <input type="date" name="date" style="min-width: 189px; max-height: 36px;">
+                        <input type="date" name="date">
                     </div>
                 </div>
 
-                <div style="display: flex;">
-                    <div class="form-group" style="flex: 1; margin-right: 18px;">
+                <div class="form-row">
+                    <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Digite seu email"
-                            style="max-height: 36px;">
+                        <input type="email" id="email" name="email" placeholder="Digite seu email">
                     </div>
                     <div class="form-group">
                         <label for="cpf">CPF</label>
-                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF"
-                            style="min-width: 189px; max-height: 36px;">
+                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="Função cargo">Função/cargo</label>
-                    <input type="text" id="Função cargo" name="Função cargo"
+                    <label for="funcao-cargo">Função/cargo</label>
+                    <input type="text" id="funcao-cargo" name="funcao-cargo"
                         placeholder="Digite a função/cargo que você exerce na Instituição.">
                 </div>
 
                 <div class="form-group">
-                    <h5 style="color: #0e2e4a;">Dados da Instituição de Ensino Credenciada*</h5>
-                    <p style=" font-size: 12px;">*Instituições de Ensino que não estejam com o credenciamento ativo
+                    <h5 class="dados-instituicao">Dados da Instituição de Ensino Credenciada*</h5>
+                    <p class="info-credenciamento">*Instituições de Ensino que não estejam com o credenciamento <br> ativo
                         terão as solicitações de acesso negadas.</p>
                 </div>
 
-                <div style="display: flex;">
-                    <div class="form-group" style="margin-right: 18px;">
+                <div class="form-row">
+                    <div class="form-group">
                         <label for="CNPJ">CNPJ</label>
-                        <input type="text" id="CNPJ" name="CNPJ" placeholder="Digite o CNPJ da Instituição"
-                            style="max-height: 36px;">
+                        <input type="text" id="CNPJ" name="CNPJ" placeholder="Digite o CNPJ da Instituição">
                     </div>
 
-                    <div class="form-group" style="flex: 1;">
+                    <div class="form-group">
                         <label for="instituicao">Nome da Instituição</label>
-                        <select id="instituicao" name="instituicao" style="min-width: 189px; max-height: 36px;">
+                        <select id="instituicao" name="instituicao">
                             <option value="" disabled selected>Selecione a Instituição</option>
                             <option value="UFC">UFC</option>
                         </select>
                     </div>
-
                 </div>
 
-                <h5 style="color: #0e2e4a; margin-bottom: 20px;">Dados de Acesso</h5>
+                <h5 class="dados-acesso">Dados de Acesso</h5>
 
-                <div style="display: flex;">
-                    <div class="form-group" style="margin-right: 18px;">
-                        <label for="senha">Senha</label>
-                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" style="max-height: 36px;">
-                    </div>
-
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="senha">Confirmar senha</label>
-                        <input type="password" id="senha" name="senha" placeholder="confirme a senha" style="max-height: 36px;">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha">
+                    </div>
+                    <div class="form-group">
+                        <label for="senha-confirm">Confirmar senha</label>
+                        <input type="password" id="senha-confirm" name="senha-confirm" placeholder="Confirme a senha">
                     </div>
                 </div>
                 <div class="form-group">
@@ -90,76 +83,126 @@
     </main>
 </template>
 
-<script>
+<script setup>
 import HeaderHome from '../components/HeaderHome.vue';
-
 </script>
 
 <style>
-.ilustracao {
-    top: 200px;
-    left: 150px;
-}
+    .main-container {
+        display: flex;
+        align-items: center;
+        padding: 64px 164px;
+    }
 
-.form-container {
-    background-color: #ffffff;
-    color: #000000;
-    padding: 40px;
-    border-radius: 10px;
-    max-width: 600px;
-    margin: 10px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 32px;
-}
+    .ilustracao {
+        margin-right: 120px;
+    }
 
-.form-titulos h2 {
-    text-align: center;
-}
+    .form-container {
+        background-color: #ffffff;
+        color: #000000;
+        padding: 40px;
+         padding-top: 20px;
+        border-radius: 10px;
+        width: 500px;
+        margin: 10px auto 32px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-.form-titulos p {
-    font-size: 12px;
-    text-align: center;
+    .form-titulos h2 {
+        font-family: Inter, sans-serif;
+        font-size: 28px;
+        text-align: center;
+    }
 
-}
+    .form-titulos p {
+        font-family: Inter, sans-serif;
+        font-size: 11px;
+        text-align: center;
+        margin-top: -20px;
+    }
 
-.form-group {
-    margin-bottom: 15px;
-}
+    .faq-link {
+        color: #f7981d;
+    }
 
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+    .dados-pessoais, .dados-instituicao, .dados-acesso {
+        color: #0e2e4a;
+        text-align: left;
+        font-family: Inter, sans-serif;
+        margin-top: 10px;
+    }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+    .info-credenciamento {
+        font-size: 12px;
+        text-align: left;
+        font-family: Inter, sans-serif;
+        margin-top: -20px;
+    }
 
-.form-group input:focus {
-    border: 2px solid #0e2e4a;
-    outline: none;
-}
+    .form-row {
+        display: flex;
+        gap: 20px;
+        text-align: left;
+    }
 
-.form-group button {
-    padding: 6px 10px;
-    background-color: #0e2e4a;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 13px;
+    .form-group {
+        flex: 1;
+        margin-bottom: 15px;
+        margin-right: 20px;
+        text-align: left;
+    }
 
-    display: block; 
-    margin: 0 auto;
-    
-}
+    .form-group label {
+        font-family: Inter, sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
 
-.form-group button:hover {
-    background-color: #0c273e;
-}
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .form-group input[type="date"] {
+    flex: 1;
+    }
+    .form-group input:focus, .form-group select:focus {
+        border: 2px solid #0e2e4a;
+        outline: none;
+    }
+
+    .form-group button {
+        padding: 6px 10px;
+        background-color: #0e2e4a;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+        display: block;
+        margin: 0 auto;
+        margin-top: 15px;
+        font-family: 'Inter', sans-serif; 
+        font-weight: bold;
+    }
+    .form-group button:hover {
+        background-color: #0c273e;
+    }
+    .form-group input[type="date"] {
+        width: 150px;
+    }
+    .faq-link {
+        color: #f7981d; /* Cor laranja */
+        text-decoration: none; /* Remover o sublinhado padrão */
+    }
+    .faq-link:hover {
+     text-decoration: underline; /* Adiciona o sublinhado quando passar o cursor */
+    }
+
 </style>
