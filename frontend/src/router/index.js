@@ -6,6 +6,8 @@ import GestaoIE from "../views/GestaoIE.vue";
 import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
 import CadastroPage from "../views/CadastroPage.vue";
+import NovaSolicitacao from "../views/NovaSolicitacao.vue";
+
 
 const routes = [
   { 
@@ -39,6 +41,11 @@ const routes = [
   {
     path: "/solicitations-admin-view-solicitations",
     component: ViewSolicitation
+  },
+
+  {
+    path: "/NovaSolicitacao-view-NovaSolicitacao",
+    component: NovaSolicitacao
   }
 ];
 
