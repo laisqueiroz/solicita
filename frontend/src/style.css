@@ -6,12 +6,12 @@
 body {
   overflow: visible;
   background-color: #003366;
-  font-family: 'Inter', Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 
 h1 {
-  font-family: 'Inter', Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Inter',sans-serif;
   color: #fff;
   font-weight:600;
 }
