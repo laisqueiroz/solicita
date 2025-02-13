@@ -20,7 +20,7 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import HeaderHome from "../components/HeaderHome.vue"
 
 </script>
