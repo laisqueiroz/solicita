@@ -17,6 +17,9 @@ class UserController {
             if (!user) {
                 return res.status(401).json({ error: 'Usuário não existe ou as credenciais fornecidas estão incorretas.' });
             }
+            if (user.active == 'false') {
+                return res.status(403).json({error: 'Usuário não pode acessar o sistema!'})
+            }
 
             const isPasswodValid = await bcrypt.compare(password, user.password);
             if (!isPasswodValid) {
@@ -54,14 +57,15 @@ class UserController {
 
     static async createUser(req, res) {
         try {
-            const { name , email , password , cpf , role } = req.body;
+            const { name , email , password , cpf ,position} = req.body;
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            if (!name || !email || !password || !cpf || !role) {
+            if (!name || !email || !password || !cpf || !position) {
                 res.status(400).json({ message: 'Todos os campos são obrigatórios!' })
             };
-
-            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, role});
+            const role = 'regular';
+            const active = 'false';
+            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active});
             res.status(201).json(newUser);
         } catch (error) {
             res.status(400).json({ error: error.message });
