@@ -5,11 +5,11 @@
         <div class="cards">
             <CardComponents @Click="goToViewSolicitations"
                 title="Solicitações de Práticas"
-                description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
+                description="Gerencie e acompanhe os pedidos de práticas de ensino, garantindo um fluxo organizado e eficiente."
             />
             <CardComponents 
                 title="Solicitações de Acesso"
-                description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
+                description="Controle e revise as solicitações de acesso, assegurando conformidade com os requisitos institucionais."
             />
         </div>
         <div class="illustration">
@@ -35,12 +35,9 @@ const goToViewSolicitations = () => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    
 }
 img {
     width: 350px;
-}
-.illustration {
-    align-items: center;
 }
 </style>

@@ -96,6 +96,8 @@ import HeaderHome from '../components/HeaderHome.vue';
 
     .ilustracao {
         margin-right: 120px;
+        width: 100px;
+        height: auto;
     }
 
     .form-container {
