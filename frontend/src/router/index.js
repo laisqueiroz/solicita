@@ -8,6 +8,7 @@ import ViewSolicitation from "../views/ViewSolicitation.vue";
 import CadastroPage from "../views/CadastroPage.vue";
 import NovaSolicitacao from "../views/NovaSolicitacao.vue";
 import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
+import VerMaisVisualizarSolictIE from "../views/VerMaisVisualizarSolictIE.vue";
 
 
 const routes = [
@@ -52,6 +53,11 @@ const routes = [
   {
     path: "/visualizar-solicitacao",
     component: VisualizarSolicitacaoIE
+  },
+
+  {
+    path: "/visualizar-solicitacao-VerMais",
+    component: VerMaisVisualizarSolictIE
   }
 
 
