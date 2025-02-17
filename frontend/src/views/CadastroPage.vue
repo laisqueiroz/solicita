@@ -200,11 +200,11 @@ import HeaderHome from '../components/HeaderHome.vue';
         width: 150px;
     }
     .faq-link {
-        color: #f7981d; /* Cor laranja */
-        text-decoration: none; /* Remover o sublinhado padrão */
+        color: #f7981d;
+        text-decoration: none; 
     }
     .faq-link:hover {
-     text-decoration: underline; /* Adiciona o sublinhado quando passar o cursor */
+     text-decoration: underline; 
     }
 
 </style>
