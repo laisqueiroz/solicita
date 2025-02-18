@@ -49,7 +49,6 @@ const routes = [
     path: "/NovaSolicitacao-view-NovaSolicitacao",
     component: NovaSolicitacao
   },
-
   {
     path: "/visualizar-solicitacao",
     component: VisualizarSolicitacaoIE
@@ -58,7 +57,7 @@ const routes = [
   {
     path: "/visualizar-solicitacao-VerMais",
     component: VerMaisVisualizarSolictIE
-  }
+  },
 
 
 ];
