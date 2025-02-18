@@ -9,6 +9,7 @@ import CadastroPage from "../views/CadastroPage.vue";
 import NovaSolicitacao from "../views/NovaSolicitacao.vue";
 import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
 import VerMaisVisualizarSolictIE from "../views/VerMaisVisualizarSolictIE.vue";
+import GerenciarInstituicoesAdmin from "../views/GerenciarInstituicoes-Admin.vue";
 
 
 const routes = [
@@ -58,6 +59,11 @@ const routes = [
   {
     path: "/visualizar-solicitacao-VerMais",
     component: VerMaisVisualizarSolictIE
+  },
+
+  {
+  path: "/GerenciarInstituicoes",
+  component: GerenciarInstituicoesAdmin
   }
 
 
