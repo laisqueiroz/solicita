@@ -1,4 +1,5 @@
 <template> 
+    <title>Solicita - Login</title>
     <HeaderHome />
     <div class="container">
         <div class="illustration">
@@ -7,21 +8,63 @@
         <div class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
-            <label for="email">E-mail / CPF</label>
-            <input type="email" id="email" placeholder="Digite seu e-mail ou CPF" />
-            <label for="password">Senha</label>
-            <input type="password" id="password" placeholder="Digite sua senha" />
+            <div id="divlogin">
+                <label for="email">E-mail / CPF</label>
+                <input v-model="cpf" type="email" id="email" required placeholder="Digite seu e-mail ou CPF" />
+            </div>
+            <div id="divlogin">
+                <label for="password">Senha</label>
+                <input v-model="password" type="password" id="password" required placeholder="Digite sua senha" />
+            </div>
             <div class="forgot-password">
                 Esqueceu a senha? <a href="#">Solicitar recuperação</a>
             </div>
             <br>
-            <button class="btn-primary">Entrar</button>
+            <div id="erroMessage">
+                <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+            </div>
+            <button class="btn-primary" @click="login">Entrar</button>
         </div>
     </div>
 </template>
 
 <script setup>
-import HeaderHome from "../components/HeaderHome.vue"
+import { ref } from "vue";
+import { loginUser } from "../services/api.js"
+import { useRouter } from "vue-router";
+import HeaderHome from "../components/HeaderHome.vue";
+
+const router = useRouter();
+const cpf = ref('')
+const password = ref('')
+const errorMessage = ref('')
+
+const login = async () => {
+    errorMessage.value = '' 
+
+    if (!cpf.value || !password.value) {
+        errorMessage.value = 'Preencha todos os campos!'
+        return
+    }
+    try {
+        const data = await loginUser(cpf.value, password.value)
+        console.log('Login bem-sucedido:', data)
+        const { token, role } = data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+
+        if (role === "admin") {
+            router.push("/gestao-admin");
+        } else {
+            router.push("/gestao-ie");
+        }
+        // Aqui você pode armazenar o token e redirecionar para outra página, se necessário
+    } catch (error) {
+        errorMessage.value = error
+        console.error('Erro no login:', error)
+    }
+}
 
 </script>
 
@@ -29,11 +72,16 @@ import HeaderHome from "../components/HeaderHome.vue"
 h1 {
     color: #000;
 }
+
+#erroMessage p {
+    color: #C20000;
+    font-size: 0.8em;
+}
         .container {
             display: flex;
+            justify-content: space-around;
             gap: 200px;
-            max-width: 1100px;
-            width: 100%;
+            width: 90%;
         }
 
         .illustration img {
@@ -44,6 +92,8 @@ h1 {
         }
 
         .login-box {
+            display: flex;
+            flex-direction: column;
             background: #ffffff;
             color: #000;
             padding: 40px;
@@ -52,18 +102,19 @@ h1 {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             width: 350px;
             height: 390px;
-            text-align: center;
-            position: relative;
             left: 140px; 
+            align-items: center;
         }
 
         .login-box h1 {
+            text-align: center;
             font-size: 28px;
             margin-bottom: 10px;
             font-weight: bold;
         }
 
         .login-box p {
+            text-align: center;
             font-size: 10px;
             color: #555;
             margin-bottom: 30px;
@@ -71,12 +122,18 @@ h1 {
         }
 
         .login-box label {
+            text-align: left;
             font-size: 13px;
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
             text-align: left;
             padding-left: 10px;
+        }
+
+        .login-box button:hover {
+            background-color: #f7981d;
+            color: #ffffff;
         }
 
         .login-box input {
@@ -88,24 +145,13 @@ h1 {
             border-radius: 5px;
             font-size: 11px;
         }
-
-        .login-box button {
-            padding: 6px 10px;
-            background-color: #002855;
-            color: white;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .login-box button:hover {
-            background-color: #001f3f;
+        .login-box #divlogin {
+            width: 100%;
+            padding: 5px;
         }
 
         .forgot-password {
+            align-self: flex-end;
             font-size: 10px;
             text-align: right;
         }
