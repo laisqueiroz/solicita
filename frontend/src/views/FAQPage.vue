@@ -36,7 +36,7 @@ import HeaderComponent from "../components/HeaderHome.vue";
 const faqList = ref([
     {
         pergunta: "O QUE É O PORTAL SOLICITA?",
-        resposta: "O Portal Solicita é um sistema que permite às instituições de ensino solicitarem estágios nas unidades de saúde vinculadas à Secretaria de Saúde. Ele facilita o acompanhamento das solicitações e a comunicação entre as instituições e a secretaria."
+        resposta: "O Portal Solicita é um sistema que permite às instituições de ensino solicitarem práticas de ensino nas unidades de saúde vinculadas à Secretaria de Saúde. Ele facilita o acompanhamento das solicitações e a comunicação entre as instituições e a secretaria."
     },
     {
         pergunta: "QUEM PODE SOLICITAR ACESSO AO PORTAL?",
@@ -52,7 +52,7 @@ const faqList = ref([
     },
     {
         pergunta: "POSSO CANCELAR UMA SOLICITAÇÃO?",
-        resposta: "Sim. Você pode cancelar uma solicitação antes de ser analisada. Depois de deferida ou indeferida, a solicitação não pode mais ser cancelada."
+        resposta: "Sim, somente no caso de solicitações indeferidas o cancelamento não pode ocorrer. Caso sua solicitações tenha sido aprovada, porém não será realizada e/ou cumprida você pode cancelar, lembrando que o ato do cancelamento acarreta na perca da solicitação de forma definitiva."
     }
 ]);
 
