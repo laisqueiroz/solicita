@@ -28,7 +28,7 @@ class UserController {
             }
 
             const token = jwt.sign({ id: user.id, role: user.role }, secretKey, {expiresIn: '2h',});
-            res.status(200).json({token});
+            res.status(200).json({token , role: user.role});
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Erro ao realizar o login.' });

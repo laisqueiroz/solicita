@@ -7,7 +7,7 @@ const api = axios.create({
 
 export const loginUser = async (cpf, password) => {
     try {
-        const response = await api.post("/users/login", cpf , password);
+        const response = await api.post("/users/login", {cpf, password});
         return response.data;
     } catch (error) {
         // tratar os erros

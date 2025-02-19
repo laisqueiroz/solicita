@@ -7,6 +7,9 @@ import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
 import CadastroPage from "../views/CadastroPage.vue";
 import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
+import EquipmentAdmin from "../views/EquipmentAdmin.vue";
+import InstitutionsAdmin from "../views/InstitutionsAdmin.vue";
+import SolicitationAcesss from "../views/SolicitationAcesss.vue";
 
 const routes = [
   { 
@@ -14,7 +17,7 @@ const routes = [
     component: HomePage 
   },
   { 
-    path: "/Login", 
+    path: "/login", 
     component: LoginPage 
   },
   { 
@@ -45,8 +48,22 @@ const routes = [
   {
     path: "/visualizar-solicitacao",
     component: VisualizarSolicitacaoIE
-  }
+  },
 
+  {
+    path: "/equipment-admin",
+    component: EquipmentAdmin
+  },
+
+  {
+    path: "/institutions-admin",
+    component: InstitutionsAdmin
+  },
+
+  {
+    path: "/solicitations-acess-admin",
+    component: SolicitationAcesss
+  },
 
 ];
 
