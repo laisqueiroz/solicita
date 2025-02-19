@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Solicitation.init({
     code: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         unique: true
     },
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            inIn:[['Estágio', 'Visita Técnica', 'Aula Prática', 'Ação de Extensão']],
+            isIn:[['Estágio', 'Visita Técnica', 'Aula Prática', 'Ação de Extensão']],
         },
     },
     shift: {
@@ -47,13 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     weekdays: {
         type: DataTypes.TEXT,
-        allowNull: false,
-        get() {
-            return JSON.parse(this.getDataValue('weekdays') || '[]');
-        },
-        set(value) {
-            this.setDataValue('weekdays', JSON.stringify(value));
-        },
+        allowNull: false
     },
     preceptorName:{
         type: DataTypes.STRING,
