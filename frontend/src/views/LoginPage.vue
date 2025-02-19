@@ -48,13 +48,15 @@ h1 {
             color: #000;
             padding: 40px;
             padding-top: 60px;
+            padding-bottom: 15px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             width: 350px;
             height: 390px;
             text-align: center;
             position: relative;
-            left: 140px; 
+            left: 140px;
+            gap:  
         }
 
         .login-box h1 {
@@ -93,6 +95,7 @@ h1 {
             padding: 6px 10px;
             background-color: #002855;
             color: white;
+            margin: 0 auto;
             margin-top: 10px;
             border: none;
             border-radius: 5px;
