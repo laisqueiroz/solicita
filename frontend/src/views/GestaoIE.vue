@@ -5,11 +5,11 @@
         <div class="cards">
             <CardComponents 
                 title="Nova Solicitação"
-                description="ashiuashdiashduasdkjasdksndkjasnkjdnsafkjnsafkjnskjfnaskjfnkjahdfiudhfuiisaufhiausf"
+                description="Registre uma nova solicitação de prática de ensino informando os detalhes necessários."
             />
             <CardComponents 
                 title="Visualizar Solicitações"
-                description="isdjasdaksjdkasnkjcnsckdnfkjsalkasjflkaslkfjlksajflkjaslfjasklfjaslkfjlaskjflaskjflaskj"
+                description="Acompanhe o status e detalhes das suas solicitações enviadas."
             /> 
         </div>
         <div class="illustration">
