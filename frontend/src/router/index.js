@@ -8,6 +8,9 @@ import ViewSolicitation from "../views/ViewSolicitation.vue";
 import CadastroPage from "../views/CadastroPage.vue";
 import FAQPage from "../views/FAQPage.vue"
 import GerenciarEquipamentos from "../views/GerenciarEquipamentos.vue"
+import NovaSolicitacao from "../views/NovaSolicitacao.vue";
+import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
+
 
 const routes = [
   { 
@@ -49,6 +52,14 @@ const routes = [
   { 
     path: "/gerenciar-equipamentos", 
     component: GerenciarEquipamentos 
+  },
+  {
+    path: "/NovaSolicitacao-view-NovaSolicitacao",
+    component: NovaSolicitacao
+  },
+  {
+    path: "/visualizar-solicitacao",
+    component: VisualizarSolicitacaoIE
   },
 ];
 

@@ -5,17 +5,17 @@
         <thead>
           <tr>
             <th v-for="col in columns" :key="col.field">{{ col.label }}</th>
+            <th>Detalhes</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(row, index) in data" :key="index">
-            <td v-for="col in columns" :key="col.field">
-              <span v-if="col.field === 'status'" class="status-text">
-                {{ row[col.field] }}
-              </span>
-              <span v-else>
-                {{ row[col.field] }}
-              </span>
+            <td 
+              v-for="col in columns" 
+              :key="col.field" 
+              :class="col.field === 'status' ? getStatusClass(row[col.field]) : ''"
+            >
+            {{ row[col.field] }}
             </td>
             <td class="action-cell">Ver mais <span class="arrow">▼</span></td>
           </tr>
@@ -32,6 +32,14 @@ const props = defineProps({
   columns: Array, 
   data: Array, 
 });
+
+const getStatusClass = (status) => {
+  return {
+    "status-approved": status === "Aprovado",
+    "status-pending": status === "Em análise",
+    "status-rejected": status === "Recusado"
+  };
+};
 </script>
 
 <style>
@@ -66,7 +74,7 @@ const props = defineProps({
 }
 
 .custom-table th {
-  font-size: 14px;
+  font-size: 1em;
   font-weight: bold;
   color: black;
   white-space: nowrap; 
@@ -78,6 +86,7 @@ const props = defineProps({
 }
 
 .action-cell {
+  font-size: 0.8em;
   color: #FFA500;
   font-weight: bold;
   cursor: pointer;
@@ -86,5 +95,20 @@ const props = defineProps({
 
 .action-cell .arrow {
   margin-left: 8px;
+}
+
+.status-approved {
+  color: green;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: red;
+  font-weight: bold;
 }
 </style>

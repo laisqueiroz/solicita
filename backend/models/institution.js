@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Modality.hasMany(models.Solicitation, { foreignKey: 'modalityId' });
+      Institution.hasMany(models.Solicitation, { foreignKey: 'institutionId' });
     }
   }
   Institution.init({
