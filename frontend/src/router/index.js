@@ -7,6 +7,7 @@ import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
 import CadastroPage from "../views/CadastroPage.vue";
 import FAQPage from "../views/FAQPage.vue"
+import GerenciarEquipamentos from "../views/GerenciarEquipamentos.vue"
 
 const routes = [
   { 
@@ -44,6 +45,10 @@ const routes = [
   {
     path: "/contatos",
     component: FAQPage
+  },
+  { 
+    path: "/gerenciar-equipamentos", 
+    component: GerenciarEquipamentos 
   },
 ];
 
