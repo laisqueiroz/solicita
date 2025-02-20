@@ -104,10 +104,10 @@ import HeaderHome from '../components/HeaderHome.vue';
         background-color: #ffffff;
         color: #000000;
         padding: 40px;
-         padding-top: 20px;
+        padding-top: 20px;
         border-radius: 10px;
         width: 500px;
-        margin: 10px auto 32px;
+        margin: 10px 0 32px 400px; 
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
