@@ -22,15 +22,14 @@
             <input type="text" id="disciplina" v-model="form.disciplina" required>
           </div>
           <div>
-            <label for="dias-da-semana">Dias da semana <span class="required">*</span></label>
-            <select id="dias-da-semana" v-model="form.diasSemana" required>
-              <option value="">--Selecione--</option>
-              <option value="segunda">Segunda-feira</option>
-              <option value="terca">Terça-feira</option>
-              <option value="quarta">Quarta-feira</option>
-              <option value="quinta">Quinta-feira</option>
-              <option value="sexta">Sexta-feira</option>
-            </select>
+            <label>Dias da semana <span class="required">*</span></label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" value="Segunda-feira" v-model="form.diasSemana"> Segunda-feira</label>
+              <label><input type="checkbox" value="Terça-feira" v-model="form.diasSemana"> Terça-feira</label>
+              <label><input type="checkbox" value="Quarta-feira" v-model="form.diasSemana"> Quarta-feira</label>
+              <label><input type="checkbox" value="Quinta-feira" v-model="form.diasSemana"> Quinta-feira</label>
+              <label><input type="checkbox" value="Sexta-feira" v-model="form.diasSemana"> Sexta-feira</label>
+            </div>
           </div>
         </div>
   
@@ -93,7 +92,7 @@
     curso: '',
     periodo: '',
     disciplina: '',
-    diasSemana: '',
+    diasSemana: [],
     semestre: '',
     horarios: '',
     modalidade: '',
@@ -120,33 +119,52 @@
   
   h1 {
     text-align: center;
+    color: black ;
   }
   
   label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
   
   input, select {
     width: 100%;
     padding: 8px;
-    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
+
+  .checkbox-group {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+  gap: 5px; /* Espaço entre os itens */
+  width: 100%;
+}
+
+.checkbox-group label {
+  display: inline-flex; 
+  align-items: center; 
+  white-space: nowrap; 
+}
+
+.checkbox-group input {
+  margin-right: 5px; 
+}
   
   .required {
     color:  #f7981d
   }
   
   button {
-    width: 100%;
     padding: 10px;
     background-color:#0e2e4a;
     color: white;
     border: none;
     border-radius: 4px;
     font-size: 16px;
+    margin: 20px auto 0; /* Centraliza o botão e adiciona um espaçamento acima */
+    display: block;
   }
   
   button:hover {
@@ -164,4 +182,3 @@
     min-width: 250px;
   }
   </style>
-  
