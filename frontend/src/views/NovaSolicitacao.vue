@@ -51,7 +51,13 @@
         <div class="form-group">
           <div>
             <label for="modalidade">Modalidade <span class="required">*</span></label>
-            <input type="text" id="modalidade" v-model="form.modalidade" required>
+            <select id="modalidade" v-model="form.modalidade" required>
+              <option value="">--Selecione--</option>
+              <option value="manha">Estágio</option>
+              <option value="tarde">Visita técnica</option>
+              <option value="tarde">Aula prática</option>
+              <option value="tarde">Ação de extensão</option>
+            </select>
           </div>
           <div>
             <label for="nome-preceptor">Nome do preceptor <span class="required">*</span></label>
