@@ -23,12 +23,12 @@ class UserController {
 
             const isPasswodValid = await bcrypt.compare(password, user.password);
             if (!isPasswodValid) {
-                console.log('a validação da senha está vazia.')
                 return res.status(401).json({ error: 'Senha incorreta.' })
             }
 
             const token = jwt.sign({ id: user.id, role: user.role }, secretKey, {expiresIn: '2h',});
-            res.status(200).json({token});
+            console.log(token);
+            res.status(200).json({token , role: user.role});
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Erro ao realizar o login.' });

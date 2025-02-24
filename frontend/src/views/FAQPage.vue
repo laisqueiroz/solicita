@@ -26,11 +26,14 @@
         </div>
 
     </div>
+
+    <FooterIllustration />
 </template>
 
 <script setup>
 import { ref } from "vue";
 import HeaderComponent from "../components/HeaderHome.vue";
+import FooterIllustration from "../components/FooterIllustration.vue"
 
 // Lista de perguntas e respostas
 const faqList = ref([

@@ -3,13 +3,13 @@
     <HeaderIE />
     <div class="container">
         <div class="cards">
-            <CardComponents 
+            <CardComponents @click="goToNewSolicitation"
                 title="Nova Solicitação"
-                description="ashiuashdiashduasdkjasdksndkjasnkjdnsafkjnsafkjnskjfnaskjfnkjahdfiudhfuiisaufhiausf"
+                description="Registre uma nova solicitação de prática de ensino informando os detalhes necessários."
             />
-            <CardComponents 
+            <CardComponents @click="goToViewSolicitations"
                 title="Visualizar Solicitações"
-                description="isdjasdaksjdkasnkjcnsckdnfkjsalkasjflkaslkfjlksajflkjaslfjasklfjaslkfjlaskjflaskjflaskj"
+                description="Registre uma nova solicitação de prática de ensino informando os detalhes necessários."
             /> 
         </div>
         <div class="illustration">
@@ -21,9 +21,21 @@
 <script setup>
 import CardComponents from '../components/CardComponents.vue';
 import HeaderIE from '../components/HeaderIE.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goToNewSolicitation = () => {
+    router.push("/new-solicitation")
+};
+
+const goToViewSolicitations =() => {
+    router.push("/solicitations-admin-view-solicitations")
+}
+
 </script>
 
-<style>
+<style scoped>
 .container {
     display: flex;
     flex-direction: row;

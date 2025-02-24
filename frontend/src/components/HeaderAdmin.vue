@@ -5,9 +5,9 @@
         </div>
         <nav class="navigation">
             <button id="HomePage" class="btn-no-filling-sec" @click="goToPrincipalPage">Página de Gestão</button>
-            <button id="Contacts" class="btn-no-filling" href="#">Solicitações</button>
-            <button id="AcessSolicitation" class="btn-no-filling" href="#">Equipamentos</button>
-            <button id="SingIn" class="btn-no-filling">Instituições</button>
+            <button id="Contacts" class="btn-no-filling" @click="goToSolicitationPage">Solicitações</button>
+            <button id="AcessSolicitation" class="btn-no-filling" @click="goToEquipmentPage">Equipamentos</button>
+            <button id="SingIn" class="btn-no-filling" @click="goToInstitutionPage">Instituições</button>
         </nav>
     </div>
 </template>
@@ -21,9 +21,17 @@ const goToPrincipalPage = () => {
     router.push("/gestao-admin")
 };
 
-defineOptions({
-name: "HeaderComponent"
-});
+const goToSolicitationPage = () => {
+    router.push("/solicitations-admin")
+};
+
+const goToEquipmentPage = () => {
+    router.push("/equipment-admin")
+}
+
+const goToInstitutionPage = () => {
+    router.push("/institutions-admin")
+}
 </script>
 
 <style scoped>

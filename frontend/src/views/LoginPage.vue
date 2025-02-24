@@ -1,4 +1,6 @@
 <template> 
+    <title>Solicita - Login</title>
+    <HeaderHome />
     <div class="container">
         <HeaderHome />
         <div class="illustration">
@@ -7,15 +9,19 @@
         <form class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
-            <label for="email">E-mail / CPF</label>
-            <input type="email" id="email" placeholder="Digite seu e-mail ou CPF" required />
-            <label for="password">Senha</label>
-            <input type="password" id="password" placeholder="Digite sua senha" required />
+            <div class="fields">
+                <label for="cpf">CPF</label>
+                <input v-model="cpf" type="cpf" id="cpf" placeholder="Digite seu CPF" required />
+            </div>
+            <div class="fields">
+                <label for="password">Senha</label>
+                <input v-model="password" type="password" id="password" placeholder="Digite sua senha" required />
+            </div>
             <div class="forgot-password">
                 Esqueceu a senha? <a href="#" @click.prevent="showModal = true">Solicitar recuperação</a>
             </div>
             <br>
-            <button type="submit" class="btn-primary">Entrar</button>
+            <button type="button" class="btn-primary" @click="login">Entrar</button>
         </form>
         
         <div v-if="showModal" class="modal">
@@ -29,18 +35,52 @@
                 </form>
             </div>
         </div>
+
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import HeaderHome from "../components/HeaderHome.vue"
 
-const showModal = ref(false);
+import { ref } from "vue";
+import { loginUser } from "../services/api.js"
+import { useRouter } from "vue-router";
+import HeaderHome from "../components/HeaderHome.vue";
+
+const router = useRouter();
+const cpf = ref('');
+const password = ref();
+const showModal = ref(false); 
 const recoveryEmail = ref('');
+const errorMessage = ref('');
+
+const login = async () => {
+    alert("entrou no login");
+    alert(password.value);
+    try {
+        alert("entrou no try")
+        const data = await loginUser(cpf.value, password.value);
+        alert("voltou do login: ", data);
+        console.log('Login bem-sucedido:', data);
+        const { token, role } = data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+
+        if (role === "admin") {
+            router.push("/gestao-admin");
+        } else {
+            router.push("/gestao-ie");
+        }
+
+    } catch (error) {
+        alert("erro")
+        errorMessage.value = error
+        console.error('Erro no login:', error)
+    }
+};
 
 const handleSubmit = () => {
-    alert(`Uma mensagem foi enviada para o seu e-mail (${recoveryEmail.value}) com instruções para redefinição de senha. Por favor, verifique sua caixa de entrada.`);
+    alert(`E-mail de recuperação enviado para: ${recoveryEmail.value}`);
     showModal.value = false;
 };
 </script>
@@ -65,19 +105,27 @@ h1 {
 }
 
 .login-box {
+    display: flex;
+    flex-direction: column;
     background-color: #ffffff;
     color: #000000;
     padding: 40px;
-    padding-top: 60px;
-    padding-bottom: 15px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     width: 350px;
     height: 390px;
-    text-align: center;
     position: relative;
     left: 140px;
     gap: 10px; 
+    align-items: center;
+}
+
+.fields {
+    align-self: flex-start;
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    margin-bottom: 30px;
 }
 
 .login-box h1 {
@@ -112,26 +160,9 @@ h1 {
     font-size: 11px;
 }
 
-.login-box button {
-    padding: 6px 10px;
-    background-color: #002855;
-    color: white;
-    margin: 0 auto;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.login-box button:hover {
-    background-color: #52606d;
-}
-
 .forgot-password {
-    font-size: 10px;
-    text-align: right;
+    font-weight: bold;
+    align-self: flex-end;
 }
 
 .forgot-password a {
@@ -175,35 +206,12 @@ h1 {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilo para o botão */
-.modal-content .btn-primary {
-    text-align: left;
-    padding: 6px 10px;
-    background-color: #002855;
-    color: white;
-    margin: 0 auto;
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: background-color 0.3s ease; /* Adiciona a transição para a animação */
-}
-
-/* Estilo para o efeito de animação ao passar o mouse */
-.modal-content .btn-primary:hover {
-    background-color: #52606d; /* Cor de fundo ao passar o mouse */
-}
-
-
 .modal-content form {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza os itens no modal */
+    align-items: center; 
     width: 100%;
 }
-
 
 .modal-content input {
     width: 50%;
@@ -224,8 +232,6 @@ h1 {
     padding-right: 200px;
 }
 
-
-
 .close {
     color: #aaa;
     float: right;
@@ -239,4 +245,5 @@ h1 {
     text-decoration: none;
     cursor: pointer;
 }
+
 </style>

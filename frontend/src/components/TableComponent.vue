@@ -15,9 +15,11 @@
               :key="col.field" 
               :class="col.field === 'status' ? getStatusClass(row[col.field]) : ''"
             >
-            {{ row[col.field] }}
+            {{ typeof col.field === 'function' ? col.field(row) : row[col.field] }}
             </td>
-            <td class="action-cell">Ver mais <span class="arrow">▼</span></td>
+            <td class="action-cell" @click="$emit('verMais', row)">
+              Ver mais <span class="arrow">▼</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -26,18 +28,20 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
   columns: Array, 
   data: Array, 
 });
 
+defineEmits(["verMais"]);
+
 const getStatusClass = (status) => {
   return {
-    "status-approved": status === "Aprovado",
+    "status-approved": status === "Deferido",
     "status-pending": status === "Em análise",
-    "status-rejected": status === "Recusado"
+    "status-rejected": status === "Indeferido"
   };
 };
 </script>

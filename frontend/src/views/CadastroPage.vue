@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit">Enviar Solicitação</button>
+                    <button type="submit" @click="goToHome">Enviar Solicitação</button>
                 </div>
             </form>
         </div>
@@ -85,29 +85,41 @@
 
 <script setup>
 import HeaderHome from '../components/HeaderHome.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goToHome = () => {
+    router.push("/")
+};
+
 </script>
 
-<style>
+<style scoped>
     .main-container {
         display: flex;
         align-items: center;
-        padding: 64px 164px;
+        justify-content: space-around;
+        padding: 64px;
     }
 
     .ilustracao {
         margin-right: 120px;
-        width: 100px;
+        width: 200px;
         height: auto;
+    }
+
+    #imagem {
+        width: 400px;
     }
 
     .form-container {
         background-color: #ffffff;
         color: #000000;
         padding: 40px;
-         padding-top: 20px;
+        padding-top: 20px;
         border-radius: 10px;
         width: 500px;
-        margin: 10px auto 32px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 

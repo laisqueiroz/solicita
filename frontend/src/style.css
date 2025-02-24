@@ -90,6 +90,17 @@ button {
   border-color: transparent;
 }
 
+.btn-no-filling-primary {
+  color: #003366;
+  background-color: transparent;
+  border-color: transparent;
+}
+.btn-no-filling-primary:hover {
+  color: #fff;
+  background-color: #003366;
+  border-color: transparent;
+}
+
 .btn-no-filling-sec {
   color: #F39A24;
   background-color: transparent;
@@ -124,13 +135,6 @@ button {
   color: #700;
   background-color: transparent;
   border-color: transparent;
-}
-
-.container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
 }
 
 .card {

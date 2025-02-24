@@ -47,6 +47,7 @@ text-align: left;
 font-size: 30px;
 color: #f7981d;
 line-height: 1.2;
+font-weight: bold;
 }
 .content p {
 color: #fff;

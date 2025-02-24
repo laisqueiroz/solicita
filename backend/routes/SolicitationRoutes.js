@@ -1,9 +1,10 @@
 const express = require('express');
 const SolicitationController = require('../controllers/SolicitationController');
+const { authenticateJWT } = require("../middlewares/AuthMiddleware");
 
 const router = express.Router();
 
-router.get('/', SolicitationController.getAllSolicitations);
+router.get('/', authenticateJWT, SolicitationController.getAllSolicitations);
 router.get('/:id', SolicitationController.getSolicitationById);
 router.post('/', SolicitationController.createSolicitation);
 router.put('/:id', SolicitationController.updateSolicitation);
