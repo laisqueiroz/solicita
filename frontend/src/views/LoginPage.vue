@@ -2,10 +2,10 @@
     <title>Solicita - Login</title>
     <HeaderHome />
     <div class="container">
+        <HeaderHome />
         <div class="illustration">
             <img src="../assets/image 9 (Traced).png" alt="Ilustração">
         </div>
-
         <form class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+
 import { ref } from "vue";
 import { loginUser } from "../services/api.js"
 import { useRouter } from "vue-router";
@@ -82,7 +83,6 @@ const handleSubmit = () => {
     alert(`E-mail de recuperação enviado para: ${recoveryEmail.value}`);
     showModal.value = false;
 };
-
 </script>
 
 <style scoped>
@@ -163,8 +163,6 @@ h1 {
 .forgot-password {
     font-weight: bold;
     align-self: flex-end;
-    font-size: 10px;
-    text-align: right;
 }
 
 .forgot-password a {
@@ -211,7 +209,7 @@ h1 {
 .modal-content form {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza os itens no modal */
+    align-items: center; 
     width: 100%;
 }
 
@@ -234,7 +232,6 @@ h1 {
     padding-right: 200px;
 }
 
-
 .close {
     color: #aaa;
     float: right;
@@ -248,4 +245,5 @@ h1 {
     text-decoration: none;
     cursor: pointer;
 }
+
 </style>
