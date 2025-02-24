@@ -1,6 +1,6 @@
 <template>
   <title>Solicitações de Práticas</title>
-  <HeaderAdmin/>
+  <HeaderIE />
   <div class="table">
     <h1>Solicitações de Práticas</h1>
     <TableComponent :columns="columns" :data="data" @verMais="abrirModal"/>
@@ -31,7 +31,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import TableComponent from "../components/TableComponent.vue";
-import HeaderAdmin from "../components/HeaderAdmin.vue";
+import HeaderIE from "../components/HeaderIE.vue";
 import { getAllSolicitations, updateSolicitationId } from "../services/api";
 
 const columns = ref([

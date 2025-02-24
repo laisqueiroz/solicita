@@ -30,7 +30,7 @@ const goToNewSolicitation = () => {
 };
 
 const goToViewSolicitations =() => {
-    router.push("/solicitations-admin-view-solicitations")
+    router.push("/view-all-solicitations")
 }
 
 </script>
