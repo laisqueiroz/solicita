@@ -5,16 +5,15 @@
         <div class="cards">
             <CardComponents @Click="goToSolicitations"
                 title="Gerenciar Solicitações"
-                description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
+                description="Gerencie e acompanhe as solicitações de práticas de ensino e solicitações de acesso ao sistema de forma centralizada e eficiente."
             />
-            <CardComponents />
-            <CardComponents 
+            <CardComponents @Click="goToInstitutions"
                 title="Gerenciar Instituições Credenciadas"
-                description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
+                description="Administre as instituições credenciadas e mantenha o controle sobre os estabelecimentos parceiros."
             />
-            <CardComponents 
+            <CardComponents @Click="goToEquipment"
                 title="Gerenciar Equipamentos"
-                description="uashuahsdiuashdhsadjhsaidhsuadnkjsadnkjasdkjasdkjashdkjahskdjhaskdjhsakjdhasjdhkshdkjashkdjhaskdjhaskjdh"
+                description="Supervisione e organize os equipamentos disponíveis para as práticas de ensino."
             />
         </div>
         <div class="illustration">
@@ -33,6 +32,12 @@ const router = useRouter();
 const goToSolicitations = () => {
     router.push("/solicitations-admin")
 };
+const goToEquipment = () => {
+    router.push("/equipment-admin")
+};
+const goToInstitutions = () => {
+    router.push("/institutions-admin")
+};
 </script>
 
 <style scoped>
@@ -42,10 +47,14 @@ const goToSolicitations = () => {
     align-items: center;
     justify-content: space-around;
 }
-img {
-    width: 350px;
-}
 .illustration {
-    align-items: center;
-}
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .illustration img {
+        max-width: 70%;
+        height: auto;
+    }
 </style>

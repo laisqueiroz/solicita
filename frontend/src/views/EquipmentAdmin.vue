@@ -3,13 +3,13 @@
     <HeaderAdmin/>
     <div class="container">
         <div class="cards">
-            <CardComponents @Click="goToViewSolicitations"
-                title="Solicitações de Práticas"
-                description="Gerencie e acompanhe os pedidos de práticas de ensino, garantindo um fluxo organizado e eficiente."
+            <CardComponents @Click="goToNewEquipment"
+                title="Novo Equipamento"
+                description="Adicione um novo equipamento com quantidade de vagas disponíveis para solicitação de práticas de ensino."
             />
-            <CardComponents @Click="goToSolicitationsAcess"
-                title="Solicitações de Acesso"
-                description="Controle e revise as solicitações de acesso, assegurando conformidade com os requisitos institucionais."
+            <CardComponents @click="goToViewEquipment"
+                title="Gerenciar Equipamentos"
+                description="Edite e gerencie os equipamentos cadastrados, aumente a quantidade vagas ou turnos."
             />
         </div>
         <div class="illustration">
@@ -25,11 +25,12 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const goToViewSolicitations = () => {
-    router.push("/solicitations-admin-view-solicitations")
+const goToNewEquipment = () => {
+    router.push("/new-equipment-admin")
 };
-const goToSolicitationsAcess = () => {
-    router.push("/solicitations-acess-admin")
+
+const goToViewEquipment = () => {
+    router.push("/view-equipment-admin")
 }
 </script>
 
@@ -38,13 +39,8 @@ const goToSolicitationsAcess = () => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    
+    justify-content: space-around;
 }
-
-img {
-    width: 350px;
-}
-
 .illustration {
         display: flex;
         justify-content: center;

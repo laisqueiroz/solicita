@@ -6,10 +6,14 @@ import GestaoIE from "../views/GestaoIE.vue";
 import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
 import CadastroPage from "../views/CadastroPage.vue";
+import FAQPage from "../views/FAQPage.vue"
+import NovaSolicitacao from "../views/NovaSolicitacao.vue";
 import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
 import EquipmentAdmin from "../views/EquipmentAdmin.vue";
 import InstitutionsAdmin from "../views/InstitutionsAdmin.vue";
 import SolicitationAcesss from "../views/SolicitationAcesss.vue";
+import VerMaisVisualizarSolictIE from "../views/VerMaisVisualizarSolictIE.vue";
+
 
 const routes = [
   { 
@@ -44,9 +48,17 @@ const routes = [
     path: "/solicitations-admin-view-solicitations",
     component: ViewSolicitation
   },
+  {
+    path: "/contatos",
+    component: FAQPage
+  },
 
   {
-    path: "/visualizar-solicitacao",
+    path: "/new-solicitation",
+    component: NovaSolicitacao
+  },
+  {
+    path: "/view-all-solicitations",
     component: VisualizarSolicitacaoIE
   },
 
@@ -63,6 +75,10 @@ const routes = [
   {
     path: "/solicitations-acess-admin",
     component: SolicitationAcesss
+  },
+  {
+    path: "/visualizar-solicitacao-VerMais",
+    component: VerMaisVisualizarSolictIE
   },
 
 ];

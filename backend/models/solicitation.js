@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Solicitation.belongsTo(models.Equipment, { foreignKey: 'equipmentId' });
       Solicitation.belongsTo(models.Institution, { foreignKey: 'institutionId' });
+      Solicitation.belongsTo(models.User, { foreignKey: 'userId' });
     }
   }
   Solicitation.init({
@@ -70,6 +71,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: {
         model: 'Institution',
+        key: 'id',
+      },
+      allowNull: false,
+      onUpdate: 'CASCADE',
+      onDelete: 'RESTRICT',
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'User',
         key: 'id',
       },
       allowNull: false,
