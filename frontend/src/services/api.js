@@ -6,11 +6,8 @@ const api = axios.create({
 });
 
 export const loginUser = async (cpf, password) => {
-    console.log("entrou no service-front");
     try {
-        console.log("entrou no try");
         const response = await api.post("/users/login", {cpf, password});
-        console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);

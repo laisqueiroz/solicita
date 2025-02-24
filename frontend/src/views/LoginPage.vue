@@ -54,12 +54,8 @@ const recoveryEmail = ref('');
 const errorMessage = ref('');
 
 const login = async () => {
-    alert("entrou no login");
-    alert(password.value);
     try {
-        alert("entrou no try")
         const data = await loginUser(cpf.value, password.value);
-        alert("voltou do login: ", data);
         console.log('Login bem-sucedido:', data);
         const { token, role } = data;
 
@@ -73,7 +69,6 @@ const login = async () => {
         }
 
     } catch (error) {
-        alert("erro")
         errorMessage.value = error
         console.error('Erro no login:', error)
     }
