@@ -23,36 +23,35 @@
 </template>
 
 <script setup>
-import CardComponents from '../components/CardComponents.vue';
-import HeaderAdmin from '../components/HeaderAdmin.vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const goToSolicitations = () => {
-    router.push("/solicitations-admin")
-};
-const goToEquipment = () => {
-    router.push("/equipment-admin")
-};
-const goToInstitutions = () => {
-    router.push("/institutions-admin")
-};
+    import CardComponents from '../components/CardComponents.vue';
+    import HeaderAdmin from '../components/HeaderAdmin.vue';
+    import { useRouter } from 'vue-router';
+    
+    const router = useRouter();
+    
+    const goToSolicitations = () => {
+        router.push("/solicitations-admin")
+    };
+    const goToEquipment = () => {
+        router.push("/equipment-admin")
+    };
+    const goToInstitutions = () => {
+        router.push("/institutions-admin")
+    };
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-}
-.illustration {
+    .container {
         display: flex;
-        justify-content: center;
+        flex-direction: row;
         align-items: center;
+        justify-content: space-around;
     }
-
+    .illustration {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+    }
     .illustration img {
         max-width: 70%;
         height: auto;
