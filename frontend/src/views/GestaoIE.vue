@@ -19,14 +19,14 @@
 </template>
 
 <script setup>
-import CardComponents from '../components/CardComponents.vue';
-import HeaderIE from '../components/HeaderIE.vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const goToNewSolicitation = () => {
-    router.push("/new-solicitation")
+    import CardComponents from '../components/CardComponents.vue';
+    import HeaderIE from '../components/HeaderIE.vue';
+    import { useRouter } from 'vue-router';
+    
+    const router = useRouter();
+    
+    const goToNewSolicitation = () => {
+        router.push("/new-solicitation")
 };
 
 const goToViewSolicitations =() => {
@@ -36,20 +36,19 @@ const goToViewSolicitations =() => {
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 50px;
-    margin-left: 50px;
-}
+    .container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        margin-top: 50px;
+        margin-left: 50px;
+    }
     .illustration {
         display: flex;
         justify-content: center;
         align-items: center;
     }
-
     .illustration img {
         max-width: 70%;
         height: auto;
