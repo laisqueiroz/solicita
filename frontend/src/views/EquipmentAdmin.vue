@@ -12,43 +12,43 @@
                 description="Edite e gerencie os equipamentos cadastrados, aumente a quantidade vagas ou turnos."
             />
         </div>
-        <div class="illustration">
+    <div class="illustration">
         <img src="../assets/linear-art-gestao.png" alt="Ilustração de gestão">
-        </div>
+    </div>
     </div>
 </template>
 
 <script setup>
-import CardComponents from '../components/CardComponents.vue';
-import HeaderAdmin from '../components/HeaderAdmin.vue';
-import { useRouter } from 'vue-router';
+    import CardComponents from '../components/CardComponents.vue';
+    import HeaderAdmin from '../components/HeaderAdmin.vue';
+    import { useRouter } from 'vue-router';
 
-const router = useRouter();
+    const router = useRouter();
 
-const goToNewEquipment = () => {
-    router.push("/new-equipment-admin")
-};
+    const goToNewEquipment = () => {
+        router.push("/new-equipment-admin")
+    };
 
-const goToViewEquipment = () => {
-    router.push("/view-equipment-admin")
-}
+    const goToViewEquipment = () => {
+        router.push("/view-equipment-admin")
+    }
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-}
-.illustration {
+    .container {
         display: flex;
-        justify-content: center;
+        flex-direction: row;
         align-items: center;
+        justify-content: space-around;
     }
-
-    .illustration img {
-        max-width: 70%;
-        height: auto;
-    }
+    .illustration {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .illustration img {
+            max-width: 70%;
+            height: auto;
+        }
 </style>
