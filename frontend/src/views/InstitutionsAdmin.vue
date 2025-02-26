@@ -19,34 +19,33 @@
 </template>
 
 <script setup>
-import CardComponents from '../components/CardComponents.vue';
-import HeaderAdmin from '../components/HeaderAdmin.vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const goToNewInstitution = () => {
-    router.push("/new-institution-admin")
-};
-
-const goToViewInstitutions = () => {
-    router.push("/view-institutions-admin")
-}
+    import CardComponents from '../components/CardComponents.vue';
+    import HeaderAdmin from '../components/HeaderAdmin.vue';
+    import { useRouter } from 'vue-router';
+    
+    const router = useRouter();
+    
+    const goToNewInstitution = () => {
+        router.push("/new-institution-admin")
+    };
+    
+    const goToViewInstitutions = () => {
+        router.push("/view-institutions-admin")
+    }
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-}
-.illustration {
+    .container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .illustration {
         display: flex;
         justify-content: center;
         align-items: center;
     }
-
     .illustration img {
         max-width: 70%;
         height: auto;
