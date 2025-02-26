@@ -22,9 +22,7 @@
 import CardComponents from '../components/CardComponents.vue';
 import HeaderAdmin from '../components/HeaderAdmin.vue';
 import { useRouter } from 'vue-router';
-
 const router = useRouter();
-
 const goToViewSolicitations = () => {
     router.push("/solicitations-admin-view-solicitations")
 };
@@ -34,18 +32,15 @@ const goToSolicitationsAcess = () => {
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    
-}
-
-img {
-    width: 350px;
-}
-
-.illustration {
+    .container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    img {
+        width: 350px;
+    }
+    .illustration {
         display: flex;
         justify-content: center;
         align-items: center;
