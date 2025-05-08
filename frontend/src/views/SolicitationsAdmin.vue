@@ -35,24 +35,21 @@ const goToSolicitationsAcess = () => {
 
 <style scoped>
 .container {
+    padding-top: 5%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    
-}
-
-img {
-    width: 350px;
+    justify-content: center;
 }
 
 .illustration {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .illustration img {
-        max-width: 70%;
-        height: auto;
-    }
+.illustration img {
+    max-width: 70%;
+    height: auto;
+}
 </style>

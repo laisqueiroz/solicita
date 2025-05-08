@@ -3,30 +3,14 @@
   <HeaderAdmin/>
   <div class="table">
     <h1>Solicitações de Práticas</h1>
-    <TableComponent :columns="columns" :data="data" @verMais="abrirModal"/>
+    <TableComponent 
+      :columns="columns" 
+      :data="data" 
+      @verMais="toggleExpand" 
+      @aprovar="aprovedSolicitation"
+      @negar="denySolicitation"
+    />
   </div>
-
-  <div v-if="modalAberto" class="modal-overlay">
-    <div class="modal">
-      <button @click="fecharModal" class="close">&times;</button>
-      <h2>Detalhes da Solicitação</h2>
-      <p><strong>Código:</strong> {{ solicitacaoSelecionada.code }}</p>
-      <p><strong>Curso:</strong> {{ solicitacaoSelecionada.course }}</p>
-      <p><strong>Disciplina:</strong> {{ solicitacaoSelecionada.subject }}</p>
-      <p><strong>Semestre:</strong> {{ solicitacaoSelecionada.period }}</p>
-      <p><strong>Tipo de Solicitação:</strong> {{ solicitacaoSelecionada.modality }}</p>
-      <p><strong>Turno da Solicitação:</strong> {{ solicitacaoSelecionada.shift }}</p>
-      <p><strong>Unidade/Equipamento:</strong> {{ solicitacaoSelecionada.Equipment.name }}</p>
-      <p><strong>Instituição Solicitante:</strong> {{ solicitacaoSelecionada.Institution.name }}</p>
-      <p><strong>Nome do Preceptor:</strong> {{ solicitacaoSelecionada.preceptorName }}</p>
-      <p><strong>N° Registro no Conselho:</strong> {{ solicitacaoSelecionada.councilRegistration }}</p>
-      <p><strong>Status:</strong> {{ solicitacaoSelecionada.status }}</p>
-      <div class="modal-actions">
-        <button @click="aprovedSolicitation" class="btn-add">Aprovar Solicitação</button>
-        <button @click="denySolicitation" class="btn-remove">Negar Solicitação</button>
-      </div>
-    </div>
-    </div>
 </template>
 
 <script setup>
@@ -45,34 +29,28 @@ const columns = ref([
 
 const data = ref([]);
 
-const modalAberto = ref(false);
-const solicitacaoSelecionada = ref({});
-
 onMounted(async () => {
-  data.value = await getAllSolicitations();
+  const solicitations = await getAllSolicitations();
+  data.value = solicitations.map(solicitation => ({
+    ...solicitation,
+    expandida: false
+  }));
 });
 
-const abrirModal = (solicitacao) => {
-  solicitacaoSelecionada.value = solicitacao;
-  modalAberto.value = true;
-};
-
-const fecharModal = () => {
-  modalAberto.value = false;
+const toggleExpand = (index) => {
+  data.value[index].expandida = !data.value[index].expandida;
 };
 
 const aprovedSolicitation = async () => {
   await updateSolicitationId(solicitacaoSelecionada.value.id, { status: "Deferido"});
-  alert(`Acesso liberado para ${solicitacaoSelecionada.value.code}`);
+  alert(`Solicitação aprovada com sucesso: ${solicitacaoSelecionada.value.code}`);
   data.value = await getAllSolicitations();
-  fecharModal();
 };
 
 const denySolicitation = async () => {
   await updateSolicitationId(solicitacaoSelecionada.value.id, { status: "Indeferido"});
-  alert(`Acesso negado para ${solicitacaoSelecionada.value.code}`);
+  alert(`Solicitação aprovada com sucesso: ${solicitacaoSelecionada.value.code}`);
   data.value = await getAllSolicitations();
-  fecharModal();
 };
 </script>
 

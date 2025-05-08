@@ -39,7 +39,7 @@ button {
 .btn-primary:hover {
   color: #003366;
   background-color: #ffffff;
-  border-color: transparent;
+  border-color: #003366;
 }
 
 .btn-secondary {
@@ -132,8 +132,8 @@ button {
 }
 
 .btn-no-filling-remove:hover {
-  color: #700;
-  background-color: transparent;
+  color: #fff;
+  background-color: #700;
   border-color: transparent;
 }
 

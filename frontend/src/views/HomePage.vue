@@ -28,8 +28,8 @@ main {
 display: flex;
 justify-content: space-between;
 align-items: center;
-padding: 0 40px;
-height: calc(100vh - 80px);
+padding: 5% 10%;
+height: auto;
 }
 .container {
 display: grid;

@@ -55,6 +55,7 @@ class SolicitationController {
 
     static async updateSolicitation(req, res) {
         const { id } = req.params;
+        const userRole = req.user.role;
         const SolicitationToUpdate = await SolicitationService.getSolicitationById(id);
         if (!SolicitationToUpdate) return res.status(404).json({ error: 'Solicitação não encontrado!' });
         try {
@@ -71,8 +72,10 @@ class SolicitationController {
             if (equipmentId) SolicitationToUpdate.equipmentId = equipmentId;
             if (institutionId) SolicitationToUpdate.institutionId = institutionId;
             if (userId) SolicitationToUpdate.institutionId = userId;
-            if (status) SolicitationToUpdate.status = status;
-
+            if (status) {
+                if (status != 'Cancelado' && userRole != 'admin') return res.status(404).json({ error: 'Usuário não tem acesso para alterar o status da solicitação.' });
+                SolicitationToUpdate.status = status;
+            }
             await SolicitationToUpdate.save();
             const solicitation = await SolicitationService.updateSolicitation(id, SolicitationToUpdate);
             res.json(solicitation);

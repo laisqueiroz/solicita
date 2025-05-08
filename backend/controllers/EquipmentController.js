@@ -22,30 +22,33 @@ class EquipmentController {
     }
 
     static async createEquipment(req, res) {
-        try {
-            const { name, shift, vacant } = req.body;
+        const { name, shift, vacant } = req.body;
 
-            if (!name || !shift || !vacant) {
-                res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
-            }
+        if (!name || !shift || !vacant) {
+            return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+
+        }
+        try {
+            const equipmentExist = await EquipmentService.getEquipmentByName(name);
+            if (equipmentExist) return res.status(403).json({ error: 'Equipamento já existe.' });
+            
             const equipment = await EquipmentService.createEquipment({ name });
-            console.log('criou  equipamento');
 
             const equipmentId = equipment.id;
             const createRotation = await RotationService.createRotation({shift , vacant , equipmentId});
-            res.status(201).json();
+            return res.status(201).json();
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
     static async updateEquipment(req, res) {
-        const { id } = eq.params;
+        const { id } = req.body;
         const equipmentToUpdate = await EquipmentService.getEquipmentById(id);
-        if (!equipmentToUpdate) return res.status(404).json({ error: error.message });
+        if (!equipmentToUpdate) return res.status(404).json({ error: "Equipamento não encontrado ou não existe." });
         try {
             const { name } = req.body;
-            if (name) equipmentToUpdate.name = name;
+            if (name !== equipmentToUpdate.name) return res.status(403).json({ error: "Nome do equipamento nãopode ser alterado." });
 
             await equipmentToUpdate.save();
             const equipment = await EquipmentService.updateEquipment(equipmentToUpdate);

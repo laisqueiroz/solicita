@@ -17,7 +17,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const goToPrincipalPage = () => {
-    router.push("/gestao-ie")
+    router.push("/regular-management")
 };
 
 const goToViewSolicitations = () => {

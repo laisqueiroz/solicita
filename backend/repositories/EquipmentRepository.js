@@ -15,6 +15,10 @@ class EquipmentRepository{
         return Equipment.findByPk(id);
     }
 
+    static async findOne(name){
+        return await Equipment.findOne({where: {name}});
+    }
+
     static async create(data) {
         return Equipment.create(data);
     }

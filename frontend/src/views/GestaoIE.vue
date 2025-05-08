@@ -37,21 +37,20 @@ const goToViewSolicitations =() => {
 
 <style scoped>
 .container {
+    padding-top: 5%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
-    margin-top: 50px;
-    margin-left: 50px;
+    justify-content: center;
 }
-    .illustration {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .illustration img {
-        max-width: 70%;
-        height: auto;
-    }
+.illustration img {
+    max-width: 70%;
+    height: auto;
+}
 </style>

@@ -6,7 +6,7 @@
         <div class="illustration">
             <img src="../assets/image 9 (Traced).png" alt="Ilustração">
         </div>
-        <form class="login-box">
+        <form @submit.prevent="login" class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
             <div class="fields">
@@ -21,7 +21,7 @@
                 Esqueceu a senha? <a href="#" @click.prevent="showModal = true">Solicitar recuperação</a>
             </div>
             <br>
-            <button type="button" class="btn-primary" @click="login">Entrar</button>
+            <button type="submit" class="btn-primary">Entrar</button>
         </form>
         
         <div v-if="showModal" class="modal">
@@ -33,6 +33,15 @@
                     <input type="email" id="recovery-email" v-model="recoveryEmail" placeholder="Digite seu e-mail" required />
                     <button type="submit" class="btn-primary">Enviar</button>
                 </form>
+            </div>
+        </div>
+
+        <div v-if="showErrorModal" class="modal">
+            <div class="modal-content">
+                <span class="close" @click="showErrorModal = false">&times;</span>
+                <h2>Erro</h2>
+                <p>{{ errorMessage }}</p>
+                <button class="btn-primary" @click="showErrorModal = false">Fechar</button>
             </div>
         </div>
 
@@ -52,6 +61,7 @@ const password = ref();
 const showModal = ref(false); 
 const recoveryEmail = ref('');
 const errorMessage = ref('');
+const showErrorModal = ref(false);
 
 const login = async () => {
     try {
@@ -69,7 +79,13 @@ const login = async () => {
         }
 
     } catch (error) {
-        errorMessage.value = error
+        if (error.response && error.response.data && error.response.data.message) {
+            errorMessage.value = error.response.data.message;
+            showErrorModal.value = true; // Exibir o modal de erro
+        } else {
+            errorMessage.value = "Erro ao tentar fazer login. Tente novamente.";
+            showErrorModal.value = true;
+        }
         console.error('Erro no login:', error)
     }
 };
