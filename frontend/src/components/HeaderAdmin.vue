@@ -18,7 +18,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const goToPrincipalPage = () => {
-    router.push("/gestao-admin")
+    router.push("/admin-management")
 };
 
 const goToSolicitationPage = () => {
@@ -26,11 +26,11 @@ const goToSolicitationPage = () => {
 };
 
 const goToEquipmentPage = () => {
-    router.push("/equipment-admin")
+    router.push("/manage-equipment")
 }
 
 const goToInstitutionPage = () => {
-    router.push("/institutions-admin")
+    router.push("/manage-institution")
 }
 </script>
 

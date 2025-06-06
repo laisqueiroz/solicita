@@ -1,8 +1,13 @@
+const { where } = require('sequelize');
 const { Institution } = require('../models');
 
 class InstitutionRepository {
     static async findAll() {
         return Institution.findAll();
+    }
+
+    static async findOne(cnpj) {
+        return Institution.findOne({where: {cnpj}});
     }
 
     static async findById(id) {

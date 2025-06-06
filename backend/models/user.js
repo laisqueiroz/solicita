@@ -2,24 +2,43 @@
 const {
   Model
 } = require('sequelize');
+const { cpf } = require('cpf-cnpj-validator');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     
     static associate(models) {
-     
+      User.belongsTo(models.Institution, { foreignKey: 'institutionId' });
     }
   }
   User.init({
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      IsEmail: true,
+      set(value) {
+        this.setDataValue('email', value.toLowerCase()); 
+      }
     },
-    password: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     cpf: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
+      allowNull: false,
+      validate: {
+        isValidCPF(value) {
+          if (!cpf.isValid(value)) {
+            throw new Error('CPF inválido!');
+          }
+        },
+      },
     },
     role: {
       type: DataTypes.STRING,
@@ -34,9 +53,22 @@ module.exports = (sequelize, DataTypes) => {
     },
     active: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         isIn: [['true','false']],
       },
+    },
+    dateBirth: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    institutionId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Institutions', 
+        key: 'id'
+      }
     }
   }, {
     sequelize,

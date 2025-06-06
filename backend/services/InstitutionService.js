@@ -5,6 +5,10 @@ class InstitutionService {
         return InstitutionRepository.findAll();
     }
 
+    static async getInstitutionByCNPJ(cnpj) {
+        return InstitutionRepository.findOne(cnpj);
+    }
+
     static async getInstitutionById(id) {
         return InstitutionRepository.findById(id);
     }

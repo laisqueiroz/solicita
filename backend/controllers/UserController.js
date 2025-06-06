@@ -10,28 +10,19 @@ class UserController {
         }
         try {
             const { cpf, password } = req.body;
-            if (!cpf || !password) {
-                return res.status(400).json({ error: 'CPF e senha são obrigatórios.' });
-            }
+            if (!cpf || !password) return res.status(400).json({ message: 'CPF e senha são obrigatórios.' });
+
             const user = await UserService.getUserByCPF(cpf);
-            if (!user) {
-                return res.status(401).json({ error: 'Usuário não existe ou as credenciais fornecidas estão incorretas.' });
-            }
-            if (user.active == 'false') {
-                return res.status(403).json({error: 'Usuário não pode acessar o sistema!'})
-            }
+            if (!user) return res.status(401).json({ message: 'Usuário não existe ou as credenciais fornecidas estão incorretas.' });
+            if (user.active == 'false') return res.status(403).json({message: 'Usuário não pode acessar o sistema!'});
 
             const isPasswodValid = await bcrypt.compare(password, user.password);
-            if (!isPasswodValid) {
-                return res.status(401).json({ error: 'Senha incorreta.' })
-            }
+            if (!isPasswodValid) return res.status(401).json({ message: 'Senha incorreta. Tente novamente.' });
 
             const token = jwt.sign({ id: user.id, role: user.role }, secretKey, {expiresIn: '2h',});
-            console.log(token);
             res.status(200).json({token , role: user.role});
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ error: 'Erro ao realizar o login.' });
+            res.status(500).json({ error: 'Erro ao processar os dados.' });
         }
     }
 
@@ -56,16 +47,16 @@ class UserController {
     }
 
     static async createUser(req, res) {
-        try {
-            const { name , email , password , cpf ,position} = req.body;
-            const hashedPassword = await bcrypt.hash(password, 10);
+        const { name , email , password , cpf ,position, institutionId, dateBirth} = req.body;
+        if (!name || !email || !password || !cpf || !position || !institutionId || !dateBirth) {
+            res.status(400).json({ message: 'Todos os campos são obrigatórios!' })
+        };
 
-            if (!name || !email || !password || !cpf || !position) {
-                res.status(400).json({ message: 'Todos os campos são obrigatórios!' })
-            };
+        try {
+            const hashedPassword = await bcrypt.hash(password, 10);
             const role = 'regular';
             const active = 'false';
-            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active});
+            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active, dateBirth, institutionId});
             res.status(201).json(newUser);
         } catch (error) {
             res.status(400).json({ error: error.message });
@@ -74,9 +65,32 @@ class UserController {
 
     static async updateUser(req, res) {
         const { id } = req.params;
+        const userExist = await UserService.getUserById(id);
+        if (!userExist) return res.status(404).json({ error: 'Usuário não encontrado' });
+        const userRole = req.user.role;
         try {
-            const user = await UserService.updateUser(id, req.body);
-            if (!user) return res.status(404).json({ error: 'Usuário não encontrado.' });
+            const { name , email , password , cpf ,position, role, active} = req.body;
+            if ( name != userExist.name ) return res.status(403).json({ error: 'Nome não pode ser alterado.' });
+            if ( cpf != userExist.cpf ) return res.status(403).json({ error: 'CPF não pode ser alterado.' });
+            const isPasswodValid = await bcrypt.compare(password, user.password);
+            if (isPasswodValid) return res.status(400).json({ error: 'A nova senha não pode ser igual à senha atual.' });
+            if (!isPasswodValid) {
+                const hashedPassword = await bcrypt.hash(password, 10);
+                userExist.password = hashedPassword;
+            }
+            if (email) userExist.email = email;
+            if (position) userExist.position = position;
+            if (role) {
+                if (userRole != 'admin') return res.status(403).json({ error: 'Papel de usuário não pode ser alterado.' });
+                userExist.role = role;
+            } 
+            if (active) {
+                if (userRole != 'admin') return res.status(403).json({ error: ' Usuário não pode ser alterar o acesso.' });
+                userExist.active = active;
+            }
+
+            await userExist.save();
+            const user = await UserService.updateUser(id, userExist);
             res.json(user);
         } catch(error) {
             res.status(400).json({ error: error.message });
@@ -85,7 +99,10 @@ class UserController {
 
     static async deleteUser(req, res) {
         const { id } = req.params;
+        const userRole = req.user.role;
+        const userId = req.user.id;
         try {
+            if (id != userId && userRole != 'admin') return res.status(403).json({ error: 'Usuário não tem autorização para esta ação.' });
             await UserService.deleteUser(id);
             res.json({ message: 'Usuário deletado com sucesso!' });
         } catch(error) {

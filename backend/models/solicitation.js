@@ -91,7 +91,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            isIn: [['Em análise','Deferido','Indeferido']],
+            isIn: [['Em análise','Deferido','Indeferido','Cancelado']],
         },
     }
   }, {

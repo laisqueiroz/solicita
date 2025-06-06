@@ -6,7 +6,7 @@
         <div class="illustration">
             <img src="../assets/image 9 (Traced).png" alt="Ilustração">
         </div>
-        <form class="login-box">
+        <form @submit.prevent="login" class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
             <div class="fields">
@@ -21,7 +21,7 @@
                 Esqueceu a senha? <a href="#" @click.prevent="showModal = true">Solicitar recuperação</a>
             </div>
             <br>
-            <button type="button" class="btn-primary" @click="login">Entrar</button>
+            <button type="submit" class="btn-primary">Entrar</button>
         </form>
         
         <div v-if="showModal" class="modal">
@@ -36,45 +36,64 @@
             </div>
         </div>
 
+        <div v-if="showErrorModal" class="modal">
+            <div class="modal-content">
+                <span class="close" @click="showErrorModal = false">&times;</span>
+                <h2>Erro</h2>
+                <p>{{ errorMessage }}</p>
+                <button class="btn-primary" @click="showErrorModal = false">Fechar</button>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script setup>
-    import { ref } from "vue";
-    import { loginUser } from "../services/api.js"
-    import { useRouter } from "vue-router";
-    import HeaderHome from "../components/HeaderHome.vue";
-    
-    const router = useRouter();
-    const cpf = ref('');
-    const password = ref();
-    const showModal = ref(false); 
-    const recoveryEmail = ref('');
-    const errorMessage = ref('');
-    
-    const login = async () => {
-        try {
-            const data = await loginUser(cpf.value, password.value);
-            console.log('Login bem-sucedido:', data);
-            const { token, role } = data;
-    
-            localStorage.setItem("token", token);
-            localStorage.setItem("role", role);
-    
-            if (role === "admin") {
-                router.push("/gestao-admin");
-            } else {
-                router.push("/gestao-ie");
-            }
-        } catch (error) {
-            errorMessage.value = error
-            console.error('Erro no login:', error)
+
+import { ref } from "vue";
+import { loginUser } from "../services/api.js"
+import { useRouter } from "vue-router";
+import HeaderHome from "../components/HeaderHome.vue";
+
+const router = useRouter();
+const cpf = ref('');
+const password = ref();
+const showModal = ref(false); 
+const recoveryEmail = ref('');
+const errorMessage = ref('');
+const showErrorModal = ref(false);
+
+const login = async () => {
+    try {
+        const data = await loginUser(cpf.value, password.value);
+        console.log('Login bem-sucedido:', data);
+        const { token, role } = data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+
+        if (role === "admin") {
+            router.push("/gestao-admin");
+        } else {
+            router.push("/gestao-ie");
         }
-    };
-    const handleSubmit = () => {
-        alert(`E-mail de recuperação enviado para: ${recoveryEmail.value}`);
-        showModal.value = false;
-    };
+
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+            errorMessage.value = error.response.data.message;
+            showErrorModal.value = true; // Exibir o modal de erro
+        } else {
+            errorMessage.value = "Erro ao tentar fazer login. Tente novamente.";
+            showErrorModal.value = true;
+        }
+        console.error('Erro no login:', error)
+    }
+};
+
+const handleSubmit = () => {
+    alert(`E-mail de recuperação enviado para: ${recoveryEmail.value}`);
+    showModal.value = false;
+};
 </script>
 
 <style scoped>

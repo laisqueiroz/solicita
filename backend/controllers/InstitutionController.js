@@ -2,11 +2,16 @@ const InstitutionService = require('../services/InstitutionService');
 
 class InstitutionController {
     static async getAllInstitutions(req, res) {
+        const { cnpj } = req.query;
         try{
+            if (cnpj) {
+                const institution = await InstitutionService.getInstitutionByCNPJ(cnpj);
+                return res.status(200).json(institution);
+            }
             const institutions = await InstitutionService.getAllInstitutions();
-            res.json(institutions);
+            return res.json(institutions);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message });
         }
     }
 
@@ -14,9 +19,9 @@ class InstitutionController {
         const { id } = req.params;
         try{
             const institutions = await InstitutionService.getInstitutionById(id);
-            res.json(institutions);
+            return res.status(200).json(institutions);
         } catch (error) {
-            res.status(400).json({ error: error.message});
+            return res.status(400).json({ error: error.message});
         }
     }
 
@@ -27,9 +32,9 @@ class InstitutionController {
                 res.status(400).json({ message: 'Todos os campos são obrigatórios!' })
             }
             const institution = await InstitutionService.createInstitution({ name, cnpj });
-            res.status(201).json(institution);
+            return res.status(201).json(institution);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
@@ -44,9 +49,9 @@ class InstitutionController {
 
             await institutionToUpdate.save();
             const institution = await InstitutionService.updateInstitution(id, institutionToUpdate);
-            res.json(institution);
+            return res.json(institution);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
@@ -54,9 +59,9 @@ class InstitutionController {
         const { id } = req.params;
         try{
             await InstitutionService.deleteInstitution(id);
-            res.json({ message: 'Instituição deletada com sucesso!'});
+            return res.status(200).json({ message: 'Instituição deletada com sucesso!'});
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 }

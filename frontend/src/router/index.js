@@ -1,85 +1,92 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { isAuthenticated, getUserRole } from "../services/authService";
 import HomePage from "../views/HomePage.vue";
 import LoginPage from "../views/LoginPage.vue";
-import GestaoAdmin from "../views/GestaoAdmin.vue";
-import GestaoIE from "../views/GestaoIE.vue";
+import AdminManagement from "../views/GestaoAdmin.vue";
+import RegularManagement from "../views/GestaoIE.vue";
 import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
-import CadastroPage from "../views/CadastroPage.vue";
+import RegistrationPage from "../views/CadastroPage.vue";
 import FAQPage from "../views/FAQPage.vue"
 import NovaSolicitacao from "../views/NovaSolicitacao.vue";
 import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
-import EquipmentAdmin from "../views/EquipmentAdmin.vue";
-import InstitutionsAdmin from "../views/InstitutionsAdmin.vue";
 import SolicitationAcesss from "../views/SolicitationAcesss.vue";
 import VerMaisVisualizarSolictIE from "../views/VerMaisVisualizarSolictIE.vue";
+import ManageInstitution from "../views/ManageInstitution.vue";
+import ManageEquipment from "../views/ManageEquipment.vue";
 
 
 const routes = [
+  // PÁGINA INICIAL
   { 
     path: "/", 
     component: HomePage 
   },
+  // PÁGINA DE PERGUNTAS FREQUENTES
+  {
+    path: "/faq",
+    component: FAQPage
+  },
+  // PÁGINA DE LOGIN
   { 
     path: "/login", 
     component: LoginPage 
   },
+  // PÁGINA DE CADASTRO
   { 
-    path: "/cadastro", 
-    component: CadastroPage 
+    path: "/registration", 
+    component: RegistrationPage 
   },
-
+  // PÁGINA GESTÃO - ADMIN
   {
-    path: "/gestao-admin",
-    component: GestaoAdmin
+    path: "/admin-management",
+    component: AdminManagement
   },
-
+  // PÁGINA GESTÃO - USUÁRIOS REGULARES
   {
-    path: "/gestao-ie",
-    component: GestaoIE
+    path: "/regular-management",
+    component: RegularManagement
   },
-
+  // PÁGINA GESTÃO DE SOLICITAÇÕES - ADMIN
   {
     path: "/solicitations-admin",
     component: SolicitationsAdmin
   },
-
+  // PÁGINA VISUALIZAR SOLICITAÇÕES DE PRÁTICAS - ADMIN
   {
     path: "/solicitations-admin-view-solicitations",
     component: ViewSolicitation
   },
-  {
-    path: "/contatos",
-    component: FAQPage
-  },
-
+  // PÁGINA NOVA SOLICITAÇÃO - USUÁRIOS REGULARES
   {
     path: "/new-solicitation",
     component: NovaSolicitacao
   },
+  // PÁGINA VISUALIZAR SOLICITAÇÕES DE PRÁTICAS - USUÁRIOS REGULARES
   {
     path: "/view-all-solicitations",
     component: VisualizarSolicitacaoIE
   },
-
-  {
-    path: "/equipment-admin",
-    component: EquipmentAdmin
-  },
-
-  {
-    path: "/institutions-admin",
-    component: InstitutionsAdmin
-  },
-
+  // PÁGINA VISUALIZAR SOLICITAÇÕES DE ACESSO - ADMIN
   {
     path: "/solicitations-acess-admin",
     component: SolicitationAcesss
   },
+  // EXCLUIR ESSA PÁGINA? 
   {
     path: "/visualizar-solicitacao-VerMais",
     component: VerMaisVisualizarSolictIE
   },
+  // PÁGINA GESTÃO DE INSTITUIÇÕES CREDENCIADAS- ADMIN
+  {
+    path: "/manage-institution",
+    component: ManageInstitution
+  },
+  // PÁGINA GESTÃO DE EQUIPAMENTOS PÚBLICOS 
+  {
+    path: "/manage-equipment",
+    component: ManageEquipment
+  }
 
 ];
 
@@ -89,3 +96,17 @@ const router = createRouter({
 });
 
 export default router;
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const userRole = isAuthenticated() ? getUserRole() : null;
+
+  if (requiresAuth && !isAuthenticated()) {
+    next("/login");
+  } else if (to.meta.role && userRole !== to.meta.role) {
+    alert("Você não tem autorização!");
+    next("/login");
+  } else {
+    next();
+  }
+});

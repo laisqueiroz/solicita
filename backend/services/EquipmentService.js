@@ -9,6 +9,14 @@ class EquipmentService {
         return EquipmentRepository.findById();
     }
 
+    static async getEquipmentByName(name) {
+        try {
+            return EquipmentRepository.findOne(name);
+        } catch (eror) {
+            return ('erro na consulta ao repository')
+        }
+    }
+
     static async createEquipment(data) {
         return EquipmentRepository.create(data);
     }

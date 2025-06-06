@@ -23,37 +23,39 @@
 </template>
 
 <script setup>
-    import CardComponents from '../components/CardComponents.vue';
-    import HeaderAdmin from '../components/HeaderAdmin.vue';
-    import { useRouter } from 'vue-router';
-    
-    const router = useRouter();
-    
-    const goToSolicitations = () => {
-        router.push("/solicitations-admin")
-    };
-    const goToEquipment = () => {
-        router.push("/equipment-admin")
-    };
-    const goToInstitutions = () => {
-        router.push("/institutions-admin")
-    };
+import CardComponents from '../components/CardComponents.vue';
+import HeaderAdmin from '../components/HeaderAdmin.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goToSolicitations = () => {
+    router.push("/solicitations-admin")
+};
+const goToEquipment = () => {
+    router.push("/manage-equipment")
+};
+const goToInstitutions = () => {
+    router.push("/manage-institution")
+};
 </script>
 
 <style scoped>
-    .container {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-    }
-    .illustration {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-    }
-    .illustration img {
-        max-width: 70%;
-        height: auto;
-    }
+.container {
+    padding-top: 5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.illustration img {
+    max-width: 70%;
+    height: auto;
+}
 </style>
