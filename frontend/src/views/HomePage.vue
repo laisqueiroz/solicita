@@ -13,9 +13,8 @@
 </template>
 
 <script setup>
-import HeaderComponent from '../components/HeaderHome.vue';
-import FooterComponent from '../components/FooterIllustration.vue';
-
+    import HeaderComponent from '../components/HeaderHome.vue';
+    import FooterComponent from '../components/FooterIllustration.vue';
 </script>
 
 <style scoped>

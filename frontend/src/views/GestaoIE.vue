@@ -19,14 +19,14 @@
 </template>
 
 <script setup>
-import CardComponents from '../components/CardComponents.vue';
-import HeaderIE from '../components/HeaderIE.vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const goToNewSolicitation = () => {
-    router.push("/new-solicitation")
+    import CardComponents from '../components/CardComponents.vue';
+    import HeaderIE from '../components/HeaderIE.vue';
+    import { useRouter } from 'vue-router';
+    
+    const router = useRouter();
+    
+    const goToNewSolicitation = () => {
+        router.push("/new-solicitation")
 };
 
 const goToViewSolicitations =() => {

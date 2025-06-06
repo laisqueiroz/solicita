@@ -22,9 +22,7 @@
 import CardComponents from '../components/CardComponents.vue';
 import HeaderAdmin from '../components/HeaderAdmin.vue';
 import { useRouter } from 'vue-router';
-
 const router = useRouter();
-
 const goToViewSolicitations = () => {
     router.push("/solicitations-admin-view-solicitations")
 };
