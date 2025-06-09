@@ -8,7 +8,7 @@ import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
 import RegistrationPage from "../views/CadastroPage.vue";
 import FAQPage from "../views/FAQPage.vue"
-import NovaSolicitacao from "../views/NovaSolicitacao.vue";
+import NovaSolicitacao from "../views/NewSolicitations.vue";
 import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
 import SolicitationAcesss from "../views/SolicitationAcesss.vue";
 import VerMaisVisualizarSolictIE from "../views/VerMaisVisualizarSolictIE.vue";
