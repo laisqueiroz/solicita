@@ -22,11 +22,11 @@ class RotationController {
 
     static async createRotation(req, res) {
         try{
-            const { name , vacant } = req.body;
-            if ( !name || !vacant ) {
+            const { name , vacant , departmentId } = req.body;
+            if ( !name || !vacant || !departmentId ) {
                 res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
             }
-            const rotation = await RotationService.createRotation({ name, vacant});
+            const rotation = await RotationService.createRotation({ name, vacant, departmentId});
             res.status(201).json(rotation);
         } catch (error) {
             res.status(400).json({ error: error.message });
@@ -38,7 +38,7 @@ class RotationController {
         const RotationToUpdate = await RotationService.getRotationById(id);
         if (!RotationToUpdate) return res.status(404).json({ error: 'Turno não encontrado!' });
         try {
-            const { name,vacant } = req.body;
+            const { name, vacant } = req.body;
             if (name) RotationToUpdate.name = name;
             if (vacant) RotationToUpdate.vacant = vacant;
 

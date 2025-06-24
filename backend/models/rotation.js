@@ -4,18 +4,26 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Rotation extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      Rotation.belongsTo(models.Equipment, { foreignKey: 'equipmentId' });
+      Rotation.belongsTo(models.Department, { foreignKey: 'departmentId' });
     }
   }
   Rotation.init({
-    shift: DataTypes.STRING,
-    vacant: DataTypes.INTEGER,
+    shift: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['matutino','vespertino','noturno']],
+      },
+    },
+    vacant: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    departmentId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'Rotation',

@@ -1,13 +1,17 @@
-const { Equipment, Rotation } = require('../models');
+const { Equipment, Department, Rotation } = require('../models');
 
 
 class EquipmentRepository{
     static async findAll() {
         return Equipment.findAll({
             include: {
-                model: Rotation,
-                attributes: ['id', 'shift', 'vacant'],
-              },
+                model: Department,
+                attributes: ['id', 'nameDepartment'],
+                include: {
+                    model: Rotation,
+                    attributes: ['id', 'shift', 'vacant'],
+                },
+            }
         });
     }
 

@@ -1,5 +1,6 @@
 const EquipmentService = require('../services/EquipmentService');
-const RotationService = require('../services/RotationService');
+const DepartmentController = require('../controllers/DepartmentController');
+const RotationController = require('../controllers/RotationController');
 
 class EquipmentController {
     static async getAllEquipment(req, res) {
@@ -22,20 +23,22 @@ class EquipmentController {
     }
 
     static async createEquipment(req, res) {
-        const { name, shift, vacant } = req.body;
+        const { name, address, nameDepartment, shift, vacant } = req.body;
 
-        if (!name || !shift || !vacant) {
+        if (!name || !shift || !vacant || !address || !nameDepartment) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
-
         }
         try {
             const equipmentExist = await EquipmentService.getEquipmentByName(name);
             if (equipmentExist) return res.status(403).json({ error: 'Equipamento já existe.' });
             
-            const equipment = await EquipmentService.createEquipment({ name });
+            const equipment = await EquipmentService.createEquipment({ name, address });
 
             const equipmentId = equipment.id;
-            const createRotation = await RotationService.createRotation({shift , vacant , equipmentId});
+            const Department = await DepartmentController.createDepartment({nameDepartment, equipmentId});
+
+            const departmentId = Department.id;
+            const Rotation = await RotationController.createRotation({ departmentId, shift, vacant});
             return res.status(201).json();
         } catch (error) {
             return res.status(400).json({ error: error.message });
@@ -47,9 +50,9 @@ class EquipmentController {
         const equipmentToUpdate = await EquipmentService.getEquipmentById(id);
         if (!equipmentToUpdate) return res.status(404).json({ error: "Equipamento não encontrado ou não existe." });
         try {
-            const { name } = req.body;
-            if (name !== equipmentToUpdate.name) return res.status(403).json({ error: "Nome do equipamento nãopode ser alterado." });
-
+            const { name, address, department, shift, vacant } = req.body;
+            if (name !== equipmentToUpdate.name) return res.status(403).json({ error: "Nome do equipamento não pode ser alterado." });
+            if (address !== equipmentToUpdate.address) 
             await equipmentToUpdate.save();
             const equipment = await EquipmentService.updateEquipment(equipmentToUpdate);
             res.json(equipment);
