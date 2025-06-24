@@ -6,6 +6,7 @@ const InstitutionRoutes = require('./routes/InstitutionRoutes');
 const RotationRoutes = require('./routes/RotationRoutes');
 const EquipmentRoutes = require('./routes/EquipmentRoutes');
 const SolicitationRoutes = require('./routes/SolicitationRoutes');
+const DepartmentRoutes = require('./routes/DepartmentRoutes');
 
 const app = express();
 
@@ -27,5 +28,6 @@ app.use('/institutions', InstitutionRoutes);
 app.use('/rotations', RotationRoutes);
 app.use('/equipment', EquipmentRoutes);
 app.use('/solicitations', SolicitationRoutes);
+app.use( '/department', DepartmentRoutes);
 
 module.exports = app;

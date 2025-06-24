@@ -5,7 +5,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Equipment extends Model {
     static associate(models) {
-      Equipment.hasMany(models.Rotation, { foreignKey: 'equipmentId' });
+      Equipment.hasMany(models.Department, { foreignKey: 'equipmentId' });
     }
   }
   Equipment.init({
@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       set(value) {
         this.setDataValue('name', value.toUpperCase()); 
       }
-    }
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'Equipment',

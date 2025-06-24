@@ -71,7 +71,7 @@ export const fetchEquipments = async () => {
         console.error("Erro ao buscar equipamentos:", error);
         throw error; 
       };
-}
+};
 
 export const fetchInstitutions = async () => {
     try {

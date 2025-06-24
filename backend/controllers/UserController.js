@@ -85,7 +85,7 @@ class UserController {
                 userExist.role = role;
             } 
             if (active) {
-                if (userRole != 'admin') return res.status(403).json({ error: ' Usuário não pode ser alterar o acesso.' });
+                if (userRole != 'admin') return res.status(403).json({ error: 'Usuário não tem permissão para realizar a ação.' });
                 userExist.active = active;
             }
 

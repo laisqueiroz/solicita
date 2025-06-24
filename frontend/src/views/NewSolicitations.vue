@@ -67,7 +67,12 @@
         </div>
         <div class="group">
           <label for="unidade-saude">Unidade de saúde <span class="required">*</span></label>
-          <input type="text" id="unidade-saude" v-model="form.unidadeSaude" placeholder="UBS Centro" required>
+          <select name="Equipment" id="Equipments" v-model="form.Equipment" required>
+            <option value="" selected >Selecione o Equipamento de Saúde</option>
+            <option v-for="equipment in equipments" :key="equipment.id" :value="equipment.id">
+              {{ equipment.name }}
+            </option>
+          </select>
         </div>
       </div>
       
@@ -100,9 +105,10 @@
 </template>
 
 <script setup>
-  import { reactive, ref } from 'vue';
+  import { reactive, ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import HeaderIE from '../components/HeaderIE.vue';
+  import { fetchEquipments } from '../services/api';
   
   const router = useRouter();
   const diasSemanaOptions = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'];
@@ -115,10 +121,23 @@
     horarios: '',
     modalidade: '',
     nomePreceptor: '',
-    unidadeSaude: '',
+    Equipment: '',
     registroConcelho: '',
     alunos: []
   });
+
+  const equipments = ref([]);
+
+  const fetchEquipment = async () => {
+    try {
+      const response = await fetchEquipments();
+      equipments.value = response;
+    } catch (error) {
+      alert('Nenhum equipamento cadastrado!')
+      console.error('Erro ao buscar equipamentos:', error);
+    }
+  };
+
   const adicionarAluno = () => {
     form.alunos.push({ nome: '', cpf: '' });
   };
@@ -133,6 +152,10 @@
   const voltarPagina = () => {
     router.push('/gestao-ie');
   };
+
+onMounted(() => {
+    fetchEquipment(); 
+});
 </script>
 
 <style scoped>

@@ -1,6 +1,4 @@
-\node_modules
-/node_modules
-solicita\backend\node_modules
-/backend\.env
-\backend\.env
-solicita\backend\.env
+node_modules/
+*.env
+test/
+migrations/
