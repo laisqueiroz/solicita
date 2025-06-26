@@ -24,7 +24,7 @@ const goToHome = () => {
     router.push("/")
 };
 const goToSingUp = () => {
-    router.push("/registration")
+    router.push("/register")
 };
 const goToContacts = () => {
     router.push("/faq")

@@ -1,134 +1,154 @@
 <template>
+  <title>Gerenciar Equipamentos</title>
+  <HeaderAdmin />
   <div class="container">
-    <title>Gerenciar Equipamentos</title>
-    <HeaderAdmin />
 
-    <section class="header-tabela">
-      <button class="btn-no-filling-primary" @click="voltarPagina">&#8592;</button>
+    <!--CABEÇALHO DA TABELA-->
+    <section class="header-table">
+      <button class="btn-no-filling-primary">&#8592;</button>
       <h2>Gerenciar Equipamentos</h2>
-      <div class="button-container">
-        <button class="btn-secondary" type="button" @click="abrirModal('adicionar')">
-          &plus; Equipamento
-        </button>
+      <button class="btn-primary" @click="openModal">&plus; Equipamento</button>
+    </section>
+
+    <!--TABELA-->
+    <section class="list-table">
+      <div v-for="(equipment, index) in equipments" :key="index" class="card-equipment">
+        <div class="info-equipment">
+          <h3>{{ equipment.name }}</h3>
+            <p>{{ equipment.address }}</p>
+        </div>
+        <div class="actions-buttons">
+          <button class="btn-primary" type="button" @click="openModal('editionEquipment', equipment.id)">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button class="btn-no-filling-remove" type="button">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
       </div>
     </section>
 
-    <form class="tabela">
-      <div class="list">
-        <div v-for="(equipment, index) in equipments" :key="index" class="equipment-card">
-          <div class="card-info">
-            <h3>{{ equipment.name }}</h3>
-            <div v-for="(rotation, rIndex) in equipment.Rotations" :key="rIndex">
-              <p><strong>Turno:</strong> {{ rotation.shift }} <strong>Vagas:</strong> {{ rotation.vacant }}</p>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn-primary" type="button" @click="abrirModal('editar', index)"><i class="fa-solid fa-pen"></i></button>
-            <button class="btn-no-filling-remove" type="button" @click="removerEquipment(index)"><i class="fas fa-trash"></i></button>
-          </div>
-        </div>
-      </div>
-    </form>
-
-    <!-- Modal -->
-    <div v-if="isModalOpen" class="modal-overlay" @click.self="fecharModal">
+    <!--MODAL-->
+    <section v-if="isModalOpen" class="overlay-modal" @click.self="closeModal">
       <div class="modal">
-        <h3>{{ modoEdicao ? "Editar Equipamento" : "Novo Equipamento" }}</h3>
+        <h3>{{ editionMode ? "Editar Equipamento" : "Adicionar Equipamento" }}</h3>
+        <form @submit.prevent="editionMode ? saveEdition() : addEquipment()">
 
-        <form @submit.prevent="modoEdicao ? salvarEdicao() : adicionarEquipment()">
           <label for="name">Nome do Equipamento:</label>
-          <input type="text" id="name" v-model="equipmentAtual.name" :disabled="modoEdicao" required />
+          <input type="text" id="name" v-model="currentEquipment.name" :disabled="editionMode" required />
 
-          <div v-for="(rotation, index) in equipmentAtual.Rotations" :key="index">
-            <label :for="'shift' + index">Turno:</label>
-            <input type="text" :id="'shift' + index" v-model="rotation.shift" required />
+          <label for="address">Endereço:</label>
+          <input type="text" id="address" v-model="currentEquipment.address" required />
 
-            <label :for="'vacant' + index">Vagas:</label>
-            <input type="number" :id="'vacant' + index" v-model="rotation.vacant" required />
+          <div v-for="(department, departmentIndex) in currentEquipment.Departments" :key="departmentIndex" class="section-department">
+            <label :for="'nameDepartment' + departmentIndex">Nome do Setor:</label>
+            <input type="text" :id="'nameDepartment' + departmentIndex" v-model="department.nameDepartment" required />
+
+            <div v-for="(rotation, rotationIndex) in department.Rotations" :key="rotationIndex" class="section-rotation">
+                <label :for="'shift' + departmentIndex + '-' + rotationIndex">Turno:</label>
+                <input type="text" :id="'shift' + departmentIndex + '-' + rotationIndex" v-model="rotation.shift" required />
+
+                <label :for="'vacant' + departmentIndex + '-' + rotationIndex">Vagas:</label>
+                <input type="number" :id="'vacant' + departmentIndex + '-' + rotationIndex" v-model.number="rotation.vacant" required />
+
+              <button type="button" class="btn-no-filling-remove"><i class="fas fa-trash"></i></button>
+            </div>
+
+            <div>
+              <button type="button" class="btn-primary">Adicionar Turno</button>
+  
+              <button type="button" class="btn-no-filling-remove">Remover Setor</button>
+            </div>
+
           </div>
 
-          <button type="button" @click="adicionarTurno">Adicionar Turno</button>
-
-          <div class="modal-buttons">
-            <button class="btn-primary" type="submit">{{ modoEdicao ? "Salvar" : "Adicionar" }}</button>
-            <button class="btn-no-filling-remove" type="button" @click="fecharModal">Fechar</button>
+          <div>
+            <button type="button" class="btn-primary" >Adicionar Setor</button>
+          </div>
+          
+          <div class="buttons-modal">
+            <button class="btn-remove" @click="closeModal">Fechar</button>
+            <button class="btn-primary">{{ editionMode ? "Salvar" : "Adicionar" }}</button>
           </div>
         </form>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
 import HeaderAdmin from '../components/HeaderAdmin.vue';
-import { fetchEquipments, createEquipment } from "../services/api";
-import { useRouter } from 'vue-router';
+import { ref, onMounted, reactive } from 'vue';
+import { fetchEquipments } from "../services/api";
 
-const router = useRouter();
-const isModalOpen = ref(false);
-const modoEdicao = ref(false);
-const indexEdicao = ref(null);
 const equipments = ref([]);
+const isModalOpen = ref(false);
+const editionMode = ref(false);
+const indexEquipmen = ref(null);
 
-const equipmentAtual = ref({
+
+const currentEquipment = reactive({
   name: '',
-  Rotations: [{ shift: '', vacant: 0 }]
+  Departments: [{
+    nameDepartment: '',
+    Rotations: [{
+      shift: '',
+      vacant: 0
+    }]
+  }],
 });
+
 
 onMounted(async () => {
   const data = await fetchEquipments();
   equipments.value = data;
 });
 
-const abrirModal = (modo, index = null) => {
-  if (modo === 'editar' && index !== null) {
-    modoEdicao.value = true;
-    indexEdicao.value = index;
-    equipmentAtual.value = { ...equipments.value[index], Rotations: [...equipments.value[index].Rotations] };
+const openModal = (mode, index = null) => {
+  if (mode === 'editionEquipment' && index !== null) {
+    editionMode.value = true;
+    indexEquipmen.value = index;
+
+    const equipmentSelect = equipments.value.find(e => e.id === index);
+
+    if (equipmentSelect) {
+      Object.assign(currentEquipment, {
+        name: equipmentSelect.name,
+        address: equipmentSelect.address,
+        Departments: equipmentSelect.Departments.map(dep => ({
+          nameDepartment: dep.nameDepartment,
+          Rotations: dep.Rotations.map(rot => ({
+            shift: rot.shift,
+            vacant: rot.vacant
+          }))
+        }))
+      });
+    }
   } else {
-    modoEdicao.value = false;
-    equipmentAtual.value = { name: '', Rotations: [{ shift: '', vacant: 0 }] };
+    editionMode.value = false;
+    Object.assign(currentEquipment, {
+      name: '',
+      address: '',
+      Departments: [{
+        nameDepartment: '',
+        Rotations: [{
+          shift: '',
+          vacant: 0
+        }]
+      }]
+    });
   }
   isModalOpen.value = true;
-};
+}
 
-const fecharModal = () => {
+const closeModal = () => {
   isModalOpen.value = false;
-};
+}
 
-const adicionarTurno = () => {
-  equipmentAtual.value.Rotations.push({ shift: '', vacant: 0 });
-};
-
-const adicionarEquipment = async () => {
-  await createEquipment(equipmentAtual.value);
-  fetchEquipments();
-  fecharModal();
-};
-
-const salvarEdicao = async () => {
-  if (indexEdicao.value !== null) {
-    await updateEquipment(equipments.value[indexEdicao.value].id, equipmentAtual.value);
-    equipments.value[indexEdicao.value] = { ...equipmentAtual.value };
-  }
-  fecharModal();
-};
-
-const removerEquipment = async (index) => {
-  const equipmentId = equipments.value[index].id;
-  await deleteEquipment(equipmentId);
-  equipments.value.splice(index, 1);
-};
-
-const voltarPagina = () => {
-  router.push('/gestao-admin');
-};
 </script>
 
-
-
 <style scoped>
+
 .container {
   display: flex;
   flex-direction: column;
@@ -138,38 +158,45 @@ const voltarPagina = () => {
   padding-top: 80px;
 }
 
-.tabela {
-  width: 700px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-/* === Título e Botão de Adicionar === */
-.header-tabela {
+.header-table {
+  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 700px;
-  margin-bottom: 15px;
-  background-color: #ffffff;
+  width: 70%;
+  border-radius: 12px;
+  padding: 5px 20px;
+}
+
+.list-table {
+  background-color: #fff;
+  width: 70%;
+  margin-top: 10px;
   border-radius: 10px;
   padding: 20px;
+}
+
+.card-equipment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.header-tabela h2 {
-  font-size: 24px;
-  font-weight: bold;
+.info-equipment {
+  text-align: left;
 }
 
+.actions-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
 
-.modal-overlay {
+.overlay-modal {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -180,14 +207,15 @@ const voltarPagina = () => {
 
 .modal {
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 350px;
+  padding: 24px;
+  border-radius: 12px;
+  width: 700px;
   text-align: center;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-.modal form {
+.modal > form {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -195,73 +223,41 @@ const voltarPagina = () => {
 }
 
 .modal label {
-  font-weight: bold;
   text-align: left;
-  display: block;
+  font-weight: bold;
 }
 
-.modal input,
-.modal select {
+.modal input {
   width: auto;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #003366;
   border-radius: 5px;
 }
-.modal div input {
-    display: flex;
-    width: 95%;
+
+.section-department {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 5px;
 }
 
-.modal-buttons {
+.section-rotation {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  height: 40px;
+  column-gap: 10px;
+}
+
+
+.buttons-modal {
+  display: flex;
+  justify-content: space-around;
   margin-top: 15px;
 }
 
-.list {
-  width: 100%;
-  max-width: 700px;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
 
-.equipment-card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-info h3 {
-  margin: 0;
-  font-size: 18px;
-  text-align: left;
-}
-
-.card-info p {
-  margin: 5px 0;
-  font-size: 14px;
-  text-align: left;
-}
-
-.card-actions {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-}
-
-.valido {
-  color: green;
-  font-weight: bold;
-}
-
-.vencido {
-  color: red;
-  font-weight: bold;
-}
 </style>
