@@ -6,7 +6,6 @@
       <nav class="navigation">
           <button id="HomePage" class="btn-no-filling" @click="goToHome">Página Inicial</button>
           <button id="Contacts" class="btn-no-filling" @click="goToContacts">Contatos</button>
-          <button id="AcessSolicitation" class="btn-no-filling-sec" @click="goToSingUp">Cadastro</button>
           <button id="SingIn" class="btn-secondary" @click="goToLogin">Acessar</button>
       </nav>
   </div>
