@@ -9,7 +9,7 @@
         <form @submit.prevent="login" class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
-            <div class="fields">
+            <div class="fields">git config --global user.name
                 <label for="cpf">CPF</label>
                 <input v-model="cpf" type="cpf" id="cpf" placeholder="Digite seu CPF" required />
             </div>
