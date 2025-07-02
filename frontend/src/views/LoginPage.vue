@@ -73,15 +73,15 @@ const login = async () => {
         localStorage.setItem("role", role);
 
         if (role === "admin") {
-            router.push("/gestao-admin");
+            router.push("/admin-management");
         } else {
-            router.push("/gestao-ie");
+            router.push("/regular-management");
         }
 
     } catch (error) {
         if (error.response && error.response.data && error.response.data.message) {
             errorMessage.value = error.response.data.message;
-            showErrorModal.value = true; // Exibir o modal de erro
+            showErrorModal.value = true; 
         } else {
             errorMessage.value = "Erro ao tentar fazer login. Tente novamente.";
             showErrorModal.value = true;

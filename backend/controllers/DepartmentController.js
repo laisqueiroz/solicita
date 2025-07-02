@@ -5,9 +5,9 @@ class DepartmentController {
     static async getAllDepartment(req, res){
         try {
             const departments = await DepartmentService.getAll();
-            res.json(departments);
+            return res.json(departments);
         } catch (error) {
-            res.status(500).json({ error: error.massage });
+            return res.status(500).json({ error: error.massage });
         }
     }
 
@@ -15,9 +15,9 @@ class DepartmentController {
         const { id } = req.params;
         try{
             const departments = await DepartmentService.getDepartmentById(id);
-            res.json(departments);
+            return res.json(departments);
         } catch (error) {
-            res.status(400).json({ error: error.massage });
+            return res.status(400).json({ error: error.massage });
         }
     }
 
@@ -25,14 +25,14 @@ class DepartmentController {
         try{
             const { nameDepartment, equipmentId } = req.body;
             if ( !nameDepartment || !equipmentId ) {
-                res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+                return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
             }
             
             const departmentCreate = await DepartmentService.createDepartment({ nameDepartment, equipmentId });
 
-            res.status(201).json(departmentCreate);
+            return res.status(200).json(departmentCreate);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
@@ -46,9 +46,9 @@ class DepartmentController {
 
             await DepartmentToUpdate.save();
             const department = await DepartmentService.updateDepartment(id, DepartmentToUpdate);
-            res.json(department);
+            return res.json(department);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
@@ -56,9 +56,9 @@ class DepartmentController {
         const { id } = req.params;
         try {
             await DepartmentService.deleteDepartment(id);
-            res.json({ message: 'Departamento excluído com sucesso!' })
+            return res.json({ message: 'Departamento excluído com sucesso!' })
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 }

@@ -6,17 +6,22 @@ import AdminManagement from "../views/GestaoAdmin.vue";
 import RegularManagement from "../views/GestaoIE.vue";
 import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
-import RegistrationPage from "../views/CadastroPage.vue";
-import FAQPage from "../views/FAQPage.vue"
-import NovaSolicitacao from "../views/NewSolicitations.vue";
-import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
+import RegistrationPage from "../views/RegistrationPage.vue";
+import FAQPage from "../views/FAQPage.vue";
+import NewSolicitations from "../views/NewSolicitations.vue";
+import InstitutionSolicitationView from "../views/InstitutionSolicitationView.vue";
 import SolicitationAcesss from "../views/SolicitationAcesss.vue";
-import VerMaisVisualizarSolictIE from "../views/VerMaisVisualizarSolictIE.vue";
 import ManageInstitution from "../views/ManageInstitution.vue";
 import ManageEquipment from "../views/ManageEquipment.vue";
+import TestManageEquipment from "../views/VerMaisVisualizarSolictIE.vue";
 
 
 const routes = [
+  {
+    path: "/test",
+    component: TestManageEquipment
+  },
+
   // PÁGINA INICIAL
   { 
     path: "/", 
@@ -34,7 +39,7 @@ const routes = [
   },
   // PÁGINA DE CADASTRO
   { 
-    path: "/registration", 
+    path: "/register", 
     component: RegistrationPage 
   },
   // PÁGINA GESTÃO - ADMIN
@@ -60,12 +65,12 @@ const routes = [
   // PÁGINA NOVA SOLICITAÇÃO - USUÁRIOS REGULARES
   {
     path: "/new-solicitation",
-    component: NovaSolicitacao
+    component: NewSolicitations
   },
   // PÁGINA VISUALIZAR SOLICITAÇÕES DE PRÁTICAS - USUÁRIOS REGULARES
   {
     path: "/view-all-solicitations",
-    component: VisualizarSolicitacaoIE
+    component: InstitutionSolicitationView
   },
   // PÁGINA VISUALIZAR SOLICITAÇÕES DE ACESSO - ADMIN
   {
@@ -73,10 +78,10 @@ const routes = [
     component: SolicitationAcesss
   },
   // EXCLUIR ESSA PÁGINA? 
-  {
+  /*{
     path: "/visualizar-solicitacao-VerMais",
-    component: VerMaisVisualizarSolictIE
-  },
+    component: ViewInstitutionSolicitationDetails
+  },*/
   // PÁGINA GESTÃO DE INSTITUIÇÕES CREDENCIADAS- ADMIN
   {
     path: "/manage-institution",

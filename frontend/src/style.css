@@ -102,15 +102,23 @@ button {
 }
 
 .btn-no-filling-sec {
-  color: #F39A24;
+  color: #003366;
   background-color: transparent;
-  border-color: transparent;
+  border-color: #003366;
 }
 
 .btn-no-filling-sec:hover {
   color: #fff;
-  background-color: transparent;
+  background-color: #003366;
   border-color: transparent;
+}
+
+.btn-no-filling-sec:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc;
+  color: #000;
+  border-color: #000;
 }
 
 .btn-no-filling-add {
@@ -128,7 +136,7 @@ button {
 .btn-no-filling-remove {
   color: #C20000;
   background-color: transparent;
-  border-color: transparent;
+  border-color: #C20000;
 }
 
 .btn-no-filling-remove:hover {
