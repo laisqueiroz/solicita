@@ -100,7 +100,7 @@ const handleSubmit = () => {
     showModal.value = false;
 };
 const goToSingUp = () => {
-    router.push("/registration")
+    router.push("/register")
 };
 </script>
 
