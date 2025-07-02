@@ -2,8 +2,8 @@
     <title>Solicitação de Cadastro</title>
     <HeaderHome/>
     <main class="main-container">
-        <div class="ilustracao">
-            <img id="imagem" src="../assets/image 12 (Traced).png" width="500">
+        <div class="illustration">
+            <img id="img" src="../assets/image 12 (Traced).png" width="500">
         </div>
         <div class="form-container">
             <div class="headerForm">
@@ -167,17 +167,16 @@ const submitForm = () => {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: 64px;
+    padding: 32px 64px 32px 64px;
 }
 
-.ilustracao {
+.illustration {
     margin-right: 120px;
-    width: 200px;
     height: auto;
 }
 
-#imagem {
-    width: 400px;
+#img {
+    width: 650px;
 }
 
 .form-container {
@@ -276,6 +275,24 @@ flex: 1;
     color: red;
     font-size: 12px;
     margin-top: 5px;
+}
+
+@media (min-width: 900px) {
+    .container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .illustration {
+        max-width: 550px;
+        height: auto;
+    }
+
+    .form-container {
+
+        margin-left: 50px;
+    }
 }
 
 </style>

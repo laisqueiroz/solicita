@@ -9,13 +9,16 @@
         <form @submit.prevent="login" class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
-            <div class="fields">
+            <div class="fields">git config --global user.name
                 <label for="cpf">CPF</label>
                 <input v-model="cpf" type="cpf" id="cpf" placeholder="Digite seu CPF" required />
             </div>
             <div class="fields">
                 <label for="password">Senha</label>
                 <input v-model="password" type="password" id="password" placeholder="Digite sua senha" required />
+            </div>
+            <div class="forgot-password">
+                Não possui cadastro? <a href="#" @click="goToSingUp">Clique aqui e cadastre-se</a>
             </div>
             <div class="forgot-password">
                 Esqueceu a senha? <a href="#" @click.prevent="showModal = true">Solicitar recuperação</a>
@@ -90,9 +93,14 @@ const login = async () => {
     }
 };
 
+
+
 const handleSubmit = () => {
     alert(`E-mail de recuperação enviado para: ${recoveryEmail.value}`);
     showModal.value = false;
+};
+const goToSingUp = () => {
+    router.push("/registration")
 };
 </script>
 
@@ -102,33 +110,33 @@ const handleSubmit = () => {
     }
     .container {
         display: flex;
-        gap: 200px;
-        max-width: 1100px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 1500px;
         width: 100%;
+        margin: 0 auto;
+        padding: 40px 20px;
     }
     .illustration img {
-        max-width: 450px;
+        max-width: 100%;
         height: auto;
-        position: relative;
-        left: 140px; 
+        object-fit: contain;
     }
     .login-box {
         display: flex;
         flex-direction: column;
         background-color: #ffffff;
         color: #000000;
-        padding: 40px;
+        padding: 50px;
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        width: 350px;
-        height: 390px;
-        position: relative;
-        left: 140px;
-        gap: 10px; 
+        width: 100%;
+        max-width: 350px;
+        gap: 10px;
         align-items: center;
     }
     .fields {
-        align-self: flex-start;
         width: 100%;
         height: 30px;
         padding: 5px;
@@ -151,7 +159,6 @@ const handleSubmit = () => {
         font-weight: bold;
         margin-bottom: 5px;
         text-align: left;
-        padding-left: 10px;
     }
     .login-box input {
         width: 100%;
@@ -163,14 +170,28 @@ const handleSubmit = () => {
         font-size: 11px;
     }
     .forgot-password {
+        font-size: 15px;
         font-weight: bold;
-        align-self: flex-end;
+        align-self: center;
     }
     .forgot-password a {
         color: #f7981d;
         text-decoration: none;
     }
     .forgot-password a:hover {
+        text-decoration: underline;
+    }
+    .cadastro {
+        font-size: 15px;
+        font-weight: bold;
+        align-self: center;
+        padding-left: 10px;
+    }
+    .cadastro a {
+        color: #f7981d;
+        text-decoration: none;
+    }
+    .cadastro a:hover {
         text-decoration: underline;
     }
     .modal {
@@ -235,4 +256,23 @@ const handleSubmit = () => {
         text-decoration: none;
         cursor: pointer;
     }
+
+    /* Layout para telas grandes */
+@media (min-width: 900px) {
+    .container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .illustration img {
+        max-width: 650px;
+        height: auto;
+    }
+
+    .login-box {
+        margin-top: 120px;
+        margin-left: 400px;
+    }
+}
 </style>
