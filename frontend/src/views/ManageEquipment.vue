@@ -64,7 +64,15 @@
             </div>
 
             <!--ADICIONAR NOVO SETOR-->
-            <form @submit.prevent="addDepartment(equipment.id)" v-if="addMode === 'NewDepartment'" style=" display: flex; flex-direction: column; align-items: flex-start; ">
+            <form 
+            @submit.prevent="addDepartment(equipment.id)" 
+            v-if="addMode === 'NewDepartment'" 
+            style=" 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start; "
+            class="forms">
+
               <label>Nome do Setor:</label>
               <input type="text" v-model="NewDepartment.nameDepartment" style= "width: 100%;" required />
               <span class="buttons-modal">
@@ -104,7 +112,7 @@
             </div>
 
             <!--ADICIONAR NOVO TURNO E VAGA-->
-            <form @submit.prevent="addRotation" v-if="addMode === 'NewRotation'">
+            <form @submit.prevent="addRotation" v-if="addMode === 'NewRotation'" class="forms">
               <div class="form-add">
                 <label :for="'shift'">Turno:</label>
                 <select 
@@ -153,7 +161,7 @@
     <section v-if="isModalOpen" class="overlay-modal" @click.self="isModalOpen = false">
       <div class="modal">
         <h3>Novo Equipamento</h3>
-        <form @submit.prevent="addEquipment">
+        <form @submit.prevent="addEquipment" class="form-modal">
 
           <label for="name">Nome do Equipamento:</label>
           <input type="text" id="name" v-model="NewEquipment.name" required />
@@ -360,25 +368,6 @@ onMounted(async () => {
   overflow-y: auto;
 }
 
-.modal > form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 10px;
-}
-
-.modal label {
-  text-align: left;
-  font-weight: bold;
-}
-
-.modal input {
-  width: auto;
-  padding: 8px;
-  border: 1px solid #003366;
-  border-radius: 5px;
-}
-
 .section-rotation {
   display: flex;
   align-items: center;
@@ -444,20 +433,21 @@ onMounted(async () => {
   justify-content: space-between;
   width: 100%;
 }
- form {
+
+.forms {
   width: 90%;
   font-weight: bold;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
- }
+}
 
- form > input {
+.forms > input {
   width: 90%;
   padding: 8px;
   border: 2px solid #003366;
   border-radius: 5px;
- }
+}
 
 .form-add {
   font-weight: bold;
@@ -473,6 +463,25 @@ onMounted(async () => {
   width: auto;
   padding: 8px;
   border: 2px solid #003366;
+  border-radius: 5px;
+}
+
+.form-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px;
+}
+
+.form-modal > label {
+  text-align: left;
+  font-weight: bold;
+}
+
+.form-modal > input {
+  width: auto;
+  padding: 8px;
+  border: 1px solid #003366;
   border-radius: 5px;
 }
 </style>
