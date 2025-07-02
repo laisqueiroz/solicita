@@ -1,14 +1,12 @@
 const EquipmentService = require('../services/EquipmentService');
-const DepartmentController = require('../controllers/DepartmentController');
-const RotationController = require('../controllers/RotationController');
 
 class EquipmentController {
     static async getAllEquipment(req, res) {
         try {
             const equipment = await EquipmentService.getAllEquipment();
-            res.json(equipment);
+            return res.json(equipment);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message });
         }
     }
 
@@ -16,30 +14,32 @@ class EquipmentController {
         const { id } = req.params;
         try {
             const equipment = await EquipmentService.getEquipmentById(id);
-            res.json(equipment);
+            return res.json(equipment);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
     static async createEquipment(req, res) {
-        const { name, address, nameDepartment, shift, vacant } = req.body;
+        const { name, address} = req.body;
 
-        if (!name || !shift || !vacant || !address || !nameDepartment) {
+        console.log("chegou no controller!")
+        console.log("Esse é o name: ", name)
+        console.log("Esse é o address: ", address)
+
+        if (!name || !address ) {
+            console.log("não passou na validação")
             return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
         }
         try {
-            const equipmentExist = await EquipmentService.getEquipmentByName(name);
+            console.log("passou na validação")
+            const nameUpperCase = name.toUpperCase();
+            const equipmentExist = await EquipmentService.getEquipmentByName(nameUpperCase);
             if (equipmentExist) return res.status(403).json({ error: 'Equipamento já existe.' });
             
             const equipment = await EquipmentService.createEquipment({ name, address });
 
-            const equipmentId = equipment.id;
-            const Department = await DepartmentController.createDepartment({nameDepartment, equipmentId});
-
-            const departmentId = Department.id;
-            const Rotation = await RotationController.createRotation({ departmentId, shift, vacant});
-            return res.status(201).json();
+            return res.status(201).json(equipment);
         } catch (error) {
             return res.status(400).json({ error: error.message });
         }
@@ -50,14 +50,14 @@ class EquipmentController {
         const equipmentToUpdate = await EquipmentService.getEquipmentById(id);
         if (!equipmentToUpdate) return res.status(404).json({ error: "Equipamento não encontrado ou não existe." });
         try {
-            const { name, address, department, shift, vacant } = req.body;
+            const { name, address } = req.body;
             if (name !== equipmentToUpdate.name) return res.status(403).json({ error: "Nome do equipamento não pode ser alterado." });
             if (address !== equipmentToUpdate.address) 
             await equipmentToUpdate.save();
             const equipment = await EquipmentService.updateEquipment(equipmentToUpdate);
-            res.json(equipment);
+            return res.json(equipment);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
@@ -65,9 +65,9 @@ class EquipmentController {
         const { id } = req.params;
         try {
             await EquipmentService.deleteEquipment(id);
-            res.json({ message: 'Equipamento deletado com sucesso!' });
+            return res.json({ message: 'Equipamento deletado com sucesso!' });
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 }

@@ -44,15 +44,24 @@ export const updateSolicitationId = async (id, data) => {
     };
 };
 
-export const createEquipment = async (name, shift, vacant) => {
+export const createEquipment = async (name, address) => {
     try {
-        const response = await api.post("/equipment", {name, shift, vacant});
+        const response = await api.post("/equipment", {name, address});
         return response.data;
     } catch (error) {
         console.error("Erro ao criar novo equipamento: ", error);
         throw error;
     };
 };
+
+export const deleteEquipment = async (id) => {
+  try {
+    const response = await api.delete(`/equipment/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export const fetchEquipments = async () => {
     try {
@@ -107,6 +116,25 @@ export const fetchInstitutionByCNPJ = async (cnpj) => {
       throw error; 
     };
 }
+
+export const createDepartment = async (data) => {
+  try {
+    const response = await api.post("/department", data);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    throw error;
+  };
+}
+
+export const deleteDepartment = async (id) => {
+  try {
+    const response = await api.delete(`/department/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 export default api;
