@@ -5,7 +5,7 @@
 
     <!--CABEÇALHO DA PÁGINA-->
     <section class="header-table">
-      <button class="btn-no-filling-primary">&#8592;</button>
+      <button class="btn-no-filling-primary" @click="toBackPage">&#8592;</button>
       <h2>Gerenciar Equipamentos</h2>
       <button class="btn-primary" @click="isModalOpen = true">&plus; Equipamento</button>
     </section>
@@ -17,13 +17,41 @@
         <div class="card-equipment">
           <div class="info-equipment">
             <h3>{{ equipment.name }}</h3>
-            <p>{{ equipment.address }}</p>
+            <p v-if="!(editionEquipment && idEquipment === equipment.id)">{{ equipment.address }}</p>
+            <span v-else>
+              <input 
+              type="text" 
+              id="address" 
+              v-model="NewEquipment.address" 
+              style="
+              height: 20px; 
+              width: 600px; 
+              margin-top: 15px;
+              padding: 5px; 
+              border: 2px solid #003366; 
+              border-radius: 5px;"
+              required />
+              <button class="btn-no-filling-remove" type="button" @click="editionEquipment = false">
+                Cancelar
+              </button>
+            </span>
           </div>
 
           <div class="actions-buttons">
             <!--BOTÃO DE EDIÇÃO-->
-            <button class="btn-primary" type="button" @click="idEquipment = equipment.id">
+            <button v-if="!(editionEquipment && idEquipment === equipment.id)" class="btn-primary" type="button" @click="startEdition(equipment)">
               <i class="fa-solid fa-pen"></i>
+            </button>
+            <!--BOTÃO DE SALVAR-->
+            <button v-else 
+            class="btn-primary" 
+            type="button" 
+            @click="toUpdateEquipment(equipment.id, NewEquipment.address)">
+              <i class="fa fa-check"></i>
+            </button>
+            <button class="btn-no-filling-sec" type="button" @click="toggleViewEquipment(equipment.id); editionMode = null">
+              <i v-if="viewEquipment !== equipment.id" class="fa fa-eye"></i>
+              <i v-else class="fa fa-eye-slash"></i>
             </button>
             <!--BOTÃO DE EXCLUIR-->
             <button class="btn-no-filling-remove" type="button" @click="excludeEquipemnt(equipment.id, equipment.name)">
@@ -34,11 +62,11 @@
         </div>
 
         <!--SETORES E VAGAS-->
-        <div v-if="idEquipment === equipment.id" class="expand-equipment">
+        <div v-if="viewEquipment === equipment.id" class="expand-equipment">
           <div class="section-department">
 
             <!--LISTA DE SETORES DO EQUIPAMENTO SELECIONADO-->
-            <div v-for="(department) in equipment.Departments" :key="department.id" class="list-department">
+            <div v-for="(department) in equipment.Departments" :key="department.id" :class="['list-department', { 'editing': selectedDepartmentId === department.id && editionMode === 'department' }]">
               <h4>{{ department.nameDepartment }}</h4>
 
               <div class="actions-buttons">
@@ -46,9 +74,9 @@
                 <button 
                 class="btn-primary" 
                 type="button" 
-                @click="editionDepartment(department, 'department')"
-                >
-                <i class="fa-solid fa-pen" ></i>
+                @click="editionDepartment(department, 'department', department.id)">
+                <i v-if="viewDepartment !== department.id" class="fa fa-eye"></i>
+                <i v-else class="fa fa-eye-slash"></i>
                 </button> 
   
                 <!--BOTÃO DE EXCLUIR-->
@@ -94,8 +122,8 @@
           
           <!--LISTA DE TURNOS E VAGAS DO SETOR SELECIONADO-->
           <div v-if="editionMode === 'department'" class="section-rotation">
-            <h4 style="align-self: center;">Gerenciar Setor: {{ departments.nameDepartment }}</h4>
-            <div v-if="departments !== null" v-for="(rotation, rotationIndex) in departments.Rotations" :key="rotationIndex" class="list-rotations">
+            <h4 style="align-self: center;">Gerenciar Setor: {{ currentDepartment?.nameDepartment }}</h4>
+            <div v-if="currentDepartment !== null" v-for="(rotation, rotationIndex) in currentDepartment.Rotations" :key="rotationIndex" class="list-rotations">
               <label :for="'shift'">Turno:</label>
               <select :id="'shift'" v-model="rotation.shift" style="height: 30px; padding: 6px 8px; border: 2px solid #003366; border-radius: 5px;" required>
                 <option disabled value="">Selecione o turno</option>
@@ -107,7 +135,7 @@
               <label :for="'vacant'">Vagas:</label>
               <input type="number" :id="'vacant'" v-model.number="rotation.vacant" style="width: 40px;" required />
   
-              <button type="button" class="btn-no-filling-remove"><i class="fas fa-trash"></i></button>
+              <button type="button" class="btn-no-filling-remove"  @click="excludeRotation(rotation.id)"><i class="fas fa-trash"></i></button>
 
             </div>
 
@@ -181,19 +209,39 @@
 
 <script setup>
 import HeaderAdmin from '../components/HeaderAdmin.vue';
-import { ref, onMounted, reactive } from 'vue';
-import { fetchEquipments, createEquipment, deleteEquipment, createDepartment, deleteDepartment } from "../services/api";
+import { ref, onMounted, reactive, computed } from 'vue';
+import { 
+  fetchEquipments, createEquipment, deleteEquipment, updateEquipment, 
+  createDepartment, deleteDepartment,
+  createRotation, deleteRotation } from "../services/api";
+import { useRouter } from 'vue-router';
 
 const equipments = ref([]);
 const isModalOpen = ref(false);
 const editionMode = ref('');
 const idEquipment = ref(null);
-const departments = ref([]);
+const viewEquipment = ref(null);
+const viewDepartment = ref(null);
 const addMode = ref('');
+const router = useRouter();
+const editionEquipment = ref(false);
+const selectedDepartmentId = ref(null);
+
+
+const startEdition = (equipment) => {
+  editionEquipment.value = true;
+  idEquipment.value = equipment.id;
+  NewEquipment.address = equipment.address;
+};
+
 
 
 const showAlert = (msn) => {
   alert(msn);
+};
+
+const toBackPage = () => {
+  router.push('/admin-management');
 };
 
 const NewEquipment = reactive({
@@ -214,6 +262,8 @@ const NewRotation = reactive({
 
 /* FUNÇÕES RELACIONADAS A EQUIPAMENTOS */
 const addEquipment = async () => {
+  const isConfirm = confirm(`Confirme o nome do Equipamento público: "${NewEquipment.name}", após a criação não será possível editar.`);
+  if (!isConfirm) return;
   try {
     await createEquipment(NewEquipment.name, NewEquipment.address);
     isModalOpen.value = false;
@@ -245,6 +295,27 @@ const excludeEquipemnt = async (id, name) => {
   }
 }
 
+const toUpdateEquipment = async (id, address) => {
+  const isConfirm = confirm(`Tem certeza que deseja atualizar o endereço para: "${address}"?`);
+  if (!isConfirm) {
+    editionEquipment.value = false;
+    idEquipment.value = null;
+    return
+  }
+  try {
+    await updateEquipment(id, {address});
+    editionEquipment.value = false;
+    idEquipment.value = null;
+    equipments.value = await fetchEquipments(); 
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error); // Exibe a mensagem do backend
+    } else {
+      alert('Erro inesperado ao criar equipamento.');
+    }
+  }
+}
+
 /* FUNÇÕES RELACIONADAS A SETOR/DEPARTAMENTO */
 const addDepartment = async (id) => {
   if (id !== idEquipment.value) return;
@@ -265,14 +336,24 @@ const addDepartment = async (id) => {
   }
 }
 
-const editionDepartment = (array, value) => {
-  if (array !== null) {
-    departments.value = array;
-    editionMode.value = value;
-  } else {
-    editionMode.value = value;
-  }
+const editionDepartment = (array, value, id) => {
+  selectedDepartmentId.value = id;
+  editionMode.value = value;
+  viewDepartment.value = id;
 }
+
+const currentDepartment = computed(() => {
+  if (!viewEquipment.value || !selectedDepartmentId.value) return null;
+
+  const equipment = equipments.value.find(eq => eq.id === viewEquipment.value);
+  if (!equipment) return null;
+
+  return equipment.Departments.find(dep => dep.id === selectedDepartmentId.value) || null;
+});
+
+const toggleViewEquipment = (id) => {
+  viewEquipment.value = viewEquipment.value === id ? null : id;
+};
 
 const excludeDepartment = async (id) => {
   const confirmacao = confirm("Tem certeza que deseja excluir este setor?");
@@ -292,6 +373,54 @@ const excludeDepartment = async (id) => {
 }
 
 /* FUNÇÕES RELACIONADAS A TURNOS E VAGAS */
+
+const addRotation = async () => {
+  try {
+    if (!currentDepartment.value?.id) {
+      alert('Erro: setor inválido.');
+      return;
+    }
+
+    NewRotation.departmentId = currentDepartment.value.id; 
+
+    await createRotation(NewRotation); 
+
+    alert('Turno e Vagas criados com sucesso!');
+    equipments.value = await fetchEquipments(); 
+
+    NewRotation.shift = '';
+    NewRotation.vacant = 0;
+    NewRotation.departmentId = 0;
+
+    addMode.value = null; 
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error); 
+    } else {
+      alert('Erro inesperado ao criar departamento.');
+    }
+  }
+}
+
+const excludeRotation = async (rotationId) => {
+  const confirmDelete = confirm('Tem certeza que deseja excluir este turno/vaga?');
+  if (!confirmDelete) return;
+
+  try {
+    await deleteRotation(rotationId);
+    alert('Turno/Vaga excluído com sucesso!');
+
+    equipments.value = await fetchEquipments();
+
+  } catch (error) {
+    console.log(error);
+    if (error.response?.data?.error) {
+      alert(error.response.data.error);
+    } else {
+      alert('Erro inesperado ao excluir turno/vaga.');
+    }
+  }
+};
 
 onMounted(async () => {
   const data = await fetchEquipments();
@@ -385,11 +514,9 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  border-left: 2px solid #e7e7e7;
-  border-right: 2px solid #e7e7e7;
-  border-bottom: 2px solid #e7e7e7;
-  border-radius: 10px;
-  background-color: #f5f5f5;
+  border-left: 2px solid #003366;
+  border-right: 2px solid #003366;
+  border-bottom: 2px solid #003366;
 }
 
 .section-department {
@@ -400,6 +527,7 @@ onMounted(async () => {
   margin-bottom: 5px;
   margin-left: 20px;
   width: 45%;
+  padding-top: 20px;
 }
 
 .section-rotation {
@@ -407,8 +535,8 @@ onMounted(async () => {
   flex-direction: column;
   align-items: flex-start;
   width: 45%;
-  height: 100%;
-  padding-right: 20px;
+  height: auto;
+  padding: 10px 20px;
 }
 
 .list-rotations {
@@ -429,6 +557,7 @@ onMounted(async () => {
 }
 
 .list-department {
+  padding-left: 20px;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -483,5 +612,9 @@ onMounted(async () => {
   padding: 8px;
   border: 1px solid #003366;
   border-radius: 5px;
+}
+
+.editing {
+  background-color: #ECEFF1;
 }
 </style>

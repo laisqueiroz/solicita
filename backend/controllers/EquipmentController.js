@@ -23,16 +23,10 @@ class EquipmentController {
     static async createEquipment(req, res) {
         const { name, address} = req.body;
 
-        console.log("chegou no controller!")
-        console.log("Esse é o name: ", name)
-        console.log("Esse é o address: ", address)
-
         if (!name || !address ) {
-            console.log("não passou na validação")
             return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
         }
         try {
-            console.log("passou na validação")
             const nameUpperCase = name.toUpperCase();
             const equipmentExist = await EquipmentService.getEquipmentByName(nameUpperCase);
             if (equipmentExist) return res.status(403).json({ error: 'Equipamento já existe.' });
@@ -46,15 +40,12 @@ class EquipmentController {
     }
 
     static async updateEquipment(req, res) {
-        const { id } = req.body;
+        const { id } = req.params;
         const equipmentToUpdate = await EquipmentService.getEquipmentById(id);
         if (!equipmentToUpdate) return res.status(404).json({ error: "Equipamento não encontrado ou não existe." });
         try {
-            const { name, address } = req.body;
-            if (name !== equipmentToUpdate.name) return res.status(403).json({ error: "Nome do equipamento não pode ser alterado." });
-            if (address !== equipmentToUpdate.address) 
-            await equipmentToUpdate.save();
-            const equipment = await EquipmentService.updateEquipment(equipmentToUpdate);
+            const { address } = req.body;
+            const equipment = await EquipmentService.updateEquipment(equipmentToUpdate.id, {address});
             return res.json(equipment);
         } catch (error) {
             return res.status(400).json({ error: error.message });
