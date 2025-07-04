@@ -29,9 +29,9 @@ class EquipmentRepository{
 
     static async update(id, data) {
         const equipment = await Equipment.findByPk(id);
+        if (!equipment) return;
 
-        Object.assign(equipment, data);
-        return equipment.save();
+        return await equipment.update(data);
     }
 
     static async delete(id){
