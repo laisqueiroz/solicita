@@ -147,10 +147,10 @@
   const submitForm = () => {
     alert("Solicitação enviada com sucesso!");
     console.log('Formulário enviado:', form);
-    router.push('/gestao-ie');
+    router.push('/regular-management');
   };
   const voltarPagina = () => {
-    router.push('/gestao-ie');
+    router.push('/regular-management');
   };
 
 onMounted(() => {

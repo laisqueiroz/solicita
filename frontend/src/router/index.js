@@ -34,7 +34,7 @@ const routes = [
   },
   // PÁGINA DE CADASTRO
   { 
-    path: "/registration", 
+    path: "/register", 
     component: RegistrationPage 
   },
   // PÁGINA GESTÃO - ADMIN

@@ -3,13 +3,14 @@
     <HeaderHome />
     <div class="container">
         <HeaderHome />
-        <div class="illustration">
-            <img src="../assets/image 9 (Traced).png" alt="Ilustração">
+        <div class="content">
+          <h1>Facilitando<br> a prática, <br> ampliando o <br> aprendizado</h1>
+          <p>Um sistema inovador projetado para simplificar o processo de solicitação de práticas de ensino. Destinado a coordenadores e instituições de ensino, o sistema facilita a gestão dos pedidos, permitindo o acompanhamento de status e aprovações, promovendo uma experiência mais eficiente e organizada.</p>
         </div>
         <form @submit.prevent="login" class="login-box">
             <h1>Acesse o Sistema</h1>
             <p>Utilize suas credenciais cadastradas para acessar o sistema.</p>
-            <div class="fields">git config --global user.name
+            <div class="fields">
                 <label for="cpf">CPF</label>
                 <input v-model="cpf" type="cpf" id="cpf" placeholder="Digite seu CPF" required />
             </div>
@@ -118,10 +119,28 @@ const goToSingUp = () => {
         margin: 0 auto;
         padding: 40px 20px;
     }
-    .illustration img {
-        max-width: 100%;
-        height: auto;
-        object-fit: contain;
+
+    .content {
+    max-width: 700px;
+    margin-top: 130px;
+    margin-left: 100px;
+}
+
+    .content h1 {
+        margin-top: 50px;
+        text-align: left;
+        font-size: 35px;
+        color: #f7981d;
+        line-height: 1.2;
+        font-weight: bold;
+    }
+    .content p {
+        color: #fff;
+        text-align: left;
+        font-size: 18px;
+        margin-top: 20px;
+        line-height: 1.6;
+        padding-right: 100px;
     }
     .login-box {
         display: flex;
@@ -263,11 +282,6 @@ const goToSingUp = () => {
         flex-direction: row;
         align-items: flex-start;
         justify-content: flex-start;
-    }
-
-    .illustration img {
-        max-width: 650px;
-        height: auto;
     }
 
     .login-box {
