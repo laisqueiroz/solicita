@@ -1,134 +1,299 @@
 <template>
+  <title>Gerenciar Equipamentos</title>
+  <HeaderAdmin />
   <div class="container">
-    <title>Gerenciar Equipamentos</title>
-    <HeaderAdmin />
 
-    <section class="header-tabela">
-      <button class="btn-no-filling-primary" @click="voltarPagina">&#8592;</button>
+    <!--CABEÇALHO DA PÁGINA-->
+    <section class="header-table">
+      <button class="btn-no-filling-primary">&#8592;</button>
       <h2>Gerenciar Equipamentos</h2>
-      <div class="button-container">
-        <button class="btn-secondary" type="button" @click="abrirModal('adicionar')">
-          &plus; Equipamento
-        </button>
+      <button class="btn-primary" @click="isModalOpen = true">&plus; Equipamento</button>
+    </section>
+
+    <!--LISTA DE EQUIPAMENTOS, SETORES E VAGAS-->
+    <section class="list-table">
+      <!--LISTA DE EQUIPAMENTOS-->
+      <div v-for="(equipment, index) in equipments" :key="index">
+        <div class="card-equipment">
+          <div class="info-equipment">
+            <h3>{{ equipment.name }}</h3>
+            <p>{{ equipment.address }}</p>
+          </div>
+
+          <div class="actions-buttons">
+            <!--BOTÃO DE EDIÇÃO-->
+            <button class="btn-primary" type="button" @click="idEquipment = equipment.id">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <!--BOTÃO DE EXCLUIR-->
+            <button class="btn-no-filling-remove" type="button" @click="excludeEquipemnt(equipment.id, equipment.name)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <!--SETORES E VAGAS-->
+        <div v-if="idEquipment === equipment.id" class="expand-equipment">
+          <div class="section-department">
+
+            <!--LISTA DE SETORES DO EQUIPAMENTO SELECIONADO-->
+            <div v-for="(department) in equipment.Departments" :key="department.id" class="list-department">
+              <h4>{{ department.nameDepartment }}</h4>
+
+              <div class="actions-buttons">
+                <!--BOTÃO DE EDITAR-->
+                <button 
+                class="btn-primary" 
+                type="button" 
+                @click="editionDepartment(department, 'department')"
+                >
+                <i class="fa-solid fa-pen" ></i>
+                </button> 
+  
+                <!--BOTÃO DE EXCLUIR-->
+                <button 
+                @click="excludeDepartment(department.id)"
+                class="btn-no-filling-remove" 
+                type="button"
+                >
+                <i class="fas fa-trash"></i>
+                </button>
+              </div>
+
+            </div>
+
+            <!--ADICIONAR NOVO SETOR-->
+            <form @submit.prevent="addDepartment(equipment.id)" v-if="addMode === 'NewDepartment'" style=" display: flex; flex-direction: column; align-items: flex-start; ">
+              <label>Nome do Setor:</label>
+              <input type="text" v-model="NewDepartment.nameDepartment" style= "width: 100%;" required />
+              <span class="buttons-modal">
+                <button class="btn-primary">Salvar</button>
+                <button class="btn-no-filling-remove" @click="addMode = null">Cancelar</button>
+              </span>
+            </form>
+
+            <div style="align-self: flex-end;">
+              <button 
+              type="button" 
+              class="btn-no-filling-sec" 
+              @click="addMode = 'NewDepartment'" 
+              :disabled="addMode === 'NewDepartment'">
+              Adicionar Setor
+            </button>
+            </div>
+          </div>
+          
+          <!--LISTA DE TURNOS E VAGAS DO SETOR SELECIONADO-->
+          <div v-if="editionMode === 'department'" class="section-rotation">
+            <h4 style="align-self: center;">Gerenciar Setor: {{ departments.nameDepartment }}</h4>
+            <div v-if="departments !== null" v-for="(rotation, rotationIndex) in departments.Rotations" :key="rotationIndex" class="list-rotations">
+              <label :for="'shift'">Turno:</label>
+              <select :id="'shift'" v-model="rotation.shift" style="height: 30px; padding: 6px 8px; border: 2px solid #003366; border-radius: 5px;" required>
+                <option disabled value="">Selecione o turno</option>
+                <option value="MATUTINO">MATUTINO</option>
+                <option value="VESPERTINO">VESPERTINO</option>
+                <option value="NOTURNO">NOTURNO</option>
+              </select>
+  
+              <label :for="'vacant'">Vagas:</label>
+              <input type="number" :id="'vacant'" v-model.number="rotation.vacant" style="width: 40px;" required />
+  
+              <button type="button" class="btn-no-filling-remove"><i class="fas fa-trash"></i></button>
+
+            </div>
+
+            <!--ADICIONAR NOVO TURNO E VAGA-->
+            <form @submit.prevent="addRotation" v-if="addMode === 'NewRotation'">
+              <div class="form-add">
+                <label :for="'shift'">Turno:</label>
+                <select 
+                :id="'shift'" 
+                v-model="NewRotation.shift" 
+                style="height: 30px; padding: 6px 8px; border: 2px solid #003366; border-radius: 5px;" 
+                required>
+                  <option disabled value="">Selecione o turno</option>
+                  <option value="MATUTINO">MATUTINO</option>
+                  <option value="VESPERTINO">VESPERTINO</option>
+                  <option value="NOTURNO">NOTURNO</option>
+                </select>
+    
+                <label :for="'vacant'">Vagas:</label>
+                <input 
+                type="number" 
+                :id="'vacant'" 
+                v-model.number="NewRotation.vacant" 
+                style="width: 40px;" 
+                required />
+              </div>
+
+              <div class="buttons-modal">
+                <button class="btn-primary">Salvar</button>
+                <button class="btn-no-filling-remove" @click="addMode = null">Cancelar</button>
+              </div>
+            </form>
+
+            <div style="align-self: flex-end;">
+              <button 
+              type="button" 
+              class="btn-no-filling-sec" 
+              @click="addMode = 'NewRotation'" 
+              :disabled="addMode === 'NewRotation'">
+              Adicionar Vaga
+              </button>
+            </div>
+          </div>
+          
+        </div>
       </div>
     </section>
 
-    <form class="tabela">
-      <div class="list">
-        <div v-for="(equipment, index) in equipments" :key="index" class="equipment-card">
-          <div class="card-info">
-            <h3>{{ equipment.name }}</h3>
-            <div v-for="(rotation, rIndex) in equipment.Rotations" :key="rIndex">
-              <p><strong>Turno:</strong> {{ rotation.shift }} <strong>Vagas:</strong> {{ rotation.vacant }}</p>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn-primary" type="button" @click="abrirModal('editar', index)"><i class="fa-solid fa-pen"></i></button>
-            <button class="btn-no-filling-remove" type="button" @click="removerEquipment(index)"><i class="fas fa-trash"></i></button>
-          </div>
-        </div>
-      </div>
-    </form>
 
-    <!-- Modal -->
-    <div v-if="isModalOpen" class="modal-overlay" @click.self="fecharModal">
+    <!--MODAL: ADICIONAR NOVO EQUIPAMENTO-->
+    <section v-if="isModalOpen" class="overlay-modal" @click.self="isModalOpen = false">
       <div class="modal">
-        <h3>{{ modoEdicao ? "Editar Equipamento" : "Novo Equipamento" }}</h3>
+        <h3>Novo Equipamento</h3>
+        <form @submit.prevent="addEquipment">
 
-        <form @submit.prevent="modoEdicao ? salvarEdicao() : adicionarEquipment()">
           <label for="name">Nome do Equipamento:</label>
-          <input type="text" id="name" v-model="equipmentAtual.name" :disabled="modoEdicao" required />
+          <input type="text" id="name" v-model="NewEquipment.name" required />
 
-          <div v-for="(rotation, index) in equipmentAtual.Rotations" :key="index">
-            <label :for="'shift' + index">Turno:</label>
-            <input type="text" :id="'shift' + index" v-model="rotation.shift" required />
-
-            <label :for="'vacant' + index">Vagas:</label>
-            <input type="number" :id="'vacant' + index" v-model="rotation.vacant" required />
-          </div>
-
-          <button type="button" @click="adicionarTurno">Adicionar Turno</button>
-
-          <div class="modal-buttons">
-            <button class="btn-primary" type="submit">{{ modoEdicao ? "Salvar" : "Adicionar" }}</button>
-            <button class="btn-no-filling-remove" type="button" @click="fecharModal">Fechar</button>
+          <label for="address">Endereço:</label>
+          <input type="text" id="address" v-model="NewEquipment.address" required />
+          
+          <div class="buttons-modal">
+            <button class="btn-no-filling-remove" @click="isModalOpen = false">Fechar</button>
+            <button class="btn-primary">Adicionar</button>
           </div>
         </form>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
 import HeaderAdmin from '../components/HeaderAdmin.vue';
-import { fetchEquipments, createEquipment } from "../services/api";
-import { useRouter } from 'vue-router';
+import { ref, onMounted, reactive } from 'vue';
+import { fetchEquipments, createEquipment, deleteEquipment, createDepartment, deleteDepartment } from "../services/api";
 
-const router = useRouter();
-const isModalOpen = ref(false);
-const modoEdicao = ref(false);
-const indexEdicao = ref(null);
 const equipments = ref([]);
+const isModalOpen = ref(false);
+const editionMode = ref('');
+const idEquipment = ref(null);
+const departments = ref([]);
+const addMode = ref('');
 
-const equipmentAtual = ref({
+
+const showAlert = (msn) => {
+  alert(msn);
+};
+
+const NewEquipment = reactive({
   name: '',
-  Rotations: [{ shift: '', vacant: 0 }]
+  address: ''
 });
+
+const NewDepartment = reactive({
+  nameDepartment:  '',
+  equipmentId: 0
+})
+
+const NewRotation = reactive({
+  departmentId: 0,
+  shift: '',
+  vacant: 0
+})
+
+/* FUNÇÕES RELACIONADAS A EQUIPAMENTOS */
+const addEquipment = async () => {
+  try {
+    await createEquipment(NewEquipment.name, NewEquipment.address);
+    isModalOpen.value = false;
+
+    equipments.value = await fetchEquipments();
+
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error); 
+    } else {
+      alert('Erro inesperado ao criar equipamento.');
+    }
+  }
+}
+
+const excludeEquipemnt = async (id, name) => {
+  const isConfirm = confirm(`Tem certeza que deseja excluir o equipamento "${name}"?`);
+  if (!isConfirm) return;
+  try {
+    await deleteEquipment(id);
+    equipments.value = await fetchEquipments(); 
+    alert(`Equipamento "${name}" excluído com sucesso!`); 
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error); // Exibe a mensagem do backend
+    } else {
+      alert('Erro inesperado ao criar equipamento.');
+    }
+  }
+}
+
+/* FUNÇÕES RELACIONADAS A SETOR/DEPARTAMENTO */
+const addDepartment = async (id) => {
+  if (id !== idEquipment.value) return;
+  NewDepartment.equipmentId = id;
+  try {
+    await createDepartment(NewDepartment);
+    equipments.value = await fetchEquipments();
+
+    addMode.value = null;
+    NewDepartment.nameDepartment = '';
+    NewDepartment.equipmentId = null;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error); 
+    } else {
+      alert('Erro inesperado ao criar departamento.');
+    }
+  }
+}
+
+const editionDepartment = (array, value) => {
+  if (array !== null) {
+    departments.value = array;
+    editionMode.value = value;
+  } else {
+    editionMode.value = value;
+  }
+}
+
+const excludeDepartment = async (id) => {
+  const confirmacao = confirm("Tem certeza que deseja excluir este setor?");
+  if (!confirmacao) return;
+
+  try {
+    await deleteDepartment(id);
+    alert('Setor excluído com sucesso!');
+    equipments.value = await fetchEquipments();
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error); 
+    } else {
+      alert('Erro inesperado ao criar departamento.');
+    }
+  }
+}
+
+/* FUNÇÕES RELACIONADAS A TURNOS E VAGAS */
 
 onMounted(async () => {
   const data = await fetchEquipments();
   equipments.value = data;
 });
 
-const abrirModal = (modo, index = null) => {
-  if (modo === 'editar' && index !== null) {
-    modoEdicao.value = true;
-    indexEdicao.value = index;
-    equipmentAtual.value = { ...equipments.value[index], Rotations: [...equipments.value[index].Rotations] };
-  } else {
-    modoEdicao.value = false;
-    equipmentAtual.value = { name: '', Rotations: [{ shift: '', vacant: 0 }] };
-  }
-  isModalOpen.value = true;
-};
-
-const fecharModal = () => {
-  isModalOpen.value = false;
-};
-
-const adicionarTurno = () => {
-  equipmentAtual.value.Rotations.push({ shift: '', vacant: 0 });
-};
-
-const adicionarEquipment = async () => {
-  await createEquipment(equipmentAtual.value);
-  fetchEquipments();
-  fecharModal();
-};
-
-const salvarEdicao = async () => {
-  if (indexEdicao.value !== null) {
-    await updateEquipment(equipments.value[indexEdicao.value].id, equipmentAtual.value);
-    equipments.value[indexEdicao.value] = { ...equipmentAtual.value };
-  }
-  fecharModal();
-};
-
-const removerEquipment = async (index) => {
-  const equipmentId = equipments.value[index].id;
-  await deleteEquipment(equipmentId);
-  equipments.value.splice(index, 1);
-};
-
-const voltarPagina = () => {
-  router.push('/gestao-admin');
-};
 </script>
 
-
-
 <style scoped>
+
 .container {
   display: flex;
   flex-direction: column;
@@ -138,38 +303,45 @@ const voltarPagina = () => {
   padding-top: 80px;
 }
 
-.tabela {
-  width: 700px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-/* === Título e Botão de Adicionar === */
-.header-tabela {
+.header-table {
+  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 700px;
-  margin-bottom: 15px;
-  background-color: #ffffff;
+  width: 70%;
+  border-radius: 12px;
+  padding: 5px 20px;
+}
+
+.list-table {
+  background-color: #fff;
+  width: 70%;
+  margin-top: 10px;
   border-radius: 10px;
   padding: 20px;
+}
+
+.card-equipment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.header-tabela h2 {
-  font-size: 24px;
-  font-weight: bold;
+.info-equipment {
+  text-align: left;
 }
 
+.actions-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
 
-.modal-overlay {
+.overlay-modal {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -180,14 +352,15 @@ const voltarPagina = () => {
 
 .modal {
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 350px;
+  padding: 24px;
+  border-radius: 12px;
+  width: 700px;
   text-align: center;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-.modal form {
+.modal > form {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -195,73 +368,111 @@ const voltarPagina = () => {
 }
 
 .modal label {
-  font-weight: bold;
   text-align: left;
-  display: block;
+  font-weight: bold;
 }
 
-.modal input,
-.modal select {
+.modal input {
   width: auto;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #003366;
   border-radius: 5px;
 }
-.modal div input {
-    display: flex;
-    width: 95%;
+
+.section-rotation {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  height: 40px;
+  column-gap: 10px;
 }
 
-.modal-buttons {
+.buttons-modal {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
 }
 
-.list {
-  width: 100%;
-  max-width: 700px;
-  margin-top: 20px;
+.expand-equipment {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-left: 2px solid #e7e7e7;
+  border-right: 2px solid #e7e7e7;
+  border-bottom: 2px solid #e7e7e7;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+
+.section-department {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: flex-start;
+  text-align: left;
+  margin-bottom: 5px;
+  margin-left: 20px;
+  width: 45%;
 }
 
-.equipment-card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+.section-rotation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 45%;
+  height: 100%;
+  padding-right: 20px;
+}
+
+.list-rotations {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.list-rotations > label {
+  font-weight: bold;
+}
+
+.list-rotations > input {
+  height: 20px;
+  padding: 5px;
+  border: 2px solid #003366;
+  border-radius: 5px;
+}
+
+.list-department {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
 }
-
-.card-info h3 {
-  margin: 0;
-  font-size: 18px;
-  text-align: left;
-}
-
-.card-info p {
-  margin: 5px 0;
-  font-size: 14px;
-  text-align: left;
-}
-
-.card-actions {
+ form {
+  width: 90%;
+  font-weight: bold;
   display: flex;
-  flex-direction: row;
-  gap: 4px;
+  flex-direction: column;
+  align-items: flex-end;
+ }
+
+ form > input {
+  width: 90%;
+  padding: 8px;
+  border: 2px solid #003366;
+  border-radius: 5px;
+ }
+
+.form-add {
+  font-weight: bold;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  height: 40px;
+  column-gap: 10px;
 }
 
-.valido {
-  color: green;
-  font-weight: bold;
-}
-
-.vencido {
-  color: red;
-  font-weight: bold;
+.form-add > input {
+  width: auto;
+  padding: 8px;
+  border: 2px solid #003366;
+  border-radius: 5px;
 }
 </style>
