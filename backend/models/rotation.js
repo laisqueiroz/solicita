@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['matutino','vespertino','noturno']],
+        isIn: [['MATUTINO','VESPERTINO','NOTURNO']],
       },
     },
     vacant: {
