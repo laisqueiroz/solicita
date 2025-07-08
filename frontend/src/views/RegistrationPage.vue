@@ -60,8 +60,15 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="CNPJ">CNPJ</label>
-                        <input type="text" id="CNPJ" name="CNPJ" placeholder="Digite o CNPJ da Instituição"
-                            v-model="form.cnpj" v-maska="'##.###.###/####-##'" @input="fetchInstitution" required>
+                        <input 
+                            type="text" 
+                            id="CNPJ" 
+                            name="CNPJ" 
+                            placeholder="Digite o CNPJ da Instituição" 
+                            v-model="form.cnpj" 
+                            v-maska="'##.###.###/####-##'"
+                            @input="fetchInstitution" 
+                        required>
                     </div>
 
                     <div class="form-group">

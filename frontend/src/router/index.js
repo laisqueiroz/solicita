@@ -6,7 +6,7 @@ import AdminManagement from "../views/GestaoAdmin.vue";
 import RegularManagement from "../views/GestaoIE.vue";
 import SolicitationsAdmin from "../views/SolicitationsAdmin.vue";
 import ViewSolicitation from "../views/ViewSolicitation.vue";
-import RegistrationPage from "../views/CadastroPage.vue";
+import RegistrationPage from "../views/RegistrationPage.vue";
 import FAQPage from "../views/FAQPage.vue"
 import NovaSolicitacao from "../views/NewSolicitations.vue";
 import VisualizarSolicitacaoIE from "../views/VisualizarSolicitacaoIE.vue";
