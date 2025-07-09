@@ -43,30 +43,23 @@
 
               <div class="actions-buttons">
                 <!--BOTÃO DE EDITAR-->
-                <button 
-                class="btn-primary" 
-                type="button" 
-                @click="editionDepartment(department, 'department')"
-                >
-                <i class="fa-solid fa-pen" ></i>
-                </button> 
-  
+                <button class="btn-primary" type="button" @click="editionDepartment(department, 'department')">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+
                 <!--BOTÃO DE EXCLUIR-->
-                <button 
-                @click="excludeDepartment(department.id)"
-                class="btn-no-filling-remove" 
-                type="button"
-                >
-                <i class="fas fa-trash"></i>
+                <button @click="excludeDepartment(department.id)" class="btn-no-filling-remove" type="button">
+                  <i class="fas fa-trash"></i>
                 </button>
               </div>
 
             </div>
 
             <!--ADICIONAR NOVO SETOR-->
-            <form @submit.prevent="addDepartment(equipment.id)" v-if="addMode === 'NewDepartment'" style=" display: flex; flex-direction: column; align-items: flex-start; ">
+            <form @submit.prevent="addDepartment(equipment.id)" v-if="addMode === 'NewDepartment'"
+              style=" display: flex; flex-direction: column; align-items: flex-start; ">
               <label>Nome do Setor:</label>
-              <input type="text" v-model="NewDepartment.nameDepartment" style= "width: 100%;" required />
+              <input type="text" v-model="NewDepartment.nameDepartment" style="width: 100%;" required />
               <span class="buttons-modal">
                 <button class="btn-primary">Salvar</button>
                 <button class="btn-no-filling-remove" @click="addMode = null">Cancelar</button>
@@ -74,31 +67,30 @@
             </form>
 
             <div style="align-self: flex-end;">
-              <button 
-              type="button" 
-              class="btn-no-filling-sec" 
-              @click="addMode = 'NewDepartment'" 
-              :disabled="addMode === 'NewDepartment'">
-              Adicionar Setor
-            </button>
+              <button type="button" class="btn-no-filling-sec" @click="addMode = 'NewDepartment'"
+                :disabled="addMode === 'NewDepartment'">
+                Adicionar Setor
+              </button>
             </div>
           </div>
-          
+
           <!--LISTA DE TURNOS E VAGAS DO SETOR SELECIONADO-->
           <div v-if="editionMode === 'department'" class="section-rotation">
             <h4 style="align-self: center;">Gerenciar Setor: {{ departments.nameDepartment }}</h4>
-            <div v-if="departments !== null" v-for="(rotation, rotationIndex) in departments.Rotations" :key="rotationIndex" class="list-rotations">
+            <div v-if="departments !== null" v-for="(rotation, rotationIndex) in departments.Rotations"
+              :key="rotationIndex" class="list-rotations">
               <label :for="'shift'">Turno:</label>
-              <select :id="'shift'" v-model="rotation.shift" style="height: 30px; padding: 6px 8px; border: 2px solid #003366; border-radius: 5px;" required>
+              <select :id="'shift'" v-model="rotation.shift"
+                style="height: 30px; padding: 6px 8px; border: 2px solid #003366; border-radius: 5px;" required>
                 <option disabled value="">Selecione o turno</option>
                 <option value="MATUTINO">MATUTINO</option>
                 <option value="VESPERTINO">VESPERTINO</option>
                 <option value="NOTURNO">NOTURNO</option>
               </select>
-  
+
               <label :for="'vacant'">Vagas:</label>
               <input type="number" :id="'vacant'" v-model.number="rotation.vacant" style="width: 40px;" required />
-  
+
               <button type="button" class="btn-no-filling-remove"><i class="fas fa-trash"></i></button>
 
             </div>
@@ -107,24 +99,16 @@
             <form @submit.prevent="addRotation" v-if="addMode === 'NewRotation'">
               <div class="form-add">
                 <label :for="'shift'">Turno:</label>
-                <select 
-                :id="'shift'" 
-                v-model="NewRotation.shift" 
-                style="height: 30px; padding: 6px 8px; border: 2px solid #003366; border-radius: 5px;" 
-                required>
+                <select :id="'shift'" v-model="NewRotation.shift"
+                  style="height: 30px; padding: 6px 8px; border: 2px solid #003366; border-radius: 5px;" required>
                   <option disabled value="">Selecione o turno</option>
                   <option value="MATUTINO">MATUTINO</option>
                   <option value="VESPERTINO">VESPERTINO</option>
                   <option value="NOTURNO">NOTURNO</option>
                 </select>
-    
+
                 <label :for="'vacant'">Vagas:</label>
-                <input 
-                type="number" 
-                :id="'vacant'" 
-                v-model.number="NewRotation.vacant" 
-                style="width: 40px;" 
-                required />
+                <input type="number" :id="'vacant'" v-model.number="NewRotation.vacant" style="width: 40px;" required />
               </div>
 
               <div class="buttons-modal">
@@ -134,16 +118,13 @@
             </form>
 
             <div style="align-self: flex-end;">
-              <button 
-              type="button" 
-              class="btn-no-filling-sec" 
-              @click="addMode = 'NewRotation'" 
-              :disabled="addMode === 'NewRotation'">
-              Adicionar Vaga
+              <button type="button" class="btn-no-filling-sec" @click="addMode = 'NewRotation'"
+                :disabled="addMode === 'NewRotation'">
+                Adicionar Vaga
               </button>
             </div>
           </div>
-          
+
         </div>
       </div>
     </section>
@@ -160,7 +141,7 @@
 
           <label for="address">Endereço:</label>
           <input type="text" id="address" v-model="NewEquipment.address" required />
-          
+
           <div class="buttons-modal">
             <button class="btn-no-filling-remove" @click="isModalOpen = false">Fechar</button>
             <button class="btn-primary">Adicionar</button>
@@ -194,7 +175,7 @@ const NewEquipment = reactive({
 });
 
 const NewDepartment = reactive({
-  nameDepartment:  '',
+  nameDepartment: '',
   equipmentId: 0
 })
 
@@ -214,7 +195,7 @@ const addEquipment = async () => {
 
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
-        alert(error.response.data.error); 
+      alert(error.response.data.error);
     } else {
       alert('Erro inesperado ao criar equipamento.');
     }
@@ -226,11 +207,11 @@ const excludeEquipemnt = async (id, name) => {
   if (!isConfirm) return;
   try {
     await deleteEquipment(id);
-    equipments.value = await fetchEquipments(); 
-    alert(`Equipamento "${name}" excluído com sucesso!`); 
+    equipments.value = await fetchEquipments();
+    alert(`Equipamento "${name}" excluído com sucesso!`);
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
-        alert(error.response.data.error); // Exibe a mensagem do backend
+      alert(error.response.data.error); // Exibe a mensagem do backend
     } else {
       alert('Erro inesperado ao criar equipamento.');
     }
@@ -250,7 +231,7 @@ const addDepartment = async (id) => {
     NewDepartment.equipmentId = null;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
-        alert(error.response.data.error); 
+      alert(error.response.data.error);
     } else {
       alert('Erro inesperado ao criar departamento.');
     }
@@ -276,7 +257,7 @@ const excludeDepartment = async (id) => {
     equipments.value = await fetchEquipments();
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
-        alert(error.response.data.error); 
+      alert(error.response.data.error);
     } else {
       alert('Erro inesperado ao criar departamento.');
     }
@@ -293,7 +274,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
 .container {
   display: flex;
   flex-direction: column;
@@ -360,7 +340,7 @@ onMounted(async () => {
   overflow-y: auto;
 }
 
-.modal > form {
+.modal>form {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -428,11 +408,11 @@ onMounted(async () => {
   gap: 10px;
 }
 
-.list-rotations > label {
+.list-rotations>label {
   font-weight: bold;
 }
 
-.list-rotations > input {
+.list-rotations>input {
   height: 20px;
   padding: 5px;
   border: 2px solid #003366;
@@ -444,20 +424,21 @@ onMounted(async () => {
   justify-content: space-between;
   width: 100%;
 }
- form {
+
+form {
   width: 90%;
   font-weight: bold;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
- }
+}
 
- form > input {
+form>input {
   width: 90%;
   padding: 8px;
   border: 2px solid #003366;
   border-radius: 5px;
- }
+}
 
 .form-add {
   font-weight: bold;
@@ -469,7 +450,7 @@ onMounted(async () => {
   column-gap: 10px;
 }
 
-.form-add > input {
+.form-add>input {
   width: auto;
   padding: 8px;
   border: 2px solid #003366;

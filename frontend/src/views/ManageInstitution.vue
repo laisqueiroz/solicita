@@ -108,7 +108,7 @@ const removerInstituicao = (index) => {
 };
 
 const backPage = () => {
-  router.push('/gestao-admin');
+  router.push('/admin-management');
 };
 </script>
 

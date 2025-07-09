@@ -59,10 +59,12 @@ const props = defineProps({
 
 const emit = defineEmits(["verMais", "aprovar", "negar"]);
 
+//Emite o objeto inteiro da linha correspondente ao índice
 const toggleExpand = (index) => {
-  emit('verMais', index); 
+  emit('verMais', index);
+  emit('verMais', props.data[index]);
+  props.data[index].expandida = !props.data[index].expandida; 
 };
-
 const getStatusClass = (status) => {
   return {
     "status-approved": status === "Deferido",
