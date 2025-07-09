@@ -136,7 +136,6 @@ const negarAcesso = () => {
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  flex: 1;
   text-align: center;
 }
 
