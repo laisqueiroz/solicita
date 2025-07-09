@@ -190,7 +190,7 @@ import { fetchEquipments } from '../services/api';
 
 const router = useRouter();
 
-// Opções para os checkboxes de dias da semana
+
 const diasSemanaOptions = [
   { text: 'Dom', value: 'domingo' },
   { text: 'Seg', value: 'segunda' },
@@ -201,7 +201,6 @@ const diasSemanaOptions = [
   { text: 'Sáb', value: 'sábado' },
 ];
 
-// Objeto reativo do formulário com todos os campos necessários
 const form = reactive({
   curso: '',
   disciplina: '',
@@ -217,15 +216,13 @@ const form = reactive({
   nomePreceptor: '',
   areaAtuacaoPreceptor: '',
   registroConselho: '',
-  alunos: [{ nome: '', cpf: '' }] // Inicia com um aluno para preenchimento
+  alunos: [{ nome: '', cpf: '' }] 
 });
 
 watch(() => form.modalidade, (novaModalidade) => {
   if (novaModalidade === 'estagio') {
-    // Limpa o campo de data única se o usuário mudar para estágio
     form.dataUnica = '';
   } else {
-    // Limpa todos os campos específicos de estágio se mudar para outra modalidade
     form.dataInicio = '';
     form.dataFim = '';
     form.diasSemana = [];
@@ -234,9 +231,8 @@ watch(() => form.modalidade, (novaModalidade) => {
 
 const dataMinimaPermitida = computed(() => {
   const hoje = new Date();
-  // Adiciona 15 dias à data de hoje
   hoje.setDate(hoje.getDate() + 15);
-  // Formata a data para o padrão YYYY-MM-DD exigido pelo input:min
+  
   return hoje.toISOString().split('T')[0];
 });
 
@@ -248,10 +244,10 @@ watch(() => form.dataInicio, (novaDataInicio) => {
 
 const unidadesDeSaude = ref([]);
 
-// Busca as unidades de saúde da API ao montar o componente
+
 const buscarUnidadesDeSaude = async () => {
   try {
-    const response = await fetchEquipments(); // Supondo que esta API retorne as unidades
+    const response = await fetchEquipments(); 
     unidadesDeSaude.value = response;
   } catch (error) {
     alert('Não foi possível carregar as unidades de saúde.');
@@ -259,7 +255,7 @@ const buscarUnidadesDeSaude = async () => {
   }
 };
 
-// 1. Computed Property para obter os setores da unidade selecionada
+
 const setoresDisponiveis = computed(() => {
   if (!form.unidadeSaudeId) return [];
 
@@ -270,7 +266,6 @@ const setoresDisponiveis = computed(() => {
   return unidadeSelecionada ? unidadeSelecionada.Departments : [];
 });
 
-// 2. Watch para limpar a seleção do setor quando a unidade muda
 watch(() => form.unidadeSaudeId, () => { form.departmentId = ''; });
 
 const rotacoesDisponiveis = computed(() => {
@@ -287,27 +282,26 @@ watch(() => form.departmentId, () => { form.rotationId = ''; });
 const vagasDoTurnoSelecionado = computed(() => {
   if (!form.rotationId) return 0;
   const rotacaoSelecionada = rotacoesDisponiveis.value.find(rotacao => rotacao.id === form.rotationId);
-  // Retorna o número de vagas ou 0 se não encontrar
   return rotacaoSelecionada ? rotacaoSelecionada.vacant : 0;
 });
 
-// 4. Lógica para desabilitar o botão "Adicionar Aluno" (NOVA LÓGICA)
+
 const isAdicionarAlunoDisabled = computed(() => {
-  // A regra só se aplica à modalidade 'estagio'
+  
   if (form.modalidade !== 'estagio') {
-    return false; // Para outras modalidades, o botão nunca é desabilitado
+    return false; 
   }
   
-  // Se for estágio, mas não houver turno selecionado, desabilite.
+  
   if (!form.rotationId || vagasDoTurnoSelecionado.value === 0) {
     return true;
   }
   
-  // Desabilita se o número de alunos for igual ou maior que o de vagas
+  
   return form.alunos.length >= vagasDoTurnoSelecionado.value;
 });
 
-// Funções de manipulação
+
 const adicionarAluno = () => {
   form.alunos.push({ nome: '', cpf: '' });
 };
@@ -316,7 +310,7 @@ const removerAluno = (index) => {
   if (form.alunos.length > 1) { 
     form.alunos.splice(index, 1);
   } else {
-    // Permite limpar o último aluno, mas não remover a linha se for a única
+    
     form.alunos[index] = { nome: '', cpf: '' };
     alert('É necessário ter pelo menos um aluno na solicitação. Os dados do aluno foram limpos.');
   }
@@ -326,11 +320,8 @@ onMounted(() => {
   buscarUnidadesDeSaude(); 
 });
 
-// Funções para manipular a lista de alunos
 
-// Funções de navegação e submissão
 const submitForm = () => {
-  // Adicionar validação final antes de enviar
   if (form.modalidade === 'estagio' && form.alunos.length > vagasDoTurnoSelecionado.value) {
     alert(`Erro: O número de alunos (${form.alunos.length}) excede o número de vagas (${vagasDoTurnoSelecionado.value}) para este estágio.`);
     return;
@@ -341,7 +332,7 @@ const submitForm = () => {
 };
 
 const voltarPagina = () => {
-  router.back(); // Mais flexível que o push, volta para a página anterior no histórico
+  router.back(); 
 };
 </script>
 
