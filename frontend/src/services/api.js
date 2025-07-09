@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://portal-solicita.onrender.com',
+    baseURL: 'http://localhost:8080',
     timeout: 10000,
 });
 /* FUNÇÕES DE USUÁRIOS */
@@ -93,18 +93,19 @@ export const fetchEquipments = async () => {
       };
 };
 
+export const createInstitution = async (data) => {
+  try {
+        const response = await api.post("/institutions", data);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao criar nova instituição: ", error);
+        throw error;
+    };
+}
 
 export const fetchInstitutions = async () => {
     try {
-        /*const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Usuário não autenticado!");
-        }*/
-  
         const response = await api.get("/institutions", {
-          /*headers: {
-              Authorization: `Bearer ${token}`,
-          },*/
         });
         return response.data;
       } catch (error) {
@@ -115,11 +116,6 @@ export const fetchInstitutions = async () => {
 
 export const fetchInstitutionByCNPJ = async (cnpj) => {
   try {
-      /*const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Usuário não autenticado!");
-      }*/
-
       const response = await api.get(`/institutions?cnpj=${cnpj}`);
       console.log(response.data)
       return response.data;
