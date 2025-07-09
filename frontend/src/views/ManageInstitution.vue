@@ -3,45 +3,45 @@
     <title>Gerenciar Instituições</title>
     <HeaderAdmin />
 
-    <section class="header-tabela">
-      <button class="btn-no-filling-primary" @click="backPage">&#8592;</button>
+    <section class="header-table">
+      <button class="btn-no-filling-primary" @click="toBackPage">&#8592;</button>
       <h2>Gerenciar Instituições</h2>
       <div class="button-container">
-        <button class="btn-secondary" type="button" @click="abrirModal('adicionar')">
+        <button class="btn-secondary" type="button" @click="openModal('adicionar')">
           &plus; Instituição
         </button>
       </div>
     </section>
 
-    <form class="tabela">
-      <div class="instituicao-lista">
-        <div v-for="(institution, index) in institutions" :key="index" class="instituicao-card">
+    <form class="table">
+      <div class="list-institution">
+        <div v-for="(institution, index) in institutions" :key="index" class="card-institution">
           <div class="card-info">
             <h3>{{ institution.name }}</h3>
             <p><strong>CNPJ:</strong> {{ institution.cnpj }}</p>
           </div>
           <div class="card-actions">
-            <button class="btn-primary" type="button" @click="abrirModal('editar', index)"><i class="fa-solid fa-pen"></i></button>
-            <button class="btn-no-filling-remove" type="button" @click="removerInstituicao(index)"><i class="fas fa-trash"></i></button>
+            <button class="btn-primary" type="button" @click="openModal('editar', index)"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-no-filling-remove" type="button" @click="excludeInstitution(index)"><i class="fas fa-trash"></i></button>
           </div>
         </div>
       </div>
     </form>
 
-    <div v-if="isModalOpen" class="modal-overlay" @click.self="fecharModal">
+    <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
       <div class="modal">
-        <h3>{{ modoEdicao ? "Editar Instituição" : "Nova Instituição" }}</h3>
+        <h3>{{ editionMode ? "Editar Instituição" : "Nova Instituição" }}</h3>
 
-        <form @submit.prevent="modoEdicao ? salvarEdicao() : adicionarInstituicao()">
+        <form @submit.prevent="editionMode ? saveEdition() : addInstitution()">
           <label for="nome">Nome da Instituição:</label>
           <input type="text" id="nome" v-model="CurrentInstitution.name" required />
 
           <label for="cnpj">CNPJ:</label>
-          <input type="text" id="cnpj" v-model="CurrentInstitution.cnpj" required />
+          <input type="text" id="cnpj" v-model="CurrentInstitution.cnpj" v-maska="'##.###.###/####-##'" required />
 
           <div class="modal-buttons">
-            <button class="btn-primary" type="submit">{{ modoEdicao ? "Salvar" : "Adicionar" }}</button>
-            <button class="btn-no-filling-remove" type="button" @click="fecharModal">Fechar</button>
+            <button class="btn-primary">{{ editionMode ? "Salvar" : "Adicionar" }}</button>
+            <button class="btn-no-filling-remove" type="button" @click="closeModal">Fechar</button>
           </div>
         </form>
       </div>
@@ -52,12 +52,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import HeaderAdmin from '../components/HeaderAdmin.vue';
-import { fetchInstitutions } from "../services/api";
+import { fetchInstitutions, createInstitution, deleteInstitution } from "../services/api";
 import { useRouter } from 'vue-router';
+import { vMaska } from "maska/vue"
 
 const router = useRouter();
 const isModalOpen = ref(false);
-const modoEdicao = ref(false);
+const editionMode = ref(false);
 const indexEdicao = ref(null);
 const institutions = ref([]);
 
@@ -67,49 +68,58 @@ const CurrentInstitution = ref({
 });
 
 onMounted(async () => {
-  const data = await fetchInstitutions();
-  institutions.value = data;
+  institutions.value = await fetchInstitutions();
 });
 
-const abrirModal = (modo, index = null) => {
+const openModal = (modo, index = null) => {
   if (modo === 'editar' && index !== null) {
-    modoEdicao.value = true;
+    editionMode.value = true;
     indexEdicao.value = index;
     CurrentInstitution.value = { ...institutions.value[index] };
   } else {
-    modoEdicao.value = false;
-    CurrentInstitution.value = { name: '', cnpj: '', status: 'Válido' };
+    editionMode.value = false;
+    CurrentInstitution.value = { name: '', cnpj: '' };
   }
   isModalOpen.value = true;
 };
 
 
-const fecharModal = () => {
+const closeModal = () => {
   isModalOpen.value = false;
 };
 
 
-const adicionarInstituicao = () => {
-  if (instituicaoAtual.value.nome && instituicaoAtual.value.cnpj) {
-    instituicoes.value.push({ ...instituicaoAtual.value });
-    fecharModal();
+const addInstitution = async () => {
+  if (!CurrentInstitution.value.name || !CurrentInstitution.value.cnpj) return;
+  try {
+    await createInstitution(CurrentInstitution.value);
+    isModalOpen.value = false;
+
+    institutions.value = await fetchInstitutions();
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error); 
+    } else {
+      alert('Erro inesperado ao criar equipamento.');
+    }
   }
 };
 
-const salvarEdicao = () => {
+const saveEdition = () => {
   if (indexEdicao.value !== null) {
-    instituicoes.value[indexEdicao.value] = { ...instituicaoAtual.value };
+    institutions.value[indexEdicao.value] = { ...CurrentInstitution.value };
   }
-  fecharModal();
+  closeModal();
 };
 
-const removerInstituicao = (index) => {
-  instituicoes.value.splice(index, 1);
+const excludeInstitution = (index) => {
+  institutions.value.splice(index, 1);
 };
 
-const backPage = () => {
-  router.push('/gestao-admin');
+const toBackPage = () => {
+  router.push('/admin-management');
 };
+
 </script>
 
 <style scoped>
@@ -123,7 +133,7 @@ const backPage = () => {
   padding-top: 80px;
 }
 
-.tabela {
+.table {
   width: 700px;
   background-color: #ffffff;
   border-radius: 10px;
@@ -132,7 +142,7 @@ const backPage = () => {
   text-align: center;
 }
 
-.header-tabela {
+.header-table {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,7 +155,7 @@ const backPage = () => {
   
 }
 
-.header-tabela h2 {
+.header-table h2 {
   font-size: 24px;
   font-weight: bold;
 }
@@ -213,7 +223,7 @@ const backPage = () => {
   margin-top: 15px;
 }
 
-.instituicao-lista {
+.list-institution {
   width: auto;
   max-width: 700px;
   margin-top: 20px;
@@ -222,7 +232,7 @@ const backPage = () => {
   gap: 15px;
 }
 
-.instituicao-card {
+.card-institution {
   background: #fff;
   padding: 15px;
   border-radius: 8px;
