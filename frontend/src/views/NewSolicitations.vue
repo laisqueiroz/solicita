@@ -9,93 +9,171 @@
     <form @submit.prevent="submitForm" class="form">
       <div class="form-group">
         <div class="group">
-          <label for="curso">Curso <span class="required">*</span></label>
+          <label for="curso">Nome do Curso <span class="required">*</span></label>
           <input type="text" id="curso" v-model="form.curso" required>
         </div>
         <div class="group">
-          <label for="periodo">Período da Disciplina <span class="required">*</span></label>
-          <input type="text" id="periodo" v-model="form.periodo" required>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="group">
           <label for="disciplina">Disciplina <span class="required">*</span></label>
           <input type="text" id="disciplina" v-model="form.disciplina" required>
-        </div>
-        <div class="group">
-          <label for="semestre">Semestre Letivo <span class="required">*</span></label>
-          <input type="text" id="semestre" v-model="form.semestre" placeholder="2025.1" required>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="group-select">
-          <label>Dias da semana <span class="required">*</span></label>
-          <div class="checkbox-group">
-            <div v-for="(dia, index) in diasSemanaOptions" :key="index" class="checkbox-item">
-              <input
-                type="checkbox"
-                :id="'dia-' + index"
-                :value="dia"
-                v-model="form.diasSemana"
-              >
-              <label :for="'dia-' + index">{{ dia }}</label>
-            </div>
-          </div>
-        </div>
-        <div class="group">
-          <label for="horarios">Horários <span class="required">*</span></label>
-          <select id="horarios" v-model="form.horarios" required>
-            <option value="">--Selecione--</option>
-            <option value="manha">Manhã</option>
-            <option value="tarde">Tarde</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="group">
-          <label for="modalidade">Modalidade <span class="required">*</span></label>
-          <select id="modalidade" v-model="form.modalidade" required>
-            <option value="">--Selecione--</option>
-            <option value="estagio">Estágio</option>
-            <option value="visita">Visita técnica</option>
-            <option value="aula">Aula prática</option>
-            <option value="acao">Ação de extensão</option>
-          </select>
-        </div>
-        <div class="group">
-          <label for="unidade-saude">Unidade de saúde <span class="required">*</span></label>
-          <select name="Equipment" id="Equipments" v-model="form.Equipment" required>
-            <option value="" selected >Selecione o Equipamento de Saúde</option>
-            <option v-for="equipment in equipments" :key="equipment.id" :value="equipment.id">
-              {{ equipment.name }}
-            </option>
-          </select>
         </div>
       </div>
       
       <div class="form-group">
         <div class="group">
-          <label for="nome-preceptor">Nome do preceptor <span class="required">*</span></label>
-          <input type="text" id="nome-preceptor" v-model="form.nomePreceptor" required>
+           <label for="semestre">Semestre Letivo <span class="required">*</span></label>
+           <input type="text" id="semestre" v-model="form.semestre" placeholder="Ex: 2025.1" required>
         </div>
-        <div class="group">
-          <label for="registro-concelho">Número de registro do Conselho</label>
-          <input type="text" id="registro-concelho" v-model="form.registroConcelho">
+         <div class="group">
+            <label for="modalidade">Modalidade da Ação <span class="required">*</span></label>
+            <select id="modalidade" v-model="form.modalidade" required>
+              <option value="" disabled>--Selecione--</option>
+              <option value="estagio">Estágio</option>
+              <option value="visita">Visita técnica</option>
+              <option value="aula">Aula prática</option>
+              <option value="acao">Ação de extensão</option>
+            </select>
         </div>
       </div>
 
+      <label class="section-label">Informações da Ação de Ensino</label>
+      <div class="form-group">
+        <div class="group">
+          <label for="unidade-saude">Unidade de Saúde <span class="required">*</span></label>
+          <select id="unidade-saude" v-model="form.unidadeSaudeId" required>
+            <option value="" disabled>Selecione a Unidade</option>
+            <option v-for="unidade in unidadesDeSaude" :key="unidade.id" :value="unidade.id">
+              {{ unidade.name }}
+            </option>
+          </select>
+        </div>
+        <div class="group">
+          <label for="setor">Setor da Unidade</label>
+          <select 
+            id="setor" 
+            v-model="form.departmentId" 
+            :disabled="!form.unidadeSaudeId"
+          >
+            <option value="" disabled>
+              {{ form.unidadeSaudeId ? 'Selecione o Setor' : 'Selecione uma unidade primeiro' }}
+            </option>
+            <option v-for="departamento in setoresDisponiveis" :key="departamento.id" :value="departamento.id">
+              {{ departamento.nameDepartment }}
+            </option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group" v-if="form.modalidade === 'estagio'">
+        <div class="group">
+          <label for="data-inicio">Data de Início <span class="required">*</span></label>
+          <input 
+            type="date" 
+            id="data-inicio" 
+            v-model="form.dataInicio" 
+            :min="dataMinimaPermitida"
+            required
+          >
+        </div>
+        <div class="group">
+          <label for="data-fim">Data de Término (opcional)</label>
+          <input 
+            type="date" 
+            id="data-fim" 
+            v-model="form.dataFim" 
+            :min="form.dataInicio" 
+            :disabled="!form.dataInicio"
+          >
+        </div>
+      </div>
+
+      <div class="form-group" v-else-if="form.modalidade">
+        <div class="group">
+          <label for="data-unica">Data da Atividade <span class="required">*</span></label>
+          <input 
+            type="date" 
+            id="data-unica" 
+            v-model="form.dataUnica"
+            :min="dataMinimaPermitida"
+            required
+          >
+        </div>
+        <div class="group"></div> 
+      </div>
+
+      <div class="form-group">
+        <div class="group-select" v-if="form.modalidade === 'estagio'">
+          <label>Dias da semana <span class="required">*</span></label>
+          <div class="checkbox-group">
+            <div v-for="dia in diasSemanaOptions" :key="dia.value" class="checkbox-item">
+              <input type="checkbox" :id="'dia-' + dia.value" :value="dia.value" v-model="form.diasSemana">
+              <label :for="'dia-' + dia.value">{{ dia.text }}</label>
+            </div>
+            <span v-if="datasCalculadas.length > 0" class="helper-text-dark">
+              Total de {{ datasCalculadas.length }} dias de atividade calculados.
+            </span>
+          </div>
+        </div>
+
+        <div class="group">
+           <label for="turno">Turno/Horário <span class="required">*</span></label>
+            <select id="turno" v-model="form.rotationId" :disabled="!form.departmentId" required>
+              <option value="" disabled>
+                {{ form.departmentId ? 'Selecione o Turno' : 'Selecione um setor' }}
+              </option>
+              <option v-for="rotacao in rotacoesDisponiveis" :key="rotacao.id" :value="rotacao.id">
+                {{ rotacao.shift }} (Vagas: {{ rotacao.vacant }})
+              </option>
+            </select>
+        </div>
+      </div>
+
+      <label class="section-label">Informações do Preceptor</label>
+      <div class="form-group">
+        <div class="group">
+          <label for="nome-preceptor">Nome do preceptor <span class="required">*</span></label>
+          <input type="text" id="nome-preceptor" v-model="form.nomePreceptor" required>
+        </div>
+         <div class="group">
+          <label for="area-atuacao">Área de Atuação do Preceptor</label>
+          <input type="text" id="area-atuacao" v-model="form.areaAtuacaoPreceptor" placeholder="Ex: Enfermagem, Fisioterapia...">
+        </div>
+      </div>
+      <div class="form-group">
+         <div class="group">
+            <label for="registro-conselho">Número de registro do Conselho</label>
+            <input type="text" id="registro-conselho" v-model="form.registroConselho">
+         </div>
+         <div class="group"></div> </div>
+      
+
+      <label class="section-label">Relação de Alunos</label>
       <div class="form-group">
         <div class="group-list">
-          <label>Relação de Alunos <span class="required">*</span></label>
-          <div v-for="(aluno, index) in form.alunos" :key="index" class="aluno-group">
-            <input type="text" v-model="aluno.nome" placeholder="Nome Completo" required>
-            <input type="text" v-model="aluno.cpf" placeholder="CPF" required>
-            <button type="button" @click="removerAluno(index)" class="btn-remove">✖</button>
+          <div class="aluno-header">
+            <label>Adicionar Alunos <span class="required">*</span></label>
+            <span v-if="form.modalidade === 'estagio'" class="helper-text">
+              <span v-if="form.rotationId">
+                Limite de {{ vagasDoTurnoSelecionado }} vagas. ({{ form.alunos.length }} / {{ vagasDoTurnoSelecionado }})
+              </span>
+              <span v-else>
+                Selecione um turno para ver o limite de vagas.
+              </span>
+            </span>
           </div>
-          <button type="button" @click="adicionarAluno" class="btn-secondary">Adicionar Aluno</button>
+
+          <div v-for="(aluno, index) in form.alunos" :key="index" class="aluno-group">
+            <input type="text" v-model="aluno.nome" placeholder="Nome Completo do Aluno" required>
+            <input type="text" v-model="aluno.cpf" placeholder="CPF do Aluno" required>
+            <button type="button" @click="removerAluno(index)" class="btn-remove" title="Remover Aluno">✖</button>
+          </div>
+          <button 
+            type="button" 
+            @click="adicionarAluno" 
+            class="btn-secondary" 
+            :disabled="isAdicionarAlunoDisabled"
+            title="Adicionar novo aluno à lista">
+              Adicionar Aluno
+          </button>
         </div>
       </div>
       
@@ -105,57 +183,166 @@
 </template>
 
 <script setup>
-  import { reactive, ref, onMounted } from 'vue';
-  import { useRouter } from 'vue-router';
-  import HeaderIE from '../components/HeaderIE.vue';
-  import { fetchEquipments } from '../services/api';
+import { reactive, ref, onMounted, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import HeaderIE from '../components/HeaderIE.vue';
+import { fetchEquipments } from '../services/api';
+
+const router = useRouter();
+
+// Opções para os checkboxes de dias da semana
+const diasSemanaOptions = [
+  { text: 'Dom', value: 'domingo' },
+  { text: 'Seg', value: 'segunda' },
+  { text: 'Ter', value: 'terca' },
+  { text: 'Qua', value: 'quarta' },
+  { text: 'Qui', value: 'quinta' },
+  { text: 'Sex', value: 'sexta' },
+  { text: 'Sáb', value: 'sábado' },
+];
+
+// Objeto reativo do formulário com todos os campos necessários
+const form = reactive({
+  curso: '',
+  disciplina: '',
+  semestre: '',
+  modalidade: '',
+  unidadeSaudeId: '',
+  departmentId: '',
+  dataInicio: '',
+  dataFim: '',
+  diasSemana: [],
+  dataUnica: '',
+  rotationId: '',
+  nomePreceptor: '',
+  areaAtuacaoPreceptor: '',
+  registroConselho: '',
+  alunos: [{ nome: '', cpf: '' }] // Inicia com um aluno para preenchimento
+});
+
+watch(() => form.modalidade, (novaModalidade) => {
+  if (novaModalidade === 'estagio') {
+    // Limpa o campo de data única se o usuário mudar para estágio
+    form.dataUnica = '';
+  } else {
+    // Limpa todos os campos específicos de estágio se mudar para outra modalidade
+    form.dataInicio = '';
+    form.dataFim = '';
+    form.diasSemana = [];
+  }
+});
+
+const dataMinimaPermitida = computed(() => {
+  const hoje = new Date();
+  // Adiciona 15 dias à data de hoje
+  hoje.setDate(hoje.getDate() + 15);
+  // Formata a data para o padrão YYYY-MM-DD exigido pelo input:min
+  return hoje.toISOString().split('T')[0];
+});
+
+watch(() => form.dataInicio, (novaDataInicio) => {
+  if (form.dataFim && novaDataInicio > form.dataFim) {
+    form.dataFim = '';
+  }
+});
+
+const unidadesDeSaude = ref([]);
+
+// Busca as unidades de saúde da API ao montar o componente
+const buscarUnidadesDeSaude = async () => {
+  try {
+    const response = await fetchEquipments(); // Supondo que esta API retorne as unidades
+    unidadesDeSaude.value = response;
+  } catch (error) {
+    alert('Não foi possível carregar as unidades de saúde.');
+    console.error('Erro ao buscar unidades de saúde:', error);
+  }
+};
+
+// 1. Computed Property para obter os setores da unidade selecionada
+const setoresDisponiveis = computed(() => {
+  if (!form.unidadeSaudeId) return [];
+
+  const unidadeSelecionada = unidadesDeSaude.value.find(
+    unidade => unidade.id === form.unidadeSaudeId
+  );
+
+  return unidadeSelecionada ? unidadeSelecionada.Departments : [];
+});
+
+// 2. Watch para limpar a seleção do setor quando a unidade muda
+watch(() => form.unidadeSaudeId, () => { form.departmentId = ''; });
+
+const rotacoesDisponiveis = computed(() => {
+  if (!form.departmentId) return [];
   
-  const router = useRouter();
-  const diasSemanaOptions = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'];
-  const form = reactive({
-    curso: '',
-    periodo: '',
-    disciplina: '',
-    diasSemana: [],
-    semestre: '',
-    horarios: '',
-    modalidade: '',
-    nomePreceptor: '',
-    Equipment: '',
-    registroConcelho: '',
-    alunos: []
-  });
+  const setorSelecionado = setoresDisponiveis.value.find(
+    setor => setor.id === form.departmentId
+  );
+  return setorSelecionado ? setorSelecionado.Rotations : [];
+});
 
-  const equipments = ref([]);
+watch(() => form.departmentId, () => { form.rotationId = ''; });
 
-  const fetchEquipment = async () => {
-    try {
-      const response = await fetchEquipments();
-      equipments.value = response;
-    } catch (error) {
-      alert('Nenhum equipamento cadastrado!')
-      console.error('Erro ao buscar equipamentos:', error);
-    }
-  };
+const vagasDoTurnoSelecionado = computed(() => {
+  if (!form.rotationId) return 0;
+  const rotacaoSelecionada = rotacoesDisponiveis.value.find(rotacao => rotacao.id === form.rotationId);
+  // Retorna o número de vagas ou 0 se não encontrar
+  return rotacaoSelecionada ? rotacaoSelecionada.vacant : 0;
+});
 
-  const adicionarAluno = () => {
-    form.alunos.push({ nome: '', cpf: '' });
-  };
-  const removerAluno = (index) => {
+// 4. Lógica para desabilitar o botão "Adicionar Aluno" (NOVA LÓGICA)
+const isAdicionarAlunoDisabled = computed(() => {
+  // A regra só se aplica à modalidade 'estagio'
+  if (form.modalidade !== 'estagio') {
+    return false; // Para outras modalidades, o botão nunca é desabilitado
+  }
+  
+  // Se for estágio, mas não houver turno selecionado, desabilite.
+  if (!form.rotationId || vagasDoTurnoSelecionado.value === 0) {
+    return true;
+  }
+  
+  // Desabilita se o número de alunos for igual ou maior que o de vagas
+  return form.alunos.length >= vagasDoTurnoSelecionado.value;
+});
+
+// Funções de manipulação
+const adicionarAluno = () => {
+  form.alunos.push({ nome: '', cpf: '' });
+};
+
+const removerAluno = (index) => {
+  if (form.alunos.length > 1) { 
     form.alunos.splice(index, 1);
-  };
-  const submitForm = () => {
-    alert("Solicitação enviada com sucesso!");
-    console.log('Formulário enviado:', form);
-    router.push('/gestao-ie');
-  };
-  const voltarPagina = () => {
-    router.push('/gestao-ie');
-  };
+  } else {
+    // Permite limpar o último aluno, mas não remover a linha se for a única
+    form.alunos[index] = { nome: '', cpf: '' };
+    alert('É necessário ter pelo menos um aluno na solicitação. Os dados do aluno foram limpos.');
+  }
+};
 
 onMounted(() => {
-    fetchEquipment(); 
+  buscarUnidadesDeSaude(); 
 });
+
+// Funções para manipular a lista de alunos
+
+// Funções de navegação e submissão
+const submitForm = () => {
+  // Adicionar validação final antes de enviar
+  if (form.modalidade === 'estagio' && form.alunos.length > vagasDoTurnoSelecionado.value) {
+    alert(`Erro: O número de alunos (${form.alunos.length}) excede o número de vagas (${vagasDoTurnoSelecionado.value}) para este estágio.`);
+    return;
+  }
+  console.log('Formulário enviado:', form);
+  alert("Solicitação enviada com sucesso!");
+  router.push('/regular-management');
+};
+
+const voltarPagina = () => {
+  router.back(); // Mais flexível que o push, volta para a página anterior no histórico
+};
 </script>
 
 <style scoped>
@@ -163,6 +350,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
   }
+
   .container {
     width: 600px;
     display: flex;
