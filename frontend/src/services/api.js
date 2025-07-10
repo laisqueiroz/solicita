@@ -15,6 +15,16 @@ export const loginUser = async (cpf, password) => {
     };
 };
 
+export const createUser = async (data) => {
+  try {
+        const response = await api.post("/users", data);
+        return response.data;
+    } catch (error) {
+        console.error(error.message);
+        throw error;
+    };
+}
+
 /* FUNÇÕES DE SOLICITAÇÕES */
 export const getAllSolicitations = async () => {
     try {
@@ -93,6 +103,7 @@ export const fetchEquipments = async () => {
       };
 };
 
+/* FUNÇÕES DE INSTITUIÇÕES */
 export const createInstitution = async (data) => {
   try {
         const response = await api.post("/institutions", data);
