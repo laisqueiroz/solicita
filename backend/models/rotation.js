@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Rotation extends Model {
     static associate(models) {
       Rotation.belongsTo(models.Department, { foreignKey: 'departmentId' });
+      Rotation.hasMany(models.Booking, { foreignKey: 'rotationId' });
     }
   }
   Rotation.init({
@@ -13,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['matutino','vespertino','noturno']],
+        isIn: [['MATUTINO','VESPERTINO','NOTURNO']],
       },
     },
     vacant: {

@@ -5,7 +5,7 @@
         </div>
         <nav class="navigation">
             <button id="HomePage" class="btn-no-filling" @click="goToPrincipalPage">Página de Gestão</button>
-            <button id="AcessSolicitation" class="btn-no-filling-sec" @click="goToViewSolicitations">Visualizar Solicitações</button>
+            <button id="AcessSolicitation" class="btn-no-filling" @click="goToViewSolicitations">Visualizar Solicitações</button>
             <button id="SingIn" class="btn-secondary" @click="goToNewSolicitation">Nova Solicitação</button>
         </nav>
     </div>

@@ -24,7 +24,7 @@ const routes = [
 
   // PÁGINA INICIAL
   { 
-    path: "/login", 
+    path: "/", 
     component: HomePage 
   },
   // PÁGINA DE PERGUNTAS FREQUENTES

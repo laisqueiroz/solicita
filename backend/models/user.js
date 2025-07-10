@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     
     static associate(models) {
       User.belongsTo(models.Institution, { foreignKey: 'institutionId' });
+      User.hasMany(models.Solicitation, { foreignKey: 'userId' });
     }
   }
   User.init({
@@ -20,9 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       IsEmail: true,
-      set(value) {
-        this.setDataValue('email', value.toLowerCase()); 
-      }
     },
     password: {
       type: DataTypes.STRING,
@@ -44,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['admin','regular']],
+        isIn: [['ADMIN','REGULAR']],
       },
     },
     position: {
@@ -55,20 +53,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['true','false']],
+        isIn: [['TRUE','FALSE']],
       },
     },
     dateBirth: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
     institutionId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'Institutions', 
-        key: 'id'
-      }
     }
   }, {
     sequelize,

@@ -5,8 +5,8 @@ class EquipmentService {
         return EquipmentRepository.findAll();
     }
 
-    static async getEquipmentById() {
-        return EquipmentRepository.findById();
+    static async getEquipmentById(id) {
+        return EquipmentRepository.findById(id);
     }
 
     static async getEquipmentByName(name) {

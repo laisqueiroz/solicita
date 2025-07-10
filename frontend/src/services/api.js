@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: 'https://portal-solicita.onrender.com',
     timeout: 10000,
 });
-
+/* FUNÇÕES DE USUÁRIOS */
 export const loginUser = async (cpf, password) => {
     try {
         const response = await api.post("/users/login", {cpf, password});
@@ -15,6 +15,7 @@ export const loginUser = async (cpf, password) => {
     };
 };
 
+/* FUNÇÕES DE SOLICITAÇÕES */
 export const getAllSolicitations = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -44,6 +45,7 @@ export const updateSolicitationId = async (id, data) => {
     };
 };
 
+/* FUNÇÕES DE EQUIPAMENTO */
 export const createEquipment = async (name, address) => {
     try {
         const response = await api.post("/equipment", {name, address});
@@ -57,6 +59,15 @@ export const createEquipment = async (name, address) => {
 export const deleteEquipment = async (id) => {
   try {
     const response = await api.delete(`/equipment/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateEquipment = async (id, address) => {
+  try {
+    const response = await api.put(`/equipment/${id}`, address);
     return response.data;
   } catch (error) {
     throw error;
@@ -82,32 +93,47 @@ export const fetchEquipments = async () => {
       };
 };
 
-export const fetchInstitutions = async () => {
-    try {
-        /*const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Usuário não autenticado!");
-        }*/
-  
-        const response = await api.get("/institutions", {
-          /*headers: {
-              Authorization: `Bearer ${token}`,
-          },*/
-        });
+export const createInstitution = async (data) => {
+  try {
+        const response = await api.post("/institutions", data);
         return response.data;
-      } catch (error) {
-        console.error("Erro ao buscar instituições:", error);
-        throw error; 
-      };
+    } catch (error) {
+        console.error("Erro ao criar nova instituição: ", error);
+        throw error;
+    };
+}
+
+export const fetchInstitutions = async () => {
+  try {
+      const response = await api.get("/institutions", {
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar instituições:", error);
+      throw error; 
+    };
+}
+
+export const deleteInstitution = async (id) => {
+  try {
+    const response = await api.delete(`/institutions/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateInstitution = async (id, data) => {
+  try {
+    const response = await api.put(`/institutions/${id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const fetchInstitutionByCNPJ = async (cnpj) => {
   try {
-      /*const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Usuário não autenticado!");
-      }*/
-
       const response = await api.get(`/institutions?cnpj=${cnpj}`);
       console.log(response.data)
       return response.data;
@@ -117,6 +143,7 @@ export const fetchInstitutionByCNPJ = async (cnpj) => {
     };
 }
 
+/* FUNÇÕES DE DEPARTAMENTO */
 export const createDepartment = async (data) => {
   try {
     const response = await api.post("/department", data);
@@ -134,6 +161,22 @@ export const deleteDepartment = async (id) => {
   } catch (error) {
     throw error;
   }
+};
+
+/* FUNÇÕES DE TURNOS E VAGAS */
+
+export const createRotation = async (rotationData) => {
+  try {
+    const response = await api.post("/rotations/", rotationData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteRotation = async (id) => {
+  const response = await api.delete(`/rotations/${id}`);
+  return response.data;
 };
 
 

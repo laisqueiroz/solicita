@@ -4,7 +4,8 @@
             <img id="imagem" src="../assets/logo amarela.png" width="100">
         </div>
         <nav class="navigation">
-            <button id="Contacts" class="btn-no-filling" @click="goToSolicitationPage">Visualizar solicitações</button>
+            <button id="HomePage" class="btn-no-filling" @click="goToPrincipalPage">Página de Gestão</button>
+            <button id="Contacts" class="btn-no-filling" @click="goToSolicitationPage">Solicitações</button>
             <button id="AcessSolicitation" class="btn-no-filling" @click="goToEquipmentPage">Equipamentos</button>
             <button id="SingIn" class="btn-no-filling" @click="goToInstitutionPage">Instituições</button>
             <button id="HomePage" class="btn-no-filling-sec" @click="goToPrincipalPage">Página de Gestão</button>
