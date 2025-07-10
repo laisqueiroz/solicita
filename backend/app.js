@@ -11,7 +11,7 @@ const DepartmentRoutes = require('./routes/DepartmentRoutes');
 const app = express();
 
 app.use(cors({
-  origin: 'https://solicita-8ctp.onrender.com',
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));

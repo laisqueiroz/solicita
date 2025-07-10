@@ -288,7 +288,7 @@ const excludeEquipemnt = async (id, name) => {
     alert(`Equipamento "${name}" excluído com sucesso!`); 
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
-        alert(error.response.data.error); // Exibe a mensagem do backend
+        alert(error.response.data.error); 
     } else {
       alert('Erro inesperado ao criar equipamento.');
     }

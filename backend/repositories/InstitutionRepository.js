@@ -14,6 +14,10 @@ class InstitutionRepository {
         return Institution.findByPk(id);
     }
 
+    static async findByStatus() {
+        return Institution.findAll({ where: { status: 'ATIVO' } });
+    }
+
     static async create(data) {
         return Institution.create(data);
     }
