@@ -32,11 +32,11 @@ const routes = [
     path: "/faq",
     component: FAQPage
   },
-  // PÁGINA DE LOGIN
+  /* PÁGINA DE LOGIN
   { 
     path: "/login", 
     component: LoginPage 
-  },
+  },*/
   // PÁGINA DE CADASTRO
   { 
     path: "/register", 

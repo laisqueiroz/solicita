@@ -9,7 +9,7 @@
             />
             <CardComponents @Click="goToSolicitationsAcess"
                 title="Solicitações de Acesso"
-                description="Controle e revise as solicitações de acesso, assegurando conformidade com os requisitos institucionais."
+                description="Controle e revise as solicitações de acesso, assegurando conformidade com os requisitos institucionais."
             />
         </div>
         <div class="illustration">

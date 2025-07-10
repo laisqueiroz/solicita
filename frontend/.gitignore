@@ -22,3 +22,4 @@ node_modules
 *.sw?
 **/api.js
 **/app.js
+**/database.sqlite

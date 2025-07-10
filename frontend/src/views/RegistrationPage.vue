@@ -276,7 +276,8 @@ const submitForm = async () => {
 
 
 .content h1 {
-    margin-top: 10px;
+    margin-left: 110px;
+    margin-top: -130px;
     text-align: left;
     font-size: 35px;
     color: #f7981d;
@@ -285,6 +286,7 @@ const submitForm = async () => {
 }
 
 .content p {
+    margin-left: 110px;
     color: #fff;
     text-align: left;
     font-size: 18px;

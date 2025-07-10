@@ -3,13 +3,13 @@
     <HeaderAdmin />
     <div class="container">
         <div class="cards">
+            <CardComponents @Click="goToInstitutions"
+                title="Gerenciar Instituições"
+                description="Administre as instituições credenciadas e mantenha o controle sobre os estabelecimentos parceiros."
+            />
             <CardComponents @Click="goToSolicitations"
                 title="Gerenciar Solicitações"
                 description="Gerencie e acompanhe as solicitações de práticas de ensino e solicitações de acesso ao sistema de forma centralizada e eficiente."
-            />
-            <CardComponents @Click="goToInstitutions"
-                title="Gerenciar Instituições Credenciadas"
-                description="Administre as instituições credenciadas e mantenha o controle sobre os estabelecimentos parceiros."
             />
             <CardComponents @Click="goToEquipment"
                 title="Gerenciar Equipamentos"
