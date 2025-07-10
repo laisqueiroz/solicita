@@ -310,12 +310,14 @@ const adicionarAluno = () => {
 const removerAluno = (index) => {
   if (form.alunos.length > 1) { 
     form.alunos.splice(index, 1);
+
   } else {
     
     form.alunos[index] = { nome: '', cpf: '' };
     alert('É necessário ter pelo menos um aluno na solicitação. Os dados do aluno foram limpos.');
   }
 };
+
 
 onMounted(() => {
   buscarUnidadesDeSaude(); 
