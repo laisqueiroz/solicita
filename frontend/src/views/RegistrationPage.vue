@@ -1,15 +1,19 @@
 <template>
     <title>Solicitação de Cadastro</title>
-    <HeaderHome/>
+    <HeaderHome />
     <main class="main-container">
-        <div class="illustration">
-            <img id="img" src="../assets/image 12 (Traced).png" width="500">
+        <div class="content">
+            <h1>Facilitando<br> a prática, <br> ampliando o <br> aprendizado</h1>
+            <p>Um sistema inovador projetado para simplificar o processo de solicitação de práticas de ensino. Destinado
+                a coordenadores e instituições de ensino, o sistema facilita a gestão dos pedidos, permitindo o
+                acompanhamento de status e aprovações, promovendo uma experiência mais eficiente e organizada.</p>
         </div>
         <div class="form-container">
             <div class="headerForm">
                 <h2>Realizar Solicitação de Acesso</h2>
                 <p>Preencha todas as informações abaixo para realizar sua solicitação de acesso <br>ao sistema. Em caso
-                    de dúvidas <a href="#" class="faq-link"><b>consultar FAQ</b></a> ou entrar em <a href="#" class="faq-link"><b>contato.</b></a></p>
+                    de dúvidas <a href="#" class="faq-link"><b>consultar FAQ</b></a> ou entrar em <a href="#"
+                        class="faq-link"><b>contato.</b></a></p>
                 <br>
                 <h5 class="headerData">Dados pessoais</h5>
             </div>
@@ -17,7 +21,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Nome Completo</label>
-                        <input type="text" id="name" name="name" v-model="form.name" placeholder="Digite seu nome completo" require>
+                        <input type="text" id="name" name="name" v-model="form.name"
+                            placeholder="Digite seu nome completo" require>
                     </div>
                     <div class="form-group">
                         <label for="date">Data de nascimento</label>
@@ -28,11 +33,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" v-model="form.email" placeholder="Digite seu email" require>
+                        <input type="email" id="email" name="email" v-model="form.email" placeholder="Digite seu email"
+                            require>
                     </div>
                     <div class="form-group">
                         <label for="cpf">CPF</label>
-                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" v-model="form.cpf" v-maska="'###.###.###-##'" @blur="validateCPF" require>
+                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" v-model="form.cpf"
+                            v-maska="'###.###.###-##'" @blur="validateCPF" require>
                         <span v-if="cpfError" class="error-message">{{ cpfError }}</span>
                     </div>
                 </div>
@@ -45,7 +52,8 @@
 
                 <div class="form-group">
                     <h5 class="headerData">Dados da Instituição de Ensino Credenciada*</h5>
-                    <p class="info-credenciamento">*Instituições de Ensino que não estejam com o credenciamento <br> ativo
+                    <p class="info-credenciamento">*Instituições de Ensino que não estejam com o credenciamento <br>
+                        ativo
                         terão as solicitações de acesso negadas.</p>
                 </div>
 
@@ -62,7 +70,7 @@
                             @input="fetchInstitution" 
                         required>
                     </div>
-                
+
                     <div class="form-group">
                         <label for="institution">Nome da Instituição</label>
                         <select id="institution" name="institution" v-model="form.institutionId">
@@ -73,17 +81,29 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="agreement">Convênio</label>
+                    <div class="agreement-box upload-area" @click="triggerFileInput">
+                        <i class="fas fa-upload upload-icon"></i>
+                        <p class="upload-text">Clique para enviar o termo de convênio</p>
+                        <input type="file" id="agreementFile" ref="fileInput" style="display: none"
+                            @change="handleFileUpload">
+                    </div>
+                </div>
 
                 <h5 class="headerData">Dados de Acesso</h5>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="password">Senha</label>
-                        <input type="password" id="password" name="password" placeholder="Digite sua senha" v-model="form.password" required>
+                        <input type="password" id="password" name="password" placeholder="Digite sua senha"
+                            v-model="form.password" required>
                     </div>
                     <div class="form-group">
                         <label for="confirmPassword">Confirmar senha</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme a senha" v-model="form.confirmPassword" @input="equatePassword" required>
+                        <input type="password" id="confirmPassword" name="confirmPassword"
+                            placeholder="Confirme a senha" v-model="form.confirmPassword" @input="equatePassword"
+                            required>
                         <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
                     </div>
                 </div>
@@ -93,6 +113,24 @@
             </form>
         </div>
     </main>
+    <div v-if="showSuccessModal" class="modal-overlay" @click.self="showSuccessModal = false">
+        <div class="modal-content">
+            <h1>Solicitação enviada com sucesso</h1>
+            <p>Aguarde avaliação e liberação de acesso feita por um administrador.</p>
+            <button @click="showSuccessModal = false" class="btn-primary">Fechar</button>
+        </div>
+    </div>
+    <div v-if="showErrorModal" class="modal-overlay" @click.self="showErrorModal = false">
+        <div class="modal-content">
+            <h1>Não Foi Possível Concluir o Cadastro</h1>
+            <h2>Algo deu errado</h2>
+            <p>
+                Sua solicitação de acesso não pôde ser concluída neste momento.<br>
+                Isso pode ter ocorrido por instabilidade no sistema ou por dados inválidos.
+            </p>
+            <button @click="showErrorModal = false" class="btn-primary">Fechar</button>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -103,7 +141,8 @@ import { useRouter } from 'vue-router';
 import { fetchInstitutionByCNPJ } from '../services/api';
 
 const router = useRouter();
-
+const showSuccessModal = ref(false);
+const showErrorModal = ref(false);
 const form = ref({
     name: '',
     dateBirth: '',
@@ -168,15 +207,32 @@ const submitForm = () => {
     align-items: center;
     justify-content: space-around;
     padding: 32px 64px 32px 64px;
+    max-width: 1500px;
 }
 
-.illustration {
-    margin-right: 120px;
-    height: auto;
+.content {
+    max-width: 700px;
+    margin-top: 10px;
+    margin-left: 100px;
 }
 
-#img {
-    width: 650px;
+
+.content h1 {
+    margin-top: 10px;
+    text-align: left;
+    font-size: 35px;
+    color: #f7981d;
+    line-height: 1.2;
+    font-weight: bold;
+}
+
+.content p {
+    color: #fff;
+    text-align: left;
+    font-size: 18px;
+    margin-top: 20px;
+    line-height: 1.6;
+    padding-right: 100px;
 }
 
 .form-container {
@@ -185,7 +241,7 @@ const submitForm = () => {
     padding: 40px;
     padding-top: 20px;
     border-radius: 10px;
-    width: 500px;
+    width: 1200px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -239,7 +295,8 @@ const submitForm = () => {
 
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -247,9 +304,11 @@ const submitForm = () => {
 }
 
 .form-group input[type="date"] {
-flex: 1;
+    flex: 1;
 }
-.form-group input:focus, .form-group select:focus {
+
+.form-group input:focus,
+.form-group select:focus {
     border: 2px solid #0e2e4a;
     outline: none;
 }
@@ -260,21 +319,97 @@ flex: 1;
     margin-top: 15px;
     font-weight: bold;
 }
+
 .form-group input[type="date"] {
     width: 150px;
 }
+
 .faq-link {
     color: #f7981d;
-    text-decoration: none; 
+    text-decoration: none;
 }
+
 .faq-link:hover {
-    text-decoration: underline; 
+    text-decoration: underline;
 }
 
 .error-message {
     color: red;
     font-size: 12px;
     margin-top: 5px;
+}
+
+.agreement-box.upload-area {
+    background-color: #f9f9f9;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 40px;
+    min-height: 10px;
+    max-height: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s ease;
+    text-align: center;
+}
+
+.upload-icon {
+    font-size: 24px;
+    color: #999;
+}
+
+.upload-text {
+    font-size: 13px;
+    color: #666;
+    font-style: italic;
+}
+
+.agreement-box.upload-area:hover {
+    border-color: #f7981d;
+    background-color: #fffef8;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.modal-content h1 {
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.modal-content .btn-primary {
+    padding: 10px 25px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0 auto;
 }
 
 @media (min-width: 900px) {
@@ -284,15 +419,9 @@ flex: 1;
         justify-content: flex-start;
     }
 
-    .illustration {
-        max-width: 550px;
-        height: auto;
-    }
-
     .form-container {
 
         margin-left: 50px;
     }
 }
-
 </style>

@@ -93,33 +93,47 @@ export const fetchEquipments = async () => {
       };
 };
 
+export const createInstitution = async (data) => {
+  try {
+        const response = await api.post("/institutions", data);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao criar nova instituição: ", error);
+        throw error;
+    };
+}
 
 export const fetchInstitutions = async () => {
-    try {
-        /*const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Usuário não autenticado!");
-        }*/
-  
-        const response = await api.get("/institutions", {
-          /*headers: {
-              Authorization: `Bearer ${token}`,
-          },*/
-        });
-        return response.data;
-      } catch (error) {
-        console.error("Erro ao buscar instituições:", error);
-        throw error; 
-      };
+  try {
+      const response = await api.get("/institutions", {
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar instituições:", error);
+      throw error; 
+    };
+}
+
+export const deleteInstitution = async (id) => {
+  try {
+    const response = await api.delete(`/institutions/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateInstitution = async (id, data) => {
+  try {
+    const response = await api.put(`/institutions/${id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const fetchInstitutionByCNPJ = async (cnpj) => {
   try {
-      /*const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Usuário não autenticado!");
-      }*/
-
       const response = await api.get(`/institutions?cnpj=${cnpj}`);
       console.log(response.data)
       return response.data;

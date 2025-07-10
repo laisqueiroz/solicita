@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
       Solicitation.belongsTo(models.Equipment, { foreignKey: 'equipmentId' });
       Solicitation.belongsTo(models.Institution, { foreignKey: 'institutionId' });
       Solicitation.belongsTo(models.User, { foreignKey: 'userId' });
+      Solicitation.belongsTo(models.Department, { foreignKey: 'departmentId'});
+      Solicitation.belongsTo(models.Rotation,  {foreignKey: 'rotationId'});
+      Solicitation.hasMany(models.Booking, { foreignKey: 'solicitationId' });
     }
   }
   Solicitation.init({
@@ -60,40 +63,31 @@ module.exports = (sequelize, DataTypes) => {
       },
     equipmentId: {
         type: DataTypes.INTEGER,
-        references: {
-          model: 'Equipment',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        allowNull: false,
     },
     institutionId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: 'Institution',
-        key: 'id',
-      },
       allowNull: false,
-      onUpdate: 'CASCADE',
-      onDelete: 'RESTRICT',
     },
     userId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: 'User',
-        key: 'id',
-      },
       allowNull: false,
-      onUpdate: 'CASCADE',
-      onDelete: 'RESTRICT',
     },
     status: {
       type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isIn: [['Em análise','Deferido','Indeferido','Cancelado']],
-        },
-    }
+      allowNull: false,
+      validate: {
+          isIn: [['EM ANDAMENTO','DEFERIDO','INDEFERIDO','CANCELADO']],
+      },
+    },
+    departmentId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    rotationId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'Solicitation',
