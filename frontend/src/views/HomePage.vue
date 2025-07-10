@@ -70,13 +70,12 @@ const showErrorModal = ref(false);
 const login = async () => {
     try {
         const data = await loginUser(cpf.value, password.value);
-        console.log('Login bem-sucedido:', data);
         const { token, role } = data;
 
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
 
-        if (role === "admin") {
+        if (role === "ADMIN") {
             router.push("/admin-management");
         } else {
             router.push("/regular-management");
