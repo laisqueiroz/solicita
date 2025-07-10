@@ -270,6 +270,9 @@ const addEquipment = async () => {
 
     equipments.value = await fetchEquipments();
 
+    NewEquipment.name = '';
+    NewEquipment.address = '';
+
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
         alert(error.response.data.error); 
