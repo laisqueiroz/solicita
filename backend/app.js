@@ -7,6 +7,7 @@ const RotationRoutes = require('./routes/RotationRoutes');
 const EquipmentRoutes = require('./routes/EquipmentRoutes');
 const SolicitationRoutes = require('./routes/SolicitationRoutes');
 const DepartmentRoutes = require('./routes/DepartmentRoutes');
+const path = require('path');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -29,5 +31,6 @@ app.use('/rotations', RotationRoutes);
 app.use('/equipment', EquipmentRoutes);
 app.use('/solicitations', SolicitationRoutes);
 app.use( '/department', DepartmentRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 module.exports = app;

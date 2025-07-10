@@ -63,7 +63,11 @@ module.exports = (sequelize, DataTypes) => {
     institutionId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    }
+    },
+    agreementFile: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'User',

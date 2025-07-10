@@ -3,11 +3,14 @@ const ValidateDates = require('../services/ValidateDates');
 
 class InstitutionController {
     static async getAllInstitutions(req, res) {
+        console.log('CNPJ recebido na query:', req.query.cnpj);
         await ValidateDates.validateStatus();
         const { cnpj } = req.query;
         try{
             if (cnpj) {
+                console.log('entrou no if');
                 const institution = await InstitutionService.getInstitutionByCNPJ(cnpj);
+                console.log('voltou da busca', institution);
                 return res.status(200).json(institution);
             }
             const institutions = await InstitutionService.getAllInstitutions();
