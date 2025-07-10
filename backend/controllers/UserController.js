@@ -48,15 +48,17 @@ class UserController {
 
     static async createUser(req, res) {
         const { name , email , password , cpf ,position, institutionId, dateBirth} = req.body;
-        if (!name || !email || !password || !cpf || !position || !institutionId || !dateBirth) {
-            res.status(400).json({ message: 'Todos os campos são obrigatórios!' })
+        const agreementFile = req.file?.filename;
+        if (!name || !email || !password || !cpf || !position || !institutionId || !dateBirth || !agreementFile) {
+            res.status(400).json({ message: 'Todos os campos são obrigatórios, incluindo o termo de convênio!' })
         };
+
 
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
             const role = 'REGULAR';
             const active = 'FALSE';
-            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active, dateBirth, institutionId});
+            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active, dateBirth, institutionId, agreementFile});
             res.status(201).json(newUser);
         } catch (error) {
             res.status(400).json({ error: error.message });

@@ -267,6 +267,10 @@ const addEquipment = async () => {
     await createEquipment(NewEquipment.name, NewEquipment.address);
     isModalOpen.value = false;
     equipments.value = await fetchEquipments();
+
+    NewEquipment.name = '';
+    NewEquipment.address = '';
+
   } catch (error) {
     alert(error?.response?.data?.error || 'Erro inesperado ao criar equipamento.');
   }

@@ -85,9 +85,13 @@
                     <label for="agreement">Convênio</label>
                     <div class="agreement-box upload-area" @click="triggerFileInput">
                         <i class="fas fa-upload upload-icon"></i>
-                        <p class="upload-text">Clique para enviar o termo de convênio</p>
+                        <p v-if="form.agreementFile" class="upload-text">
+                            Arquivo selecionado: <strong>{{ form.agreementFile.name }}</strong>
+                        </p>
+                        <p v-else class="upload-text">Clique para enviar o termo de convênio: PDF ou JPG</p>
                         <input type="file" id="agreementFile" ref="fileInput" style="display: none"
                             @change="handleFileUpload">
+                        
                     </div>
                 </div>
 
@@ -122,11 +126,9 @@
     </div>
     <div v-if="showErrorModal" class="modal-overlay" @click.self="showErrorModal = false">
         <div class="modal-content">
-            <h1>Não Foi Possível Concluir o Cadastro</h1>
-            <h2>Algo deu errado</h2>
+            <h2>Algo deu errado!</h2>
             <p>
-                Sua solicitação de acesso não pôde ser concluída neste momento.<br>
-                Isso pode ter ocorrido por instabilidade no sistema ou por dados inválidos.
+                {{ messageError }}
             </p>
             <button @click="showErrorModal = false" class="btn-primary">Fechar</button>
         </div>
@@ -138,11 +140,13 @@ import { ref } from 'vue';
 import { vMaska } from "maska/vue"
 import HeaderHome from '../components/HeaderHome.vue';
 import { useRouter } from 'vue-router';
-import { fetchInstitutionByCNPJ } from '../services/api';
+import { createUser, fetchInstitutionByCNPJ,  } from '../services/api';
 
 const router = useRouter();
 const showSuccessModal = ref(false);
 const showErrorModal = ref(false);
+const messageError = ref('');
+
 const form = ref({
     name: '',
     dateBirth: '',
@@ -152,12 +156,18 @@ const form = ref({
     cnpj: '',
     institutionId: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    agreementFile: null,
 });
 
 const cpfError = ref('');
 const passwordError = ref('');
 const institutions = ref([]);
+const fileInput = ref(null);
+
+const triggerFileInput = () => {
+  fileInput.value?.click(); 
+};
 
 const validateCPF = () => {
     const cpf = form.value.cpf.replace(/\D/g, '');
@@ -185,17 +195,65 @@ const fetchInstitution = async () => {
             const response = await fetchInstitutionByCNPJ(form.value.cnpj);
             institutions.value = [response];
         } catch (error) {
-            alert('Instituição não credenciada. Se acha que é um erro entre em contato.')
+            alert('Instituição não credenciada, ou com o credenciamento suspenso. Se acha que é um erro entre em contato.')
             console.error('Erro ao buscar instituição:', error);
         }
     }
 };
 
-const submitForm = () => {
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
 
-    if (validateCPF() && equatePassword()) {
-        alert(form.value.institutionName);
-        router.push("/");
+  if (!file) return; 
+  const validTypes = ['application/pdf', 'image/jpeg'];
+  const maxSize = 10 * 1024 * 1024;
+
+  if (!validTypes.includes(file.type)) {
+    showErrorModal.value = true;
+    messageError.value = "Tipo de arquivo inválido. Envie um PDF ou JPG.";
+    form.value.agreementFile = null;
+    event.target.value = ''; 
+    return;
+  }
+  if (file.size > maxSize) {
+    showErrorModal.value = true;
+    messageError.value = "Arquivo muito grande. O tamanho máximo permitido é 10MB.";
+    form.value.agreementFile = null;
+    event.target.value = '';
+    return;
+  }
+
+  form.value.agreementFile = file;
+};
+
+const submitForm = async () => {
+
+    if (!validateCPF() || !equatePassword()) return;
+
+    const formData = new FormData();
+    formData.append('name', form.value.name);
+    formData.append('dateBirth', form.value.dateBirth);
+    formData.append('email', form.value.email);
+    formData.append('cpf', form.value.cpf);
+    formData.append('position', form.value.position);
+    formData.append('institutionId', form.value.institutionId);
+    formData.append('password', form.value.password);
+    formData.append('agreement', form.value.agreementFile);
+
+    try {
+    await createUser(formData);
+    showSuccessModal.value = true;
+    
+    setTimeout(() => {
+        router.push('/');
+    }, 10000);
+    } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+        showErrorModal.value = true;
+        messageError.value = error.response.data.error;
+    } else {
+      alert('Erro inesperado!.');
+    }
     }
 };
 
