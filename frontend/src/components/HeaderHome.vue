@@ -6,7 +6,6 @@
       <nav class="navigation">
           <button id="HomePage" class="btn-no-filling" @click="goToHome">Página Inicial</button>
           <button id="Contacts" class="btn-no-filling" @click="goToContacts">Contatos</button>
-          <button id="SingIn" class="btn-secondary" @click="goToLogin">Acessar</button>
       </nav>
   </div>
 </template>
@@ -16,9 +15,6 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const goToLogin = () => {
-    router.push("/login")
-};
 const goToHome = () => {
     router.push("/")
 };

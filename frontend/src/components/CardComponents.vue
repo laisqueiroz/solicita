@@ -26,7 +26,7 @@ defineProps({
 }
 
 .card:hover {
-    background-color: #f0f0f0;
+    background-color: #F6C457;
     cursor: pointer;
 }
 
