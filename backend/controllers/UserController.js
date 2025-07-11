@@ -58,7 +58,7 @@ class UserController {
             const hashedPassword = await bcrypt.hash(password, 10);
             const role = 'REGULAR';
             const active = 'FALSE';
-            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active, dateBirth, institutionId, agreementFile});
+            const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active, dateBirth, institutionId, agreementFile, justification});
             res.status(201).json(newUser);
         } catch (error) {
             res.status(400).json({ error: error.message });
@@ -71,10 +71,10 @@ class UserController {
         if (!userExist) return res.status(404).json({ error: 'Usuário não encontrado' });
         const userRole = req.user.role;
         try {
-            const { name , email , password , cpf ,position, role, active} = req.body;
+            const { name , email , password , cpf ,position, role, active, justification} = req.body;
             if ( name != userExist.name ) return res.status(403).json({ error: 'Nome não pode ser alterado.' });
             if ( cpf != userExist.cpf ) return res.status(403).json({ error: 'CPF não pode ser alterado.' });
-            const isPasswodValid = await bcrypt.compare(password, user.password);
+            const isPasswodValid = await bcrypt.compare(password, userExist.password);
             if (isPasswodValid) return res.status(400).json({ error: 'A nova senha não pode ser igual à senha atual.' });
             if (!isPasswodValid) {
                 const hashedPassword = await bcrypt.hash(password, 10);
@@ -83,13 +83,14 @@ class UserController {
             if (email) userExist.email = email;
             if (position) userExist.position = position;
             if (role) {
-                if (userRole != 'admin') return res.status(403).json({ error: 'Papel de usuário não pode ser alterado.' });
+                if (userRole != 'ADMIN') return res.status(403).json({ error: 'Papel de usuário não pode ser alterado.' });
                 userExist.role = role;
             } 
             if (active) {
-                if (userRole != 'admin') return res.status(403).json({ error: 'Usuário não tem permissão para realizar a ação.' });
+                if (userRole != 'ADMIN') return res.status(403).json({ error: 'Usuário não tem permissão para realizar a ação.' });
                 userExist.active = active;
             }
+            if (justification) userExist.justification = justification;
 
             await userExist.save();
             const user = await UserService.updateUser(id, userExist);

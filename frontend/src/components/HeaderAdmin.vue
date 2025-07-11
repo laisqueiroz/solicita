@@ -8,7 +8,6 @@
             <button id="Contacts" class="btn-no-filling" @click="goToSolicitationPage">Solicitações</button>
             <button id="AcessSolicitation" class="btn-no-filling" @click="goToEquipmentPage">Equipamentos</button>
             <button id="SingIn" class="btn-no-filling" @click="goToInstitutionPage">Instituições</button>
-            <button id="HomePage" class="btn-no-filling-sec" @click="goToPrincipalPage">Página de Gestão</button>
         </nav>
     </div>
 </template>
