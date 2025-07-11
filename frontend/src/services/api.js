@@ -75,7 +75,15 @@ export const getAllSolicitations = async () => {
 
 export const updateSolicitationId = async (id, data) => {
     try {
-        await api.put(`/solicitations/${id}`, data);
+        const token = localStorage.getItem("token");
+        if (!token) {
+        throw new Error("Usuário não autenticado!");
+        }
+        await api.put(`/solicitations/${id}`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+      });
         console.log('Sucesso');
     } catch (error) {
         console.error(`Erro ao atualizar solicitação com ID ${id}:`, error);

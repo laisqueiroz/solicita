@@ -54,7 +54,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["verMais", "aprovar", "negar"]);
+const emit = defineEmits(["verMais"]);
 
 const expandedRows = ref(new Set());
 
@@ -69,9 +69,10 @@ const toggleExpand = (index) => {
 
 const getStatusClass = (status) => {
   return {
-    "status-approved": status === "Deferido",
-    "status-pending": status === "Em análise",
-    "status-rejected": status === "Indeferido"
+    "status-approved": status === "DEFERIDO",
+    "status-pending": status === "EM ANDAMENTO",
+    "status-rejected": status === "INDEFERIDO",
+    "status-canceled": status === "CANCELADO"
   };
 };
 </script>
@@ -88,7 +89,7 @@ const getStatusClass = (status) => {
   background-color: white;
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+  padding: 20px;
   width: 100%;
   max-width: 1200px; 
   overflow-x: auto; 
@@ -106,6 +107,7 @@ const getStatusClass = (status) => {
   text-align: left;
   border-bottom: 1px solid #ddd;
   min-width: 120px; 
+  font-size: small;
 }
 
 .custom-table th {
@@ -116,13 +118,13 @@ const getStatusClass = (status) => {
 }
 
 .status-text {
-  color: #FFA500;
+  color: #003366;
   font-weight: bold;
 }
 
 .action-cell {
   font-size: 0.8em;
-  color: #FFA500;
+  color: #003366;
   font-weight: bold;
   cursor: pointer;
   text-align: left;
@@ -133,17 +135,22 @@ const getStatusClass = (status) => {
 }
 
 .status-approved {
-  color: green;
+  color: #00C217;
   font-weight: bold;
 }
 
 .status-pending {
-  color: orange;
+  color: #F39A24;
   font-weight: bold;
 }
 
 .status-rejected {
-  color: red;
+  color: #C20000;
+  font-weight: bold;
+}
+
+.status-canceled {
+  color: #b3b3b3;
   font-weight: bold;
 }
 

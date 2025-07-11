@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       Solicitation.belongsTo(models.Department, { foreignKey: 'departmentId'});
       Solicitation.belongsTo(models.Rotation,  {foreignKey: 'rotationId'});
       Solicitation.hasMany(models.Booking, { foreignKey: 'solicitationId' });
+      Solicitation.hasMany(models.Relation, { foreignKey: 'solicitationId' });
     }
   }
   Solicitation.init({
@@ -38,21 +39,6 @@ module.exports = (sequelize, DataTypes) => {
             isIn:[['Estágio', 'Visita Técnica', 'Aula Prática', 'Ação de Extensão']],
         },
     },
-    shift: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isIn: [['manhã','tarde','noite']],
-        },
-    },
-    relation: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    weekdays: {
-        type: DataTypes.TEXT,
-        allowNull: false
-    },
     preceptorName:{
         type: DataTypes.STRING,
         allowNull: false
@@ -60,7 +46,11 @@ module.exports = (sequelize, DataTypes) => {
     councilRegistration: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
+    },
+    rolePreceptor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     equipmentId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -87,6 +77,10 @@ module.exports = (sequelize, DataTypes) => {
     rotationId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    justification: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   }, {
     sequelize,
