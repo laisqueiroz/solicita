@@ -1,9 +1,14 @@
 const { where } = require('sequelize');
-const { User } = require('../models');
+const { User, Institution } = require('../models');
 
 class UserRepository {
     static async findAll() {
-        return User.findAll();
+        return User.findAll( {
+            include: {
+                model: Institution,
+                attributes: ['id', 'name', 'status'],
+            }
+        });
     }
 
     static async findOne(cpf){

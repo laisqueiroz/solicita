@@ -15,6 +15,34 @@ export const loginUser = async (cpf, password) => {
     };
 };
 
+export const updateUser = async (id, data) => {
+  const token = localStorage.getItem('token');
+  try {
+        const response = await api.put(
+          `/users/${id}`, data, 
+          { headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error.message);
+        throw error;
+    };
+}
+
+export const fetchUsers = async () => {
+  try {
+        const response = await api.get("/users");
+        return response.data;
+    } catch (error) {
+        console.error(error.message);
+        throw error;
+    };
+}
+
 export const createUser = async (data) => {
   try {
         const response = await api.post("/users", data);

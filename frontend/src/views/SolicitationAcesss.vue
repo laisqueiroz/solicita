@@ -2,96 +2,133 @@
   <title>Solicitações de Acesso</title>
   <HeaderAdmin />
   <div class="table">
-    <h1>Solicitações de Acesso</h1>
-    <TableComponent :columns="columns" :data="data" @verMais="abrirModal" />
+    <section class="header-table">
+      <button class="btn-no-filling-primary" @click="toBackPage">&#8592;</button>
+      <h2>Gerenciar Solicitações de Acesso</h2>
+      <div></div>
+    </section>
+      
+    <section class="data-list">
+      <section class="filters">
+        <label for="filter">Filtrar por status:</label>
+        <select id="filter" v-model="selectedFilter">
+          <option value="ALL">Todos</option>
+          <option value="ATIVO">Ativos</option>
+          <option value="INATIVO">Inativos</option>
+        </select>
+      </section>
+
+      <TableComponent 
+      :columns="columns"
+      :data="filteredUsers"
+      :showDefaultActions="true"
+      >
+      <template #details="{ row }">
+        <p><strong>Email:</strong> {{ row.email }}</p>
+        <p><strong>CPF:</strong> {{ row.cpf }}</p>
+        <p><strong>Nascimento:</strong> {{ row.dateBirth }}</p>
+        <p><strong>Papel:</strong> {{ row.role }}</p>
+        <p>
+          <strong>Arquivo de Termo:</strong>
+          <span v-if="row.agreementFile">
+            <a :href="`https://portal-solicita.onrender.com/uploads/${row.agreementFile}`" target="_blank">
+              {{ row.agreementFile }}
+            </a>
+          </span>
+          <span v-else>Não enviado</span>
+        </p>
+        <p v-if="row.justification != null"><strong>Justificativa:</strong> {{ row.justification || 'Não enviado' }}</p>
+        
+        <div class="actions-buttons" v-if="row.active === 'FALSE'">
+          <button class="btn-remove" @click="showingJustificationFor = row.id">Negar Solicitação</button>
+          <button class="btn-primary" @click="approveAccess(row)">Liberar Acesso</button>
+        </div>
+
+        <div class="action" v-if="showingJustificationFor != null">
+          <div class="justification-box">
+            <label for="">Justificativa:</label>
+            <input
+              v-model="justificationInputs"
+              placeholder="Digite a justificativa"
+              class="input-justification"
+            />
+          </div>
+
+          <div class="actions-buttons">
+            <button @click="showingJustificationFor = null">Cancelar</button>
+            <button class="btn-remove" @click="rejectAccess(row)">Confirmar Rejeição</button>
+          </div>
+        </div>
+      </template>
+      </TableComponent>
+    </section>
+    
   </div>
-  <div v-if="modalAberto" class="modal-overlay">
-    <div class="modal">
-      <button @click="fecharModal" class="close">&times;</button>
-      <h2>Detalhes da Solicitação</h2>
-      <p><strong>Nome:</strong> {{ solicitacaoSelecionada.name }}</p>
-      <p><strong>CPF:</strong> {{ solicitacaoSelecionada.cpf }}</p>
-      <p><strong>Cargo/Função:</strong> {{ solicitacaoSelecionada.position }}</p>
-      <p><strong>Instituição:</strong> {{ solicitacaoSelecionada.institutionId }}</p>
-      <p><strong>Status:</strong> {{ solicitacaoSelecionada.status }}</p>
-      <div class="modal-actions">
-        <button @click="liberarAcesso" class="approve">Liberar Acesso</button>
-        <button @click="negarAcesso" class="negate">Negar Acesso</button>
-      </div>
-    </div>
-  </div>
+  
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import TableComponent from "../components/TableComponent.vue";
 import HeaderAdmin from "../components/HeaderAdmin.vue";
+import { fetchUsers, updateUser } from "../services/api";
+
+const users = ref([]);
+const selectedFilter = ref("ALL");
+const justificationInputs = ref('');
+const showingJustificationFor = ref(null);
+
 const columns = ref([
   { label: "Nome", field: "name" },
-  { label: "CPF", field: "cpf" },
-  { label: "Cargo/Função", field: "position" },
-  { label: "Instituição", field: "institutionId" },
-  { label: "Status", field: "status" },
+  { label: "Instituição", field: (row) => row.Institution?.name || "Não informado" },
+  { label: "Cargo", field: "position" },
+  { label: "Status", field: (row) => (row.active === true || row.active === "TRUE" ? "ATIVO" : "INATIVO") }
 ]);
-const data = ref([]);
-const modalAberto = ref(false);
-const solicitacaoSelecionada = ref({});
+
+
+const approveAccess = async (user) => {
+  if(user.active === 'TRUE') return;
+  if (!confirm(`Tem certeza que deseja liberar o Usuário: ${user.name}?`)) return;
+  try {
+    user.active = 'TRUE';
+    await updateUser(user.id, user);
+    alert(`Usuário liberado com sucesso!`);
+    users.value = await fetchUsers();
+  } catch (error) {
+    alert(error?.response?.data?.error || 'Erro inesperado ao liberar usuário.');
+  }
+};
+
+const rejectAccess = async (user) => {
+  if(user.active === 'TRUE') return;
+  if (!confirm(`Tem certeza que deseja rejeitar o acesso do Usuário: ${user.name}?`)) return;
+  try {
+    user.justification = justificationInputs;
+    showingJustificationFor = null;
+    user.active = 'FALSE';
+
+    // Ideal é deletar o usuário. Mas no momento iremos apenas manter INATIVO.
+    
+    alert(`Acesso do usuário recusado com sucesso!`);
+    users.value = await fetchUsers();
+  } catch (error) {
+    alert(error?.response?.data?.error || 'Erro inesperado ao liberar usuário.');
+  }
+};
+
 onMounted(async () => {
-  //const response = await fetch("http://localhost:3000/");
-  //data.value = await response.json();
-  data.value = [
-    {
-      "name": "Carlos Eduardo Lima",
-      "cpf": "123-456-789.00",
-      "position": "Professor Titular",
-      "institutionId": "Universidade Estadual do Rio de Janeiro",
-      "status": "Em análise"
-    },
-    {
-      "name": "Mariana Souza Ferreira",
-      "cpf": "987-654-321.11",
-      "position": "Coordenadora de Estágio",
-      "institutionId": "Universidade de São Paulo",
-      "status": "Em análise"
-    },
-    {
-      "name": "Rafael Mendes Oliveira",
-      "cpf": "456-789-123.22",
-      "position": "Diretor Acadêmico",
-      "institutionId": "Universidade Federal de Minas Gerais",
-      "status": "Em análise"
-    },
-    {
-      "name": "Fernanda Costa Andrade",
-      "cpf": "789-123-456.33",
-      "position": "Coordenadora de Curso",
-      "institutionId": "Universidade Federal do Rio Grande do Sul",
-      "status": "Em análise"
-    },
-    {
-      "name": "Luciano Pereira Santos",
-      "cpf": "321-654-987.44",
-      "position": "Professor Adjunto",
-      "institutionId": "Universidade Federal do Ceará",
-      "status": "Em análise"
-    }
-  ]
+  users.value = await fetchUsers();
 });
-const abrirModal = (solicitacao) => {
-  solicitacaoSelecionada.value = solicitacao;
-  modalAberto.value = true;
-};
-const fecharModal = () => {
-  modalAberto.value = false;
-};
-const liberarAcesso = () => {
-  alert(`Acesso liberado para ${solicitacaoSelecionada.value.name}`);
-  fecharModal();
-};
-const negarAcesso = () => {
-  alert(`Acesso negado para ${solicitacaoSelecionada.value.name}`);
-  fecharModal();
-};
+
+const filteredUsers = computed(() => {
+  if (selectedFilter.value === "ATIVO") {
+    return users.value.filter(u =>  u.active === "TRUE");
+  } else if (selectedFilter.value === "INATIVO") {
+    return users.value.filter(u => u.active === "FALSE");
+  }
+  return users.value; 
+});
+
 </script>
 
 <style scoped>
@@ -102,61 +139,74 @@ const negarAcesso = () => {
   justify-content: space-around;
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+.filters {
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  position: relative;
-  width: 400px;
-}
-
-.modal-actions {
-  margin-top: 15px;
-  display: flex;
-  justify-content: center;
   gap: 10px;
+  margin-bottom: 16px;
+  width: 800px;
+  justify-content: flex-end;
 }
 
-.modal-actions button {
-  padding: 10px;
-  border: none;
-  cursor: pointer;
+.filters > label {
+  font-weight: bold;
+}
+
+.filters > select {
+  width: auto;
+  padding: 8px;
+  border: 1px solid #003366;
   border-radius: 5px;
-  text-align: center;
 }
 
-button.approve {
-  background: green;
-  color: white;
+.actions-buttons {
+  display: flex;
 }
 
-button.negate {
-  background: red;
-  color: white;
+.action {
+  width: 90%;
 }
 
-button.close {
-  position: absolute;
-  top: -10px;
-  right: -20px;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: black;
+.action input {
+  width: auto;
+  padding: 8px;
+  border: 1px solid #003366;
+  border-radius: 5px;
 }
+
+.action label {
+  font-weight: bold;
+}
+
+.justification-box {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+.header-table {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 800px;
+  margin-bottom: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.data-list {
+  width: 800px;
+  padding: 20px;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
 </style>
