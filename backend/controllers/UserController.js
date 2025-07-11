@@ -58,6 +58,7 @@ class UserController {
             const hashedPassword = await bcrypt.hash(password, 10);
             const role = 'REGULAR';
             const active = 'FALSE';
+            const justification = null;
             const newUser = await UserService.createUser({name, email, password: hashedPassword, cpf, position ,role, active, dateBirth, institutionId, agreementFile, justification});
             res.status(201).json(newUser);
         } catch (error) {
