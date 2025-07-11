@@ -192,7 +192,6 @@ import { fetchEquipments } from '../services/api';
 
 const router = useRouter();
 
-
 const diasSemanaOptions = [
   { text: 'Dom', value: 'domingo' },
   { text: 'Seg', value: 'segunda' },
@@ -200,7 +199,7 @@ const diasSemanaOptions = [
   { text: 'Qua', value: 'quarta' },
   { text: 'Qui', value: 'quinta' },
   { text: 'Sex', value: 'sexta' },
-  { text: 'Sáb', value: 'sábado' },
+  { text: 'Sáb', value: 'sabado' },
 ];
 
 const form = reactive({
@@ -218,11 +217,51 @@ const form = reactive({
   nomePreceptor: '',
   areaAtuacaoPreceptor: '',
   registroConselho: '',
-  alunos: [{ nome: '', cpf: '' }] 
+  alunos: [{ nome: '', cpf: '' }],
+  datas: [] // ← novas datas calculadas
+});
+
+const dataMinimaPermitida = computed(() => {
+  const hoje = new Date();
+  hoje.setDate(hoje.getDate() + 15);
+  return hoje.toISOString().split('T')[0];
 });
 
 const datasCalculadas = computed(() => {
-  return []; // evita erro ao mostrar as datas enquanto não fizer o cálculo real
+  if (
+    form.modalidade !== 'estagio' ||
+    !form.dataInicio ||
+    !form.dataFim ||
+    form.diasSemana.length === 0
+  ) return [];
+
+  const diasSemanaMap = {
+    domingo: 0,
+    segunda: 1,
+    terca: 2,
+    quarta: 3,
+    quinta: 4,
+    sexta: 5,
+    sabado: 6
+  };
+
+  const inicio = new Date(form.dataInicio);
+  const fim = new Date(form.dataFim);
+  const resultado = [];
+
+  for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
+    const dia = d.getDay();
+    const nomeDia = Object.keys(diasSemanaMap).find(k => diasSemanaMap[k] === dia);
+    if (form.diasSemana.includes(nomeDia)) {
+      resultado.push(new Date(d).toISOString().split('T')[0]);
+    }
+  }
+
+  return resultado;
+});
+
+watch(datasCalculadas, (novasDatas) => {
+  form.datas = [...novasDatas];
 });
 
 watch(() => form.modalidade, (novaModalidade) => {
@@ -232,14 +271,8 @@ watch(() => form.modalidade, (novaModalidade) => {
     form.dataInicio = '';
     form.dataFim = '';
     form.diasSemana = [];
+    form.datas = [];
   }
-});
-
-const dataMinimaPermitida = computed(() => {
-  const hoje = new Date();
-  hoje.setDate(hoje.getDate() + 15);
-  
-  return hoje.toISOString().split('T')[0];
 });
 
 watch(() => form.dataInicio, (novaDataInicio) => {
@@ -249,7 +282,6 @@ watch(() => form.dataInicio, (novaDataInicio) => {
 });
 
 const unidadesDeSaude = ref([]);
-
 
 const buscarUnidadesDeSaude = async () => {
   try {
@@ -261,14 +293,11 @@ const buscarUnidadesDeSaude = async () => {
   }
 };
 
-
 const setoresDisponiveis = computed(() => {
   if (!form.unidadeSaudeId) return [];
-
   const unidadeSelecionada = unidadesDeSaude.value.find(
     unidade => unidade.id === form.unidadeSaudeId
   );
-
   return unidadeSelecionada ? unidadeSelecionada.Departments : [];
 });
 
@@ -276,7 +305,6 @@ watch(() => form.unidadeSaudeId, () => { form.departmentId = ''; });
 
 const rotacoesDisponiveis = computed(() => {
   if (!form.departmentId) return [];
-  
   const setorSelecionado = setoresDisponiveis.value.find(
     setor => setor.id === form.departmentId
   );
@@ -291,22 +319,11 @@ const vagasDoTurnoSelecionado = computed(() => {
   return rotacaoSelecionada ? rotacaoSelecionada.vacant : 0;
 });
 
-
 const isAdicionarAlunoDisabled = computed(() => {
-  
-  if (form.modalidade !== 'estagio') {
-    return false; 
-  }
-  
-  
-  if (!form.rotationId || vagasDoTurnoSelecionado.value === 0) {
-    return true;
-  }
-  
-  
+  if (form.modalidade !== 'estagio') return false;
+  if (!form.rotationId || vagasDoTurnoSelecionado.value === 0) return true;
   return form.alunos.length >= vagasDoTurnoSelecionado.value;
 });
-
 
 const adicionarAluno = () => {
   form.alunos.push({ nome: '', cpf: '' });
@@ -315,26 +332,19 @@ const adicionarAluno = () => {
 const removerAluno = (index) => {
   if (form.alunos.length > 1) { 
     form.alunos.splice(index, 1);
-
   } else {
-    
     form.alunos[index] = { nome: '', cpf: '' };
     alert('É necessário ter pelo menos um aluno na solicitação. Os dados do aluno foram limpos.');
   }
 };
-
-
-onMounted(() => {
-  buscarUnidadesDeSaude(); 
-});
-
 
 const submitForm = () => {
   if (form.modalidade === 'estagio' && form.alunos.length > vagasDoTurnoSelecionado.value) {
     alert(`Erro: O número de alunos (${form.alunos.length}) excede o número de vagas (${vagasDoTurnoSelecionado.value}) para este estágio.`);
     return;
   }
-  console.log('Formulário enviado:', form);
+
+  console.log('Formulário enviado:', form); // inclui form.datas aqui
   alert("Solicitação enviada com sucesso!");
   router.push('/regular-management');
 };
@@ -342,7 +352,12 @@ const submitForm = () => {
 const voltarPagina = () => {
   router.back(); 
 };
+
+onMounted(() => {
+  buscarUnidadesDeSaude(); 
+});
 </script>
+
 
 <style scoped>
 #app {
