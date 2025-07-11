@@ -33,6 +33,7 @@
               <option value="aula">Aula prática</option>
               <option value="acao">Ação de extensão</option>
             </select>
+            
         </div>
       </div>
 
@@ -218,6 +219,10 @@ const form = reactive({
   areaAtuacaoPreceptor: '',
   registroConselho: '',
   alunos: [{ nome: '', cpf: '' }] 
+});
+
+const datasCalculadas = computed(() => {
+  return []; // evita erro ao mostrar as datas enquanto não fizer o cálculo real
 });
 
 watch(() => form.modalidade, (novaModalidade) => {
