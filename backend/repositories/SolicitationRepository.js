@@ -1,11 +1,13 @@
-const { Solicitation, Equipment, Institution } = require('../models');
+const { Solicitation, Equipment, Institution, Department, Rotation } = require('../models');
 
 class SolicitationRepository {
     static async findAll() {
         return Solicitation.findAll({
             include: [
                 { model: Equipment, attributes: ['name'] },
-                { model: Institution, attributes: ['name'] }
+                { model: Institution, attributes: ['name'] },
+                { model: Department, attributes: ['nameDepartment'] },
+                { model: Rotation, attributes: ['shift'] }
             ]
         });
     }
