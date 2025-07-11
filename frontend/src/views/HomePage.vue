@@ -76,7 +76,7 @@ const login = async () => {
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
 
-        if (role === "admin") {
+        if (role === "ADMIN") {
             router.push("/admin-management");
         } else {
             router.push("/regular-management");
