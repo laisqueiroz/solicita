@@ -11,28 +11,29 @@
       <div class="form-group">
         <div class="group">
           <label for="curso">Nome do Curso <span class="required">*</span></label>
-          <input type="text" id="curso" v-model="form.curso" required>
+          <input type="text" id="curso" v-model="form.course" required>
         </div>
         <div class="group">
           <label for="disciplina">Disciplina <span class="required">*</span></label>
-          <input type="text" id="disciplina" v-model="form.disciplina" required>
+          <input type="text" id="disciplina" v-model="form.subject" required>
         </div>
       </div>
       
       <div class="form-group">
         <div class="group">
            <label for="semestre">Semestre Letivo <span class="required">*</span></label>
-           <input type="text" id="semestre" v-model="form.semestre" placeholder="Ex: 2025.1" required>
+           <input type="text" id="semestre" v-model="form.period" placeholder="Ex: 2025.1" required>
         </div>
          <div class="group">
             <label for="modalidade">Modalidade da Ação <span class="required">*</span></label>
-            <select id="modalidade" v-model="form.modalidade" required>
+            <select id="modalidade" v-model="form.modality" required>
               <option value="" disabled>--Selecione--</option>
-              <option value="estagio">Estágio</option>
-              <option value="visita">Visita técnica</option>
-              <option value="aula">Aula prática</option>
-              <option value="acao">Ação de extensão</option>
+              <option value="ESTÁGIO">ESTÁGIO</option>
+              <option value="VISITA TÉCNICA">VISITA TÉCNICA</option>
+              <option value="AULA PRÁTICA">AULA PRÁTICA</option>
+              <option value="AÇÃO DE EXTENSÃO">AÇÃO DE EXTENSÃO</option>
             </select>
+            
         </div>
       </div>
 
@@ -40,9 +41,9 @@
       <div class="form-group">
         <div class="group">
           <label for="unidade-saude">Unidade de Saúde <span class="required">*</span></label>
-          <select id="unidade-saude" v-model="form.unidadeSaudeId" required>
+          <select id="unidade-saude" v-model="form.equipmentId" required>
             <option value="" disabled>Selecione a Unidade</option>
-            <option v-for="unidade in unidadesDeSaude" :key="unidade.id" :value="unidade.id">
+            <option v-for="unidade in equipments" :key="unidade.id" :value="unidade.id">
               {{ unidade.name }}
             </option>
           </select>
@@ -52,10 +53,10 @@
           <select 
             id="setor" 
             v-model="form.departmentId" 
-            :disabled="!form.unidadeSaudeId"
+            :disabled="!form.equipmentId"
           >
             <option value="" disabled>
-              {{ form.unidadeSaudeId ? 'Selecione o Setor' : 'Selecione uma unidade primeiro' }}
+              {{ form.equipmentId ? 'Selecione o Setor' : 'Selecione uma unidade primeiro' }}
             </option>
             <option v-for="departamento in setoresDisponiveis" :key="departamento.id" :value="departamento.id">
               {{ departamento.nameDepartment }}
@@ -64,14 +65,14 @@
         </div>
       </div>
       
-      <div class="form-group" v-if="form.modalidade === 'estagio'">
+      <div class="form-group" v-if="form.modality === 'ESTÁGIO'">
         <div class="group">
           <label for="data-inicio">Data de Início <span class="required">*</span></label>
           <input 
             type="date" 
             id="data-inicio" 
-            v-model="form.dataInicio" 
-            :min="dataMinimaPermitida"
+            v-model="datesForm.dataInicio" 
+            :min="dateMinimum"
             required
           >
         </div>
@@ -80,21 +81,21 @@
           <input 
             type="date" 
             id="data-fim" 
-            v-model="form.dataFim" 
-            :min="form.dataInicio" 
-            :disabled="!form.dataInicio"
+            v-model="datesForm.dataFim" 
+            :min="datesForm.dataInicio" 
+            :disabled="!datesForm.dataInicio"
           >
         </div>
       </div>
 
-      <div class="form-group" v-else-if="form.modalidade">
+      <div class="form-group" v-else-if="form.modality">
         <div class="group">
           <label for="data-unica">Data da Atividade <span class="required">*</span></label>
           <input 
             type="date" 
             id="data-unica" 
-            v-model="form.dataUnica"
-            :min="dataMinimaPermitida"
+            v-model="datesForm.dataUnica"
+            :min="dateMinimum"
             required
           >
         </div>
@@ -102,15 +103,15 @@
       </div>
 
       <div class="form-group">
-        <div class="group-select" v-if="form.modalidade === 'estagio'">
+        <div class="group-select" v-if="form.modality === 'ESTÁGIO'">
           <label>Dias da semana <span class="required">*</span></label>
           <div class="checkbox-group">
-            <div v-for="dia in diasSemanaOptions" :key="dia.value" class="checkbox-item">
-              <input type="checkbox" :id="'dia-' + dia.value" :value="dia.value" v-model="form.diasSemana">
+            <div v-for="dia in weekdaysOptions" :key="dia.value" class="checkbox-item">
+              <input type="checkbox" :id="'dia-' + dia.value" :value="dia.value" v-model="datesForm.diasSemana">
               <label :for="'dia-' + dia.value">{{ dia.text }}</label>
             </div>
-            <span v-if="datasCalculadas.length > 0" class="helper-text-dark">
-              Total de {{ datasCalculadas.length }} dias de atividade calculados.
+            <span v-if="datesCalculate.length > 0" class="helper-text-dark">
+              Total de dias de atividade calculados: {{ datesCalculate.length }}.
             </span>
           </div>
         </div>
@@ -132,17 +133,17 @@
       <div class="form-group">
         <div class="group">
           <label for="nome-preceptor">Nome do preceptor <span class="required">*</span></label>
-          <input type="text" id="nome-preceptor" v-model="form.nomePreceptor" required>
+          <input type="text" id="nome-preceptor" v-model="form.preceptorName" required>
         </div>
          <div class="group">
           <label for="area-atuacao">Área de Atuação do Preceptor</label>
-          <input type="text" id="area-atuacao" v-model="form.areaAtuacaoPreceptor" placeholder="Ex: Enfermagem, Fisioterapia...">
+          <input type="text" id="area-atuacao" v-model="form.rolePreceptor" placeholder="Ex: Enfermagem, Fisioterapia...">
         </div>
       </div>
       <div class="form-group">
          <div class="group">
             <label for="registro-conselho">Número de registro do Conselho</label>
-            <input type="text" id="registro-conselho" v-model="form.registroConselho">
+            <input type="text" id="registro-conselho" v-model="form.councilRegistration">
          </div>
          <div class="group"></div> </div>
       
@@ -152,9 +153,9 @@
         <div class="group-list">
           <div class="aluno-header">
             <label>Adicionar Alunos <span class="required">*</span></label>
-            <span v-if="form.modalidade === 'estagio'" class="helper-text">
+            <span v-if="form.modality === 'ESTÁGIO'" class="helper-text">
               <span v-if="form.rotationId">
-                Limite de {{ vagasDoTurnoSelecionado }} vagas. ({{ form.alunos.length }} / {{ vagasDoTurnoSelecionado }})
+                Limite de {{ vagasDoTurnoSelecionado }} vagas. ({{ form.relation.length }} / {{ vagasDoTurnoSelecionado }})
               </span>
               <span v-else>
                 Selecione um turno para ver o limite de vagas.
@@ -162,9 +163,9 @@
             </span>
           </div>
 
-          <div v-for="(aluno, index) in form.alunos" :key="index" class="aluno-group">
-            <input type="text" v-model="aluno.nome" placeholder="Nome Completo do Aluno" required>
-            <input type="text" v-model="aluno.cpf" placeholder="CPF do Aluno" required>
+          <div v-for="(relation, index) in form.relation" :key="index" class="aluno-group">
+            <input type="text" v-model="relation.name" placeholder="Nome Completo do Aluno" required>
+            <input type="text" v-model="relation.cpf" placeholder="CPF do Aluno" required>
             <button type="button" @click="removerAluno(index)" class="btn-remove" title="Remover Aluno">✖</button>
           </div>
           <button 
@@ -187,83 +188,128 @@
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import HeaderIE from '../components/HeaderIE.vue';
-import { fetchEquipments } from '../services/api';
+import { fetchEquipments, createSolicitation } from '../services/api';
 
 const router = useRouter();
 
-
-const diasSemanaOptions = [
+const weekdaysOptions = [
   { text: 'Dom', value: 'domingo' },
   { text: 'Seg', value: 'segunda' },
   { text: 'Ter', value: 'terca' },
   { text: 'Qua', value: 'quarta' },
   { text: 'Qui', value: 'quinta' },
   { text: 'Sex', value: 'sexta' },
-  { text: 'Sáb', value: 'sábado' },
+  { text: 'Sáb', value: 'sabado' },
 ];
 
 const form = reactive({
-  curso: '',
-  disciplina: '',
-  semestre: '',
-  modalidade: '',
-  unidadeSaudeId: '',
+  course: '',
+  subject: '',
+  period: '',
+  modality: '',
+  equipmentId: '',
   departmentId: '',
+  date: [],
+  rotationId: '',
+  preceptorName: '',
+  rolePreceptor: '',
+  councilRegistration: '',
+  relation: [{ name: '', cpf: '' }]
+});
+
+const datesForm = reactive({
   dataInicio: '',
   dataFim: '',
-  diasSemana: [],
   dataUnica: '',
-  rotationId: '',
-  nomePreceptor: '',
-  areaAtuacaoPreceptor: '',
-  registroConselho: '',
-  alunos: [{ nome: '', cpf: '' }] 
+  diasSemana: []
 });
 
-watch(() => form.modalidade, (novaModalidade) => {
-  if (novaModalidade === 'estagio') {
-    form.dataUnica = '';
+const dateMinimum = computed(() => {
+  const today = new Date();
+  today.setDate(today.getDate() + 15);
+  return today.toISOString().split('T')[0];
+});
+
+const datesCalculate = computed(() => {
+  if (
+    form.modality !== 'ESTÁGIO' ||
+    !datesForm.dataInicio ||
+    !datesForm.dataFim ||
+    datesForm.diasSemana.length === 0
+  ) return [];
+
+  const diasSemanaMap = {
+    domingo: 0,
+    segunda: 1,
+    terca: 2,
+    quarta: 3,
+    quinta: 4,
+    sexta: 5,
+    sabado: 6
+  };
+
+  const inicio = new Date(datesForm.dataInicio);
+  const fim = new Date(datesForm.dataFim);
+  const result = [];
+
+  for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
+    const day = d.getDay();
+    const nameDay = Object.keys(diasSemanaMap).find(k => diasSemanaMap[k] === day);
+    if (datesForm.diasSemana.includes(nameDay)) {
+      result.push(new Date(d).toISOString().split('T')[0]);
+    }
+  }
+
+  return result;
+});
+
+watch(
+  [() => form.modality, () => datesCalculate.value, () => datesForm.dataUnica],
+  () => {
+    if (form.modality === 'ESTÁGIO') {
+      form.date = [...datesCalculate.value];
+    } else if (datesForm.dataUnica) {
+      form.date = [datesForm.dataUnica];
+    } else {
+      form.date = [];
+    }
+  },
+);
+
+watch(() => form.modality, (novaModalidade) => {
+  if (novaModalidade === 'ESTÁGIO') {
+    datesForm.dataUnica = '';
   } else {
-    form.dataInicio = '';
-    form.dataFim = '';
-    form.diasSemana = [];
+    datesForm.dataInicio = '';
+    datesForm.dataFim = '';
+    datesForm.diasSemana = [];
+    form.date = [];
   }
 });
 
-const dataMinimaPermitida = computed(() => {
-  const hoje = new Date();
-  hoje.setDate(hoje.getDate() + 15);
-  
-  return hoje.toISOString().split('T')[0];
-});
-
-watch(() => form.dataInicio, (novaDataInicio) => {
-  if (form.dataFim && novaDataInicio > form.dataFim) {
-    form.dataFim = '';
+watch(() => datesForm.dataInicio, (novaDataInicio) => {
+  if (datesForm.dataFim && novaDataInicio > datesForm.dataFim) {
+    datesForm.dataFim = '';
   }
 });
 
-const unidadesDeSaude = ref([]);
+const equipments = ref([]);
 
-
-const buscarUnidadesDeSaude = async () => {
+const fetchAllEquipments = async () => {
   try {
     const response = await fetchEquipments(); 
-    unidadesDeSaude.value = response;
+    equipments.value = response;
   } catch (error) {
     alert('Não foi possível carregar as unidades de saúde.');
     console.error('Erro ao buscar unidades de saúde:', error);
   }
 };
 
-
 const setoresDisponiveis = computed(() => {
-  if (!form.unidadeSaudeId) return [];
-
-  const unidadeSelecionada = unidadesDeSaude.value.find(
-    unidade => unidade.id === form.unidadeSaudeId
+  if (!form.equipmentId) return [];
+  const unidadeSelecionada = equipments.value.find(
+    unidade => unidade.id === form.equipmentId
   );
-
   return unidadeSelecionada ? unidadeSelecionada.Departments : [];
 });
 
@@ -271,7 +317,6 @@ watch(() => form.unidadeSaudeId, () => { form.departmentId = ''; });
 
 const rotacoesDisponiveis = computed(() => {
   if (!form.departmentId) return [];
-  
   const setorSelecionado = setoresDisponiveis.value.find(
     setor => setor.id === form.departmentId
   );
@@ -286,58 +331,49 @@ const vagasDoTurnoSelecionado = computed(() => {
   return rotacaoSelecionada ? rotacaoSelecionada.vacant : 0;
 });
 
-
 const isAdicionarAlunoDisabled = computed(() => {
-  
-  if (form.modalidade !== 'estagio') {
-    return false; 
-  }
-  
-  
-  if (!form.rotationId || vagasDoTurnoSelecionado.value === 0) {
-    return true;
-  }
-  
-  
-  return form.alunos.length >= vagasDoTurnoSelecionado.value;
+  if (form.modality !== 'ESTÁGIO') return false;
+  if (!form.rotationId || vagasDoTurnoSelecionado.value === 0) return true;
+  return form.relation.length >= vagasDoTurnoSelecionado.value;
 });
 
-
 const adicionarAluno = () => {
-  form.alunos.push({ nome: '', cpf: '' });
+  form.relation.push({ name: '', cpf: '' });
 };
 
 const removerAluno = (index) => {
-  if (form.alunos.length > 1) { 
-    form.alunos.splice(index, 1);
-
+  if (form.relation.length > 1) { 
+    form.relation.splice(index, 1);
   } else {
-    
-    form.alunos[index] = { nome: '', cpf: '' };
+    form.relation[index] = { name: '', cpf: '' };
     alert('É necessário ter pelo menos um aluno na solicitação. Os dados do aluno foram limpos.');
   }
 };
 
-
-onMounted(() => {
-  buscarUnidadesDeSaude(); 
-});
-
-
-const submitForm = () => {
-  if (form.modalidade === 'estagio' && form.alunos.length > vagasDoTurnoSelecionado.value) {
-    alert(`Erro: O número de alunos (${form.alunos.length}) excede o número de vagas (${vagasDoTurnoSelecionado.value}) para este estágio.`);
+const submitForm = async () => {
+  if (form.modality === 'ESTÁGIO' && form.relation.length > vagasDoTurnoSelecionado.value) {
+    alert(`Erro: O número de alunos (${form.relation.length}) excede o número de vagas (${vagasDoTurnoSelecionado.value}) para este estágio.`);
     return;
   }
-  console.log('Formulário enviado:', form);
-  alert("Solicitação enviada com sucesso!");
-  router.push('/regular-management');
+  try {
+    await createSolicitation(form);
+  
+    alert("Solicitação enviada com sucesso!");
+    router.push('/regular-management');
+  } catch (error) {
+    alert(error?.response?.data?.error || 'Erro inesperado ao enviar a solicitação.');
+  }
 };
 
 const voltarPagina = () => {
   router.back(); 
 };
+
+onMounted(() => {
+  fetchAllEquipments(); 
+});
 </script>
+
 
 <style scoped>
 #app {

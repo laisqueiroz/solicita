@@ -91,6 +91,24 @@ export const updateSolicitationId = async (id, data) => {
     };
 };
 
+export const createSolicitation = async (data) => {
+  try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+        throw new Error("Usuário não autenticado!");
+        }
+        await api.post("/solicitations", data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('Sucesso');
+    } catch (error) {
+        console.error(`Erro ao atualizar solicitação com ID ${id}:`, error);
+        throw error;
+    };
+};
+
 /* FUNÇÕES DE EQUIPAMENTO */
 export const createEquipment = async (name, address) => {
     try {

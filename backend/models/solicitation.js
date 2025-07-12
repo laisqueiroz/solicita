@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            isIn:[['Estágio', 'Visita Técnica', 'Aula Prática', 'Ação de Extensão']],
+            isIn:[['ESTÁGIO', 'VISITA TÉCNICA', 'AULA PRÁTICA', 'AÇÃO DE EXTENSÃO']],
         },
     },
     preceptorName:{
