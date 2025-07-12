@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', authenticateJWT, SolicitationController.getAllSolicitations);
 router.get('/:id', SolicitationController.getSolicitationById);
-router.post('/', SolicitationController.createSolicitation);
+router.post('/', authenticateJWT, SolicitationController.createSolicitation);
 router.put('/:id', authenticateJWT, SolicitationController.updateSolicitation);
 router.delete('/:id', SolicitationController.deleteSolicitation);
 
