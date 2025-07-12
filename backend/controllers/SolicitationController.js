@@ -1,4 +1,7 @@
 const SolicitationService = require('../services/SolicitationService');
+const BookingRepository = require('../repositories/BookingRepository');
+const RelationRepository = require('../repositories/RelationRepository');
+const UserRepository = require('../repositories/UserRepository');
 const GenerateCode = require('../services/GenerateCodeService');
 
 class SolicitationController {
@@ -28,9 +31,9 @@ class SolicitationController {
         const { id } = req.params;
         try{
             const solicitation = await SolicitationService.getSolicitationById(id);
-            res.json(solicitation);
+            return res.json(solicitation);
         } catch (error) {
-            res.status(400).json({ error: error.massage });
+            return res.status(400).json({ error: error.massage });
         }
     }
 
@@ -38,18 +41,63 @@ class SolicitationController {
         try{
             const userId = req.user.id;
             if (!userId) return res.status(400).json({ message: 'Usuário não autenticado ou não encontrado!' })
-            const { rolePreceptor, course , subject, period, modality, shift, relation, weekdays, preceptorName, councilRegistration, equipmentId , institutionId, departmentId, rotationId } = req.body;
-            if ( !rolePreceptor || !course || !subject || !period || !modality || !shift || !relation || !weekdays || !preceptorName || !councilRegistration || !equipmentId || !institutionId || !departmentId || !rotationId) {
-                res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+            const { rolePreceptor, course , subject, period, date, 
+                    modality, relation, preceptorName, councilRegistration, 
+                    equipmentId , departmentId, rotationId } = req.body;
+            if ( !date || !rolePreceptor || !course || !subject || !period || 
+                !modality || !relation || !preceptorName || !councilRegistration || 
+                !equipmentId || !departmentId || !rotationId) {
+                return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
             }
+            const dataUser = await UserRepository.findById(userId);
+            const institutionId = dataUser.institutionId;
             const code = await GenerateCode.generateUniqueCode();
             if (!code) return res.status(400).json({ message: 'Erro ao gerar o código.' })
             const status = "EM ANDAMENTO";
             const justification = null;
+
             const solicitation = await SolicitationService.createSolicitation({ rolePreceptor, code, course , subject, period, modality, preceptorName, councilRegistration, equipmentId, institutionId, userId, departmentId, rotationId, status, justification });
-            res.status(201).json(solicitation);
+            
+            const solicitationId = solicitation.id;
+            
+            if (modality === "ESTÁGIO") {
+                
+                if (Array.isArray(relation)) {
+                    
+                    for (const item of relation) {
+                        const { name, cpf } = item;
+    
+                        await RelationRepository.create({
+                            name,
+                            cpf,
+                            solicitationId
+                        });
+    
+                        for (const d of date) {
+                            await BookingRepository.create({
+                                date: d,
+                                rotationId,
+                                solicitationId
+                            });
+                        }
+                    }
+                };
+            } else {
+                
+                if (Array.isArray(relation)) {
+                    for (const item of relation) {
+                        const { name, cpf } = item;
+    
+                        await RelationRepository.create({ name, cpf, solicitationId });
+                    }
+                };
+
+                await BookingRepository.create({date: date[0], rotationId, solicitationId});
+            }
+
+            return res.status(201).json(solicitation);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
@@ -75,9 +123,9 @@ class SolicitationController {
             }
             await SolicitationToUpdate.save();
             const solicitation = await SolicitationService.updateSolicitation(id, SolicitationToUpdate);
-            res.json(solicitation);
+            return res.json(solicitation);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 
@@ -85,9 +133,9 @@ class SolicitationController {
         const { id } = req.params;
         try {
             await SolicitationService.deleteSolicitation(id);
-            res.json({ message: 'Solicitação excluída com sucesso!' })
+            return res.json({ message: 'Solicitação excluída com sucesso!' })
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
     }
 }
