@@ -239,6 +239,7 @@ const addMode = ref('');
 const router = useRouter();
 const editionEquipment = ref(false);
 const selectedDepartmentId = ref(null);
+const viewEquipment = ref(null);
 
 
 const startEdition = (equipment) => {
