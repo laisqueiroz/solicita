@@ -73,3 +73,9 @@ Siga os passos abaixo para rodar o projeto em seu ambiente local.
 
 
 **Observação:** Este projeto não requer a configuração de variáveis de ambiente (`.env`) para a sua execução básica.
+
+<p align="center">
+  <a href="https://solicita-8ctp.onrender.com/" target="_blank">
+    <img src="https://img.shields.io/badge/Acessar%20a%20Aplicação-4FC08D?style=for-the-badge&logo=rocket&logoColor=white" alt="Acessar a Aplicação">
+  </a>
+</p>
